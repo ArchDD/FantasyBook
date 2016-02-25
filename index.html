@@ -4,26 +4,30 @@
 <head>
 	<meta charset="UTF-8"/>
 	<title>BookyWooky</title>
+	<!-- normalise css -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"></script>
 	<!-- style sheet link -->
-	<link href="css/style.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
 	<!-- use google's content delivery network for minified jQuery -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 
 <body>
+	<!-- header contains introductory content -->
 	<header role="banner">
 		<a class="brand">Site Title or Logo</a>
-		
-		<nav role="navigation">
-			<ul class="navbar">
-				<li><a href="#">Page 1</a></li>
-				<li><a href="#">Page 2</a></li>
-				<li><a href="#">Page 3</a></li>
-				<li><a href="#">Page 4</a></li>
-			</ul>	
-		</nav>
 	</header>
+	<!-- navigation links -->
+	<nav role="navigation">
+		<ul class="navbar">
+			<li><a href="#">Page 1</a></li>
+			<li><a href="#">Page 2</a></li>
+			<li><a href="#">Page 3</a></li>
+			<li><a href="#">Page 4</a></li>
+		</ul>	
+	</nav>
 
+	<!-- main contains the primary content -->
 	<main role="main">	
 		<h1>Page Heading</h1>
     
@@ -50,8 +54,9 @@
 	      <li>List item</li>
 	      <li>List item</li>
 	    </ol>
-	</main><!-- End primary page content -->
+	</main>
 
+	<!-- aside contains secondary content, the sidebar -->
 	<aside role="complementary">
 		<h3>Secondary page content</h3>
 
@@ -60,7 +65,7 @@
 
 	<footer role="contentinfo">
 		<div>Page footer content</div>
-		<small>Copyright &copy; <time datetime="year">2016</time></small>
+		<small>Site developed by Dillon Keith Diep and Jason Haciepiri</small>
 	</footer>
 </body>
 </html>
