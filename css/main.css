@@ -3,15 +3,19 @@ body {
 	margin: 0;
 	min-width:640px;
 	background-color: #bffff9;
-}
+	display: flex;
+	flex-direction: column;
 
-header, footer {
-	padding: 0; margin: 0;
-	width: 100%;
-	clear: both;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+
+	height: 100%;
 }
 
 header {
+	flex: 1;
 	background-color: green;
 	color: white;
 	display: flex;
@@ -24,6 +28,8 @@ footer {
 nav {
 	background-color: red;
 	flex: 10;
+	display: flex;
+	align-items: center;
 }
 
 aside {
@@ -32,17 +38,19 @@ aside {
 }
 
 main {
-    background-color: #9051f5;
     flex: 10;
+    background: url(../images/square.svg);
 }
 
 img {
     max-width: 50%;
-    height: auto;
 }
 
 ul {
     list-style-type: none;
+    /* reset placement for centering */
+    padding: 0;
+	margin: 0;
 }
 
 #logo {
@@ -56,10 +64,11 @@ ul {
 }
 
 #container {
-  border-radius: 6px;
-  background-color: #566490;
-  display: flex;
-  align-items: stretch;
+	flex: 1;
+	border-radius: 6px;
+	background-color: #566490;
+	display: flex;
+	justify-content: center ;
 }
 
 .navbar {
@@ -67,6 +76,44 @@ ul {
 	display: flex;
 }
 
-li {
+.navbar li {
 	flex: 1;
+	display: flex;
+	justify-content: center ;
+}
+
+.sidebar
+{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.sidebar li
+{
+	text-align: center;
+}
+
+a {
+	/* remove underlines from links */
+	text-decoration: none;
+	height: 40px;
+	width: 40px;
+	background: url(../images/square.svg);
+}
+
+button {
+	color:white;
+	border: none;
+	height: 40px;
+	width: 40px;
+	background: url(../images/square.svg);
+	background-size: cover;
+
+	/* center text in button */
+	display: flex;
+	justify-content: center;
+
+	margin: auto;
 }
