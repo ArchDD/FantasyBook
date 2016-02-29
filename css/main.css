@@ -2,38 +2,24 @@ body {
 	padding: 0;
 	margin: 0;
 	min-width:640px;
-	background-color: #bffff9;
-	display: flex;
-	flex-direction: column;
-
-	flex-wrap: nowrap;
-	justify-content: flex-start;
-	align-items: stretch;
-	align-content: stretch;
-
-	height: 100%;
 }
 
 header {
 	flex: 1;
-	background-color: green;
-	color: white;
 	display: flex;
 }
 
 footer {
-    background-color: #5903ff;
+    background-color: blue;
 }
 
 nav {
-	background-color: red;
 	flex: 10;
 	display: flex;
 	align-items: center;
 }
 
 aside {
-    background-color: #4729a5;
 	flex: 1;
 }
 
@@ -43,7 +29,7 @@ main {
 }
 
 img {
-    max-width: 50%;
+	max-width: 100%;
 }
 
 ul {
@@ -54,19 +40,22 @@ ul {
 }
 
 #logo {
-	background-color: orange;
 	flex: 1;
 	display: flex;
-	/* center wrap horizontally */
+	/* center wrap vertically */
 	align-items: center;
-	/* center wrap vertically*/
+	/* center wrap horizontally*/
 	justify-content: center ;
+}
+
+.block {
+	margin: 0.1em;
+    background-color: #eae5cb;
+    border-radius: 0.2em;
 }
 
 #container {
 	flex: 1;
-	border-radius: 6px;
-	background-color: #566490;
 	display: flex;
 	justify-content: center ;
 }
@@ -98,13 +87,9 @@ ul {
 a {
 	/* remove underlines from links */
 	text-decoration: none;
-	height: 40px;
-	width: 40px;
-	background: url(../images/square.svg);
 }
 
 button {
-	color:white;
 	border: none;
 	height: 40px;
 	width: 40px;
