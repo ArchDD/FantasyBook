@@ -25,7 +25,6 @@ aside {
 main {
     flex: 10;
     background: url(../images/square.svg);
-    display: flex;
 }
 
 img {
@@ -94,7 +93,7 @@ button {
 	height: 40px;
 	width: 40px;
 	background: url(../images/square.svg);
-	background-size: cover;
+	background-size: cover;	
 
 	/* center text in button */
 	display: flex;
@@ -105,5 +104,4 @@ button {
 
 /*** character creator ***/
 canvas {
-	flex: 1;
 }
