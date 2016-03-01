@@ -1,7 +1,6 @@
 body {
 	padding: 0;
 	margin: 0;
-	min-width:640px;
 }
 
 header {
@@ -26,6 +25,7 @@ aside {
 main {
     flex: 10;
     background: url(../images/square.svg);
+    display: flex;
 }
 
 img {
@@ -101,4 +101,9 @@ button {
 	justify-content: center;
 
 	margin: auto;
+}
+
+/*** character creator ***/
+canvas {
+	flex: 1;
 }
