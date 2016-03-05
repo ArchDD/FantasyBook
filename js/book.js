@@ -61,7 +61,7 @@ function createNewBook(settings) {
     //get height of the shelf
     var shelfHeight = $('#bookshelf').height();
     //create text and book elements
-    var $text = $('<span class="spineText">'+settings.spineText+'</span>');
+    var $text = $('<span class="spineText unselectable">'+settings.spineText+'</span>');
     var $book = $('<div class="book"/>');
     //apply book settings
     $book.height(settings.height);

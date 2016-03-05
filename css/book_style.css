@@ -33,6 +33,10 @@ body{
     white-space: nowrap;
 }
 
+.book .spineText:hover {
+    cursor: default;
+}
+
 #hidden-textures {
     position: absolute;
     left: -9999px;
