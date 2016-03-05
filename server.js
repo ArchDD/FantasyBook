@@ -30,10 +30,12 @@ var types = {
     '.json' : 'application/json',
     '.pdf'  : 'application/pdf',
     '.txt'  : 'text/plain', // plain text only
+    '.ttf'  : 'application/x-font-ttf',
     '.xhtml': '#not suitable for dual delivery, use .html',
     '.htm'  : '#proprietary, non-standard, use .html',
     '.jpg'  : '#common but non-standard, use .jpeg',
     '.rar'  : '#proprietary, non-standard, platform dependent, use .zip',
+    '.docx' : '#proprietary, non-standard, platform dependent, use .pdf',
     '.doc'  : '#proprietary, non-standard, platform dependent, ' +
               'closed source, unstable over versions and installations, ' +
               'contains unsharable personal and printer preferences, use .pdf',
@@ -95,6 +97,9 @@ function fail(response, code) {
 function serve(request, response) {
     var file = request.url;
     if (ends(file,'/')) file = file + 'index.html';
+    // If there are parameters, take them off
+    var parts = file.split("?");
+    if (parts.length > 1) file = parts[0];
     file = "." + file;
     var type = findType(request, path.extname(file));
     if (! type) return fail(response, BadType);
@@ -124,7 +129,7 @@ function findType(request, extension) {
 
 // Check whether a string starts with a prefix, or ends with a suffix
 function starts(s, x) { return s.lastIndexOf(x, 0) == 0; }
-function ends(s, x) { return s.indexOf(x, s.length-x.length) == 0; }
+function ends(s, x) { return s.indexOf(x, s.length-x.length) >= 0; }
 
 // Check that a file is inside the site.  This is essential for security.
 var site = fs.realpathSync('.') + path.sep;
