@@ -100,19 +100,22 @@ $(window).on("load", function() {
             $("#bookshelf-container").css("display","none");
             $("#bookshelf-container").css("visibility","hidden");
             resizeBooks();
-            // Set title to book title
-            //var front_cover = document.getElementById("front_cover");
-            //front_cover.innerHTML = this.id;
-            // Set colour to book colour
-            //$('.hard').css("background",books[this.id].colour);
-            //$('.hard').css("background","rgba(0,0,0,1)");
-            var settings = books[this.id];
-            settings.width = 800;
-            settings.height = 450;
+        }
+    });
+    // Do not propagate click to the flipbook container beneath
+    $("body").on("click", "#flipbook", function(e) {
+        e.stopPropagation();
+    });
 
-            //$('.hard').append(createBookCanvas(settings));
-            // Load content
-
+    $("body").on("click", "#flipbook-container", function() {
+        if(bookIsOpen) {
+            bookIsOpen = false;
+            // Make flipbook visible
+            $("#flipbook-container").css("display","none");
+            $("#flipbook-container").css("visibility","hidden");
+            $("#bookshelf-container").css("display","flex");
+            $("#bookshelf-container").css("visibility","visible");
+            resizeBooks();
         }
     });
 
