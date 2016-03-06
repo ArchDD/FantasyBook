@@ -83,14 +83,20 @@ $(window).on("load", function() {
     }
 
     // Attach mouse over event for books created at runtime
-    /*
-    $('body').on('mouseover mouseout', '.book', function() {
-        console.log("HEY!");
-    })
-    */
+    var intervalId;
+    $('body').on('mouseover', '.book', function() {
+        intervalId = setInterval(function() {
+            console.log("HEEYy");
+        }, 1000);
+    });
+
+    $('body').on('mouseout', '.book', function() {
+        clearInterval(intervalId);
+    });
 
     var bookIsOpen = false;
-    // Open flipbookon book click
+
+    // Open flipbook and exit book shelf
     $("body").on("click", ".book", function() {
         if(!bookIsOpen) {
             bookIsOpen = true;
@@ -100,6 +106,15 @@ $(window).on("load", function() {
             $("#bookshelf-container").css("display","none");
             $("#bookshelf-container").css("visibility","hidden");
             resizeBooks();
+            // Set title to book title
+            //var front_cover = document.getElementById("front_cover");
+            //front_cover.innerHTML = this.id;
+            // Set colour to book colour
+            //$('.hard').css("background",books[this.id].colour);
+            //$('.hard').css("background","rgba(0,0,0,1)");
+
+            //$('.hard').append(createBookCanvas(settings));
+            // Load content
         }
     });
     // Do not propagate click to the flipbook container beneath
@@ -107,6 +122,7 @@ $(window).on("load", function() {
         e.stopPropagation();
     });
 
+    // Exit flipbook and return to book shelf
     $("body").on("click", "#flipbook-container", function() {
         if(bookIsOpen) {
             bookIsOpen = false;
