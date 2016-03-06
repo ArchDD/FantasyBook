@@ -10,6 +10,7 @@ body{
 }
 
 .book:hover{
+    cursor: default;
     transform: scale(1.1);
 }
 
@@ -41,10 +42,6 @@ body{
 .book .spineText:hover {
     cursor: default;
 } */
-
-.book:hover {
-    cursor: default;
-}
 
 #hidden-textures {
     position: absolute;

@@ -105,7 +105,7 @@ $(window).on("load", function() {
             $("#flipbook-container").css("visibility","visible");
             $("#bookshelf-container").css("display","none");
             $("#bookshelf-container").css("visibility","hidden");
-            resizeBooks();
+            
             // Set title to book title
             //var front_cover = document.getElementById("front_cover");
             //front_cover.innerHTML = this.id;
