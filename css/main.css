@@ -102,7 +102,7 @@ button {
 	margin: auto;
 }
 
-#character {
+#character, #ui {
 	position: absolute;
 }
 
