@@ -1,8 +1,29 @@
 
 //when the document is ready
-$(document).ready(function() {
+$(window).on("load", function() {
+    // call initial window resize function
+    resizeBooks();
+    // add event to listen for future window resizes
+    window.addEventListener('resize', resizeBooks, false);
+
     var canvases = {};
     initialiseBookshelf();
+
+    function resizeBooks() {
+        var mainHeight = $("#main").height();
+        var $flipbook = $("#flipbook");
+
+        $flipbook.css({ height:8 * mainHeight/10,
+                        top:mainHeight/10
+                     });
+
+        for (var key in books) {
+            var $book = $("#"+key);
+            var shelfHeight = $('#bookshelf').height();
+            $book.css({top:shelfHeight - $book.height()});
+        }
+    }
+
     function initialiseBookshelf() {
         //Texture container
         var textures = {
@@ -38,13 +59,13 @@ $(document).ready(function() {
     }
 
     var books = {
-        "Lord of the Rings" : {
+        "Lord-of-the-Rings" : {
             height: 400, width: 96, colour: "#2a6f41", texture: "leather"
         },
-        "Alice in Wonderland" : {
+        "Alice-in-Wonderland" : {
             height: 400, width: 48, colour: '#42548a', texture: "leather"
         },
-        "A Hitchhiker's Guide to the Galaxy" : {
+        "A-Hitchhikers-Guide-to-the-Galaxy" : {
             height: 400, width: 36, colour: '#661919', texture: "leather"
         },
         "Coraline" : {
@@ -54,23 +75,11 @@ $(document).ready(function() {
 
     //Populate the shelf with previously saved books
     function populateBooks() {
-        //Example Books
-        /*var books = [
-        {spineText: 'Lord of the Rings', height: 400, width: 96, colour: '#2a6f41', texture: canvases['leather']},
-        {spineText: "Alice in Wonderland", height: 400, width: 48, colour: '#42548a', texture: canvases.leather},
-        {spineText: "A Hitchhiker's Guide to the Galaxy", height: 400, width: 36, colour: '#661919', texture: canvases.leather},
-        {spineText: "Morte", height: 400, width: 60, colour: '#603939', texture: canvases.leather},
-        {spineText: "Coraline", height: 400, width: 50, colour: '#4d3960', texture: canvases.leather}
-        ];*/
-
         //Create each example 
         for (var key in books) {
+            //console.log($('#bookshelf').height());
             $('#bookshelf').append(createNewBook(key, books[key]));
         }
-        /*$.each(books, function(i,book) {
-            console.log(book);
-           // $('#bookshelf').append(createNewBook(book));
-        });*/
     }
 
     // Attach mouse over event for books created at runtime
@@ -83,16 +92,19 @@ $(document).ready(function() {
     var bookIsOpen = false;
     // Open flipbookon book click
     $("body").on("click", ".book", function() {
-        /*if(!bookIsOpen) {
+        if(!bookIsOpen) {
             bookIsOpen = true;
             // Make flipbook visible
-            $("#flipbook-container").css("display","block");
+            $("#flipbook-container").css("display","flex");
             $("#flipbook-container").css("visibility","visible");
+            $("#bookshelf-container").css("display","none");
+            $("#bookshelf-container").css("visibility","hidden");
+            resizeBooks();
             // Set title to book title
-            var front_cover = document.getElementById("front_cover");
-            front_cover.innerHTML = this.id;
+            //var front_cover = document.getElementById("front_cover");
+            //front_cover.innerHTML = this.id;
             // Set colour to book colour
-            $('.hard').css("background",books[this.id].colour);
+            //$('.hard').css("background",books[this.id].colour);
             //$('.hard').css("background","rgba(0,0,0,1)");
             var settings = books[this.id];
             settings.width = 800;
@@ -101,14 +113,7 @@ $(document).ready(function() {
             //$('.hard').append(createBookCanvas(settings));
             // Load content
 
-            // Attach page turning function
-            $("#flipbook").turn({
-                width: 800,
-                height: 450,
-                autoCenter: true,
-                elevation: 100
-            });
-        }*/
+        }
     });
 
     function createBookCanvas(settings) {
@@ -155,7 +160,6 @@ $(document).ready(function() {
         $book.width(settings.width);
         //position the book relative to the shelf
         $book.offset({top:shelfHeight - settings.height});
-
         // Append book graphics
         $book.append(createBookCanvas(settings));
         // Append book spine text

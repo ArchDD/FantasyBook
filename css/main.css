@@ -1,4 +1,5 @@
-body {
+html, body {
+    height: 100%;
 	padding: 0;
 	margin: 0;
 }
@@ -10,11 +11,11 @@ header {
 
 footer {
     background-color: blue;
+    flex: 1;
 }
 
 nav {
 	flex: 10;
-	display: flex;
 	align-items: center;
 }
 
@@ -24,6 +25,7 @@ aside {
 
 main {
     flex: 10;
+    display: flex;
 }
 
 img {
@@ -35,6 +37,12 @@ ul {
     /* reset placement for centering */
     padding: 0;
 	margin: 0;
+}
+
+#wrapper {
+    display: flex;
+    height: inherit;
+    flex-direction:column;
 }
 
 #logo {
@@ -53,9 +61,10 @@ ul {
 }
 
 #container {
-	flex: 1;
+	flex: 15;
 	display: flex;
 	justify-content: center ;
+    height: inherit;
 }
 
 .navbar {
