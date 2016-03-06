@@ -29,6 +29,7 @@ main {
 
 img {
 	max-width: 100%;
+	padding: 1em;
 }
 
 ul {
@@ -102,6 +103,6 @@ button {
 	margin: auto;
 }
 
-/*** character creator ***/
-canvas {
+#character {
+	position: absolute;
 }
