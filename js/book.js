@@ -1,6 +1,12 @@
 
 //when the document is ready
 $(window).on("load", function() {
+
+    var bookIsOpen = false;
+    var pageNumber = 0;
+    var currentBook = null;
+    var isSinglePage = false;
+
     // call initial window resize function
     resizeBooks();
     // add event to listen for future window resizes
@@ -11,6 +17,13 @@ $(window).on("load", function() {
 
     function resizeBooks() {
         var mainHeight = $("#main").height();
+        var mainWidth = $("#main").width();
+
+        if(mainWidth < 800)
+            changeToSinglePage(currentBook);
+        else
+            changeToDoublePage(currentBook);
+
         var $flipbook = $("#flipbook");
 
         $flipbook.css({ height:7 * mainHeight/10,
@@ -82,10 +95,6 @@ $(window).on("load", function() {
         }
     }
 
-    var bookIsOpen = false;
-    var pageNumber = 0;
-    var currentBook = null;
-
     // Open flipbook and exit book shelf
     $("body").on("click", ".book", function() {
         if(!bookIsOpen) {
@@ -93,19 +102,10 @@ $(window).on("load", function() {
             bookIsOpen = true;
             currentBook = books[this.id];
 
-            // First page setup
-            pageNumber = 0;
-
-            $("#right_page .page-title").html(currentBook.bookTitle);
-            $("#right_page .page-title").show();
-            $("#left_page .page-title").hide();
-            $("#left_page .page-image").hide();
-
-            $("#left_page .page-content").html("");
-            $("#right_page .page-content").html(currentBook.desc);
-
-            $("#left_page .page-number").html("");
-            $("#right_page .page-number").html(pageNumber+1);
+            if(isSinglePage)
+                loadFirstPageSingle(currentBook);
+            else
+                loadFirstPage(currentBook);
 
             // Make flipbook visible
             $("#flipbook-container").css("display","flex");
@@ -116,43 +116,120 @@ $(window).on("load", function() {
     });
 
     $("body").on("click", "#right_page", function(e) {
-        nextPage();
+        if(!isSinglePage)
+            nextPage();
+        else
+            changePageSingle(e);
     });
 
     $("body").on("click", "#left_page", function(e) {
         previousPage();
     });
 
-    // contacts server to get the event name for the page
-    function getEventTitle(book, pageNumber) {
-        return "Event";
+    function updatePage(pageId, book, pageNumber) {
+        if(pageNumber == 0 || pageNumber == book.pages) {
+            $(pageId+" .page-title").html("");
+            $(pageId+" .page-content").html("");
+            $(pageId+" .page-number").html("");
+            $(pageId+" .page-image").hide();
+        }
+        else {
+            $(pageId+" .page-title").html(getEventTitle(currentBook, pageNumber));
+            $(pageId+" .page-content").html(getEventContent(currentBook, pageNumber));
+            $(pageId+" .page-number").html(pageNumber);
+            $(pageId+" .page-image").show();
+        }
+        
     }
 
-    // contacts server to get either an event description or past event result
-    function getEventContent(book, pageNumber) {
-        return "Event description";
+    function loadFirstPage(book) {
+        pageNumber = 0;
+        $("#left_page .page-title").hide();
+        $("#left_page .page-image").hide();
+
+        $("#left_page .page-content").html("");
+        $("#left_page .page-number").html("");
+
+        // Write title
+        $("#right_page .page-title").html(book.bookTitle);
+        // write book description
+        $("#right_page .page-content").html(book.desc);
+        $("#right_page .page-number").html(pageNumber+1);
     }
 
-    // contacts server to get active status of the event 
-    function isEventComplete(book, pageNumber) {
-        return "False";
+    function loadFirstPageSingle(book) {
+        pageNumber = 1;
+        // Write title
+        $("#right_page .page-title").html(book.bookTitle);
+        // write book description
+        $("#right_page .page-content").html(book.desc);
+        $("#right_page .page-number").html(pageNumber);
     }
 
-    // contacts server to get active status of the event 
-    function getEventChoices(book, pageNumber) {
+    function changeToSinglePage(book) {
+        $("#left_page").hide();
+        isSinglePage = true;
+        $(".page").css({width:"100%"});
+        if(bookIsOpen) {
+            if(pageNumber == 0) {
+                pageNumber = 1;
+                loadFirstPageSingle(book);
+            } else {
+                updatePage("#right_page",book,pageNumber);
+            }
+        }
+    }
 
-        var choices = {
-            choice1 : "Go",
-            choice2 : "Leave"
+    function changeToDoublePage(book) {
+        $("#left_page").show();
+        isSinglePage = false;
+        $(".page").css({width:"50%"});
+        if(bookIsOpen) {
+            if(pageNumber%2 == 1)
+                pageNumber -= 1;
+            if(pageNumber == 0) {
+                loadFirstPage(book);
+            } else {
+                $("#left_page .page-title").show();
+                $("#left_page .page-image").show();
+                updatePage("#left_page",book,pageNumber);
+                updatePage("#right_page",book,pageNumber+1);
+            }
+        }
+    }
+
+    // Go to next or previous page in single page format
+    function changePageSingle(event, element) {
+        var clickPos = event.pageX;
+        var $page = $("#right_page");
+        var pageWidth = $page.width();
+        var leftOffset = $page.offset().left;
+        var threshold = leftOffset+pageWidth/2;
+
+        if(clickPos > threshold) {
+            // If there are more pages left
+            if(pageNumber + 1 < currentBook.pages) {
+                pageNumber += 1;
+                // get new page
+                updatePage("#right_page",currentBook,pageNumber);
+            }
+        }
+        else {
+            // If it is not at the start
+            if (pageNumber -1 > 0) {
+                pageNumber -= 1;
+
+                // special case for first page
+                if(pageNumber == 1) {
+                    loadFirstPageSingle(currentBook);
+                }
+                // otherwise
+                else {
+                    updatePage("#right_page",currentBook,pageNumber);
+                }
+            }
         }
 
-        return choices;
-    }
-
-    function updatePage(pageId, book, pageNumber) {
-        $(pageId+" .page-title").html(getEventTitle(currentBook, pageNumber));
-        $(pageId+" .page-content").html(getEventContent(currentBook, pageNumber));
-        $(pageId+" .page-number").html(pageNumber);
     }
 
     // Change page content to next page
@@ -167,44 +244,20 @@ $(window).on("load", function() {
             // Update content of the left page
             // Contact server to get either new event, saved result, or empty string
             updatePage("#left_page",currentBook,pageNumber);
-
-            // Set right hand page to server content if it is not the end of the book
-            if(pageNumber + 1 < currentBook.pages) {
-                updatePage("#right_page",currentBook,pageNumber+1);
-            }
-            // otherwise empty string
-            else  {
-                $("#right_page .page-title").html("");
-                $("#right_page .page-content").html("");
-                $("#right_page .page-image").hide();
-                $("#right_page .page-number").html("");
-            }           
-            
+            updatePage("#right_page",currentBook,pageNumber+1);
         }
     }
 
     // Change page content to previous page
     function previousPage() {
-        // If there are more pages left
+        // If it is not at the start
         if (pageNumber -2 >= 0) {
             pageNumber -= 2;
-            
+
             $("#right_page .page-image").show();
-            // If it is the first page, the left is blank
-            // and the right page has the title and setting description
+            // special case for first page
             if(pageNumber == 0) {
-                // blank left page
-                $("#left_page .page-title").hide();
-                $("#left_page .page-image").hide();
-
-                $("#left_page .page-content").html("");
-                $("#left_page .page-number").html("");
-
-                // Write title
-                $("#right_page .page-title").html(currentBook.bookTitle);
-                // write book description
-                $("#right_page .page-content").html(currentBook.desc);
-                $("#right_page .page-number").html(pageNumber+1);
+                loadFirstPage(currentBook);
             }
             // otherwise
             else {
@@ -285,5 +338,32 @@ $(window).on("load", function() {
 
         return $book;
     }
+
+    // contacts server to get the event name for the page
+    function getEventTitle(book, pageNumber) {
+        return "Event";
+    }
+
+    // contacts server to get either an event description or past event result
+    function getEventContent(book, pageNumber) {
+        return "Event description";
+    }
+
+    // contacts server to get active status of the event 
+    function isEventComplete(book, pageNumber) {
+        return "False";
+    }
+
+    // contacts server to get active status of the event 
+    function getEventChoices(book, pageNumber) {
+
+        var choices = {
+            choice1 : "Go",
+            choice2 : "Leave"
+        }
+
+        return choices;
+    }
+
 });
 
