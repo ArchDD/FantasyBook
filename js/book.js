@@ -16,24 +16,34 @@ $(window).on("load", function() {
     initialiseBookshelf();
 
     function resizeBooks() {
+
         var mainHeight = $("#main").height();
         var mainWidth = $("#main").width();
 
-        if(mainWidth < 800)
-            changeToSinglePage(currentBook);
-        else
-            changeToDoublePage(currentBook);
+        if(bookIsOpen) {
+            if(mainWidth < 800)
+                changeToSinglePage(currentBook);
+            else
+                changeToDoublePage(currentBook);
 
-        var $flipbook = $("#flipbook");
+            var $flipbook = $("#flipbook");
 
-        $flipbook.css({ height:7 * mainHeight/10,
-                        top:1.5*mainHeight/10
-                     });
-
-        for (var key in books) {
-            var $book = $("#"+key);
-            var shelfHeight = $('#bookshelf').height();
-            $book.css({top:shelfHeight - $book.height()});
+            $flipbook.css({ height:7 * mainHeight/10,
+                            top:1.5*mainHeight/10
+                         });
+        } else {
+            for (var key in books) {
+                var $book = $("#"+key);
+                //$book.removeClass("book-transition"); // dont animate css changes
+                $book.removeClass("book-transition"); // renable transitions
+                $book.addClass("no-transition"); // set transitions to none.
+                var shelfHeight = $('#bookshelf').height();
+                $book.css({top:shelfHeight - $book.height()});
+                $book[0].offsetHeight; // causes css changes to be applied
+                $book.removeClass("no-transition"); // renable transitions
+                $book.addClass("book-transition");
+            }
+            
         }
     }
 
@@ -101,6 +111,7 @@ $(window).on("load", function() {
 
             bookIsOpen = true;
             currentBook = books[this.id];
+            resizeBooks();
 
             if(isSinglePage)
                 loadFirstPageSingle(currentBook);
@@ -173,6 +184,8 @@ $(window).on("load", function() {
         if(bookIsOpen) {
             if(pageNumber == 0) {
                 pageNumber = 1;
+            }
+            if(pageNumber == 1) {
                 loadFirstPageSingle(book);
             } else {
                 updatePage("#right_page",book,pageNumber);
@@ -325,7 +338,7 @@ $(window).on("load", function() {
         var shelfHeight = $('#bookshelf').height();
         //create text and book elements
         var $text = $('<span class="spineText unselectable">'+settings.bookTitle+'</span>');
-        var $book = $('<div class="book" id="'+key+'"/>');
+        var $book = $('<div class="book book-transition" id="'+key+'"/>');
         //apply book settings
         $book.height(settings.height);
         $book.width(settings.width);
