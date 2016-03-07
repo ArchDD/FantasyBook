@@ -10,6 +10,7 @@ body{
 }
 
 .book:hover{
+    cursor: default;
     transform: scale(1.1);
 }
 
@@ -41,10 +42,6 @@ body{
 .book .spineText:hover {
     cursor: default;
 } */
-
-.book:hover {
-    cursor: default;
-}
 
 #hidden-textures {
     position: absolute;
@@ -103,9 +100,44 @@ body{
 #flipbook .page{
     width:50%;
     background-color:white;
-    line-height:300px;
     font-size:20px;
-    text-align:center;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+}
+
+#flipbook .page-top {
+    flex: 1;
+}
+
+#flipbook .page-title {
+    font-size: 40px;
+    text-align: center;
+    flex: 2;
+}
+
+#flipbook .page-content {
+    margin-left: 4%;
+    margin-right: 4%;
+    text-align:left;
+    flex: 6;
+}
+
+#flipbook .page-image {
+    margin-left: 4%;
+    margin-right: 4%;
+    max-width: 100%;
+    background-image: url("../images/template_image.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    flex: 4;
+}
+
+#flipbook .page-number {
+    margin-right: 4%;
+    margin-bottom: 4%;
+    text-align: right;
+    flex: 0.3;
 }
 
 #right_page {
