@@ -30,7 +30,6 @@ main {
 
 img {
 	max-width: 100%;
-	padding: 1em;
 }
 
 ul {
@@ -49,16 +48,19 @@ ul {
 #logo {
 	flex: 1;
 	display: flex;
-	/* center wrap vertically */
-	align-items: center;
-	/* center wrap horizontally*/
-	justify-content: center ;
+}
+
+#logo > div {
+    display: flex;
+    padding: 3%;
+    min-width: 0; /*don't forget this line, see the explanation below*/
 }
 
 .block {
 	margin: 0.1em;
     background-color: #eae5cb;
     border-radius: 0.2em;
+    display: flex;
 }
 
 #container {
@@ -101,7 +103,7 @@ button {
 	border: none;
 	height: 40px;
 	width: 40px;
-	background: url(../images/square.svg);
+	background: url("../images/square.svg");
 	background-size: cover;	
 
 	/* center text in button */
@@ -135,6 +137,32 @@ button {
 }
 .ui-button:active {
     background: linear-gradient(#EB7723 50%, #A80000 50%);
+}
+
+.article-title {
+    text-align: center;
+    font-size: 2em;
+    padding: 3%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.article-content {
+    font-size: 1.2em;
+    flex: 10;    
+}
+
+article {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 5%;
+    padding-top: 3%;
 }
 
 .unselectable {
