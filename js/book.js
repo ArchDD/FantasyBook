@@ -21,7 +21,7 @@ $(window).on("load", function() {
         var mainWidth = $("#main").width();
 
         if(bookIsOpen) {
-            if(mainWidth < 800)
+            if(window.screen.width < 800)
                 changeToSinglePage(currentBook);
             else
                 changeToDoublePage(currentBook);

@@ -17,6 +17,7 @@ footer {
 nav {
 	flex: 10;
 	align-items: center;
+
 }
 
 aside {
@@ -26,10 +27,12 @@ aside {
 main {
     flex: 10;
     display: flex;
+    background-image: url("../images/basicpaper.png");
 }
 
 img {
 	max-width: 100%;
+    height: auto;
 }
 
 ul {
@@ -39,11 +42,18 @@ ul {
 	margin: 0;
 }
 
+
+
+
 #wrapper {
     display: flex;
     height: inherit;
     flex-direction:column;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: black;
 }
+
 
 #logo {
 	flex: 1;
@@ -57,9 +67,8 @@ ul {
 }
 
 .block {
-	margin: 0.1em;
-    background-color: #eae5cb;
-    border-radius: 0.2em;
+   /* background-color: #eae5cb; */
+    background-color: black;
     display: flex;
 }
 
@@ -73,12 +82,52 @@ ul {
 .navbar {
 	flex: 1;
 	display: flex;
+    background-image: url("../images/navbar.png");
+    border-radius: 5px;
+    -webkit-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -moz-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -o-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -ms-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 5px 5px rgba(0,0,0,0.3);
 }
 
 .navbar li {
 	flex: 1;
 	display: flex;
 	justify-content: center ;
+}
+
+.navbar span {
+    font-weight: bold;
+    color: #b98b46;
+    font-family: Garamond, Serif;
+    font-size: 1.25em;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.2), -1px -1px 1px rgba(0,0,0,0.8);
+}
+
+.navbar a > img {
+    height: 50px;
+}
+
+.navbar a > img:hover{
+    opacity: 0.7;
+}
+
+.navbar a > span:hover {
+    color: #816131;
+}
+
+.navbar a {
+    border: none;
+    height: 50px;
+    background-color: rgba(0,0,0,0);
+
+    /* center text in button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
 }
 
 .sidebar
@@ -97,20 +146,8 @@ ul {
 a {
 	/* remove underlines from links */
 	text-decoration: none;
-}
-
-button {
-	border: none;
-	height: 40px;
-	width: 40px;
-	background: url("../images/square.svg");
-	background-size: cover;	
-
-	/* center text in button */
-	display: flex;
-	justify-content: center;
-
-	margin: auto;
+    display: flex;
+    width: 100%;
 }
 
 #character, #ui {
@@ -172,4 +209,34 @@ article {
   -moz-user-select: none;     
   -ms-user-select: none;      
   user-select: none;           
+}
+
+@media (max-device-width: 800px) {
+    #wrapper {
+        padding: 0;
+    }
+    .navbar {
+        font-size: 1.5em;
+    }
+
+    .navbar a > img {
+        height: 70px;
+    }
+
+    .navbar a {
+        height: 70px;
+    }
+}
+
+@media (max-width: 800px) {
+    #wrapper {
+        padding: 0;
+    }
+    .navbar {
+        font-size: 0.7em;
+    }
+
+    .navbar a > img {
+        height: 30px;
+    }
 }

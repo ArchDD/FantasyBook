@@ -103,10 +103,10 @@ body{
 }
 
 #flipbook{
-    width:80%;
+    width:90%;
     flex: 8;
     position: relative;
-    left: 10%;
+    left: 5%;
     position: absolute;
     display: flex;
     flex-direction: row;
