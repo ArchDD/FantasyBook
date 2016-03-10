@@ -29,10 +29,10 @@
 		<!-- navigation links -->
 		<nav class="block">
 			<ul class="navbar">
-				<li><a href="#"><button type="image" class="button" onClick="clickhome(this)">Home</button></a></li>
-				<li><a href="#"><button type="image" class="button" onClick="clickexit(this)">About</button></a></li>
-				<li><a href="#"><button type="image" class="button">Regiser | Login</button></a></li>
-				<li><a href="#"><button type="image" class="button">Logout</button></a></li>
+				<li><a href="#"><button class="page-button" onClick="clickhome(this)">Home</button></a></li>
+				<li><a href="#"><button class="page-button" onClick="clickexit(this)">About</button></a></li>
+				<li><a href="#"><button class="page-button">Regiser | Login</button></a></li>
+				<li><a href="#"><button class="page-button">Logout</button></a></li>
 			</ul>	
 		</nav>
 	</header>
@@ -41,16 +41,160 @@
 		<!-- aside contains secondary content, the sidebar -->
 		<aside class="block">
 			<ul class="sidebar">
-				<li><a href="#"><button type="image" class="button">Profile</button></a></li>
-				<li><a href="#"><button type="image" class="button">Characters</button></a></li>
-				<li><a href="book.html"><button type="image" class="button">Books</button></a></li>
+				<li><a href="#"><button class="page-button">Profile</button></a></li>
+				<li><a href="#"><button class="page-button">Characters</button></a></li>
+				<li><a href="book.html"><button page-button="button">Books</button></a></li>
 			</ul>
 		</aside>
 
 		<!-- main contains the primary content -->
 		<main id = "main" class = "block">
 			<section id = "game">
-				<a href="#" class="ui-button">Play</a>
+				<section id = "ui">
+					<form id = "ui-form">
+						<section id = "character-features" class = "ui-element">
+							<legend class = "ui-item"><p>Name</p></legend>
+							<input type="text" name="name" class = "ui-item"/>
+							<button type = "button" class = "ui-item">Hair</button>
+							<button type = "button" class = "ui-item">Face</button>
+							<button type = "button" class = "ui-item">Head</button>
+						</section>
+
+						<section id = "feature-attributes">
+							<fieldset>
+								<legend>Hair</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Brow</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+							
+						    <fieldset>
+								<legend>Lash</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Pupil</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Eye</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Nose</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Mouth</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Cheek</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Chin</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Ear</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Head</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Colour<br/>
+								<input type="text" name="firstname"/>
+							</fieldset>
+
+							<fieldset>
+								<legend>Neck</legend>
+								Poisition<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+								Scale<br/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+								<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							</fieldset>
+						</section>
+					</form>
+				</section>
 				<canvas id = "character" class = "unselectable"></canvas>
 				<canvas id = "character-creator" class = "unselectable"></canvas>
 			</section>

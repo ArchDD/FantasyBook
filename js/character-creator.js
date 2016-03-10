@@ -20,29 +20,24 @@ init = function() {
 			draw(characterCreator, backgroundImages[i], characterCreator.width/2, characterCreator.height/2, characterCreator.width, characterCreator.height);
 	});
 	drawCharacter(characterCanvas, myCharacter, characterCanvas.width/1.3, characterCanvas.height/2., characterAspectRatio*(characterCanvas.height/1.4) , (characterCanvas.height/1.4));
-	
-	setupUI();
-	placeUI(characterCreator);
 };
 
 setupUI = function() {
 	// UI
-	document.querySelectorAll('.ui-button')[0].addEventListener('click', function(event) {
+	/*document.querySelectorAll('.ui-button')[0].addEventListener('click', function(event) {
 	   console.log('Button clicked'); 
-	});
+	});*/
 }
 
 placeUI = function(canvas) {
 	var rect = canvas.getBoundingClientRect();
 	console.log(rect.top, rect.right, rect.bottom, rect.left);
 
-	var uibutton = document.querySelectorAll('.ui-button')[0];
-	uibutton.style.width = canvas.width/10+'px';
-	uibutton.style.height = canvas.height/10+'px';
-
-	uibutton.style.left = x+'px';
-	uibutton.style.top = y+'px';
-
+	var ui = document.querySelectorAll('#ui')[0];
+	ui.style.width = canvas.width/2+'px';
+	ui.style.height = canvas.height+'px';
+	ui.style.left = rect.left+'px';
+	ui.style.top = rect.top+'px';
 }
 
 // variables
@@ -84,7 +79,7 @@ character = function() {
 				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
 
 	this.features = [this.neck, this.head, this.chin, this.ear, 
-					this.cheek, this.mouth, this.pupil, this.socket, 
+					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
 					this.brow, this.lash, this.nose, this.hair];
 }
 // character instance
@@ -107,7 +102,7 @@ drawCharacter = function(canvas, character, x, y, width, height, callback)
 		"../images/character/"+character.nose.type+".png",
 		"../images/character/"+character.hair.type+".png"];
 
-	loadImages(characterImages, function(){
+	loadImages(characterImages, function() {
 		for (var i = 0; i < character.features.length; i++)
 		{
 			draw(canvas, 
@@ -195,4 +190,6 @@ resizeCanvas = function(canvas) {
 		image.onload = function() {
 			context.drawImage(image, 0, 0, canvas.width, canvas.height);
 		};
+
+		placeUI(canvas);
 };
