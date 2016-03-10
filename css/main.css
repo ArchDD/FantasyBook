@@ -17,6 +17,7 @@ footer {
 nav {
 	flex: 10;
 	align-items: center;
+
 }
 
 aside {
@@ -26,11 +27,12 @@ aside {
 main {
     flex: 10;
     display: flex;
+    background-image: url("../images/basicpaper.png");
 }
 
 img {
 	max-width: 100%;
-	padding: 1em;
+    height: auto;
 }
 
 ul {
@@ -47,21 +49,27 @@ fieldset {
     display: flex;
     height: inherit;
     flex-direction:column;
+    padding-left: 15%;
+    padding-right: 15%;
+    background-color: black;
 }
+
 
 #logo {
 	flex: 1;
 	display: flex;
-	/* center wrap vertically */
-	align-items: center;
-	/* center wrap horizontally*/
-	justify-content: center ;
+}
+
+#logo > div {
+    display: flex;
+    padding: 3%;
+    min-width: 0; /*don't forget this line, see the explanation below*/
 }
 
 .block {
-	margin: 0.1em;
-    background-color: #eae5cb;
-    border-radius: 0.2em;
+   /* background-color: #eae5cb; */
+    background-color: black;
+    display: flex;
 }
 
 #container {
@@ -74,12 +82,52 @@ fieldset {
 .navbar {
 	flex: 1;
 	display: flex;
+    background-image: url("../images/navbar.png");
+    border-radius: 5px;
+    -webkit-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -moz-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -o-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    -ms-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 5px 5px rgba(0,0,0,0.3);
 }
 
 .navbar li {
 	flex: 1;
 	display: flex;
 	justify-content: center ;
+}
+
+.navbar span {
+    font-weight: bold;
+    color: #b98b46;
+    font-family: Garamond, Serif;
+    font-size: 1.25em;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.2), -1px -1px 1px rgba(0,0,0,0.8);
+}
+
+.navbar a > img {
+    height: 50px;
+}
+
+.navbar a > img:hover{
+    opacity: 0.7;
+}
+
+.navbar a > span:hover {
+    color: #816131;
+}
+
+.navbar a {
+    border: none;
+    height: 50px;
+    background-color: rgba(0,0,0,0);
+
+    /* center text in button */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
 }
 
 .sidebar
@@ -134,10 +182,61 @@ a {
 	justify-content: center;
 
 	margin: auto;
+    display: flex;
+    width: 100%;
 }
 
 #character, #ui {
 	position: absolute;
+}
+
+
+.ui-button {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    position: absolute;
+    left: 500px;
+    top: 150px;
+    color: #FFF;
+    text-decoration: none;
+    background: linear-gradient(#1879BD 50%, #084D79 50%);
+    text-align: center;
+    font-size: 15px;
+    font-family: sans-serif;
+    z-index: 1;
+}
+.ui-button:hover {
+    background: linear-gradient(#678834 50%, #093905 50%);
+}
+.ui-button:active {
+    background: linear-gradient(#EB7723 50%, #A80000 50%);
+}
+
+.article-title {
+    text-align: center;
+    font-size: 2em;
+    padding: 3%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.article-content {
+    font-size: 1.2em;
+    flex: 10;    
+}
+
+article {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 5%;
+    padding-top: 3%;
 }
 
 .unselectable {
@@ -147,4 +246,34 @@ a {
   -moz-user-select: none;     
   -ms-user-select: none;      
   user-select: none;           
+}
+
+@media (max-device-width: 800px) {
+    #wrapper {
+        padding: 0;
+    }
+    .navbar {
+        font-size: 1.5em;
+    }
+
+    .navbar a > img {
+        height: 70px;
+    }
+
+    .navbar a {
+        height: 70px;
+    }
+}
+
+@media (max-width: 800px) {
+    #wrapper {
+        padding: 0;
+    }
+    .navbar {
+        font-size: 0.7em;
+    }
+
+    .navbar a > img {
+        height: 30px;
+    }
 }

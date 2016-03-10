@@ -6,7 +6,22 @@ body{
     position: relative;
     overflow: hidden;
     border-radius: 4px;
+}
+
+.book-transition {
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
+}
+
+.no-transition {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    -ms-transition: none;
+    transition: none;
 }
 
 .book:hover{
@@ -88,10 +103,10 @@ body{
 }
 
 #flipbook{
-    width:80%;
+    width:90%;
     flex: 8;
     position: relative;
-    left: 10%;
+    left: 5%;
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -100,7 +115,7 @@ body{
 #flipbook .page{
     width:50%;
     background-color:white;
-    font-size:20px;
+    font-size:1.25em;
     cursor: default;
     display: flex;
     flex-direction: column;
@@ -111,7 +126,7 @@ body{
 }
 
 #flipbook .page-title {
-    font-size: 40px;
+    font-size: 2em;
     text-align: center;
     flex: 2;
 }
