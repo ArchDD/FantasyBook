@@ -15,10 +15,10 @@ init = function() {
     	resizeCanvas(characterCanvas);
 	}, false);
 
-	loadImages(backgroundImages, function() {
+	/*loadImages(backgroundImages, function() {
 		for (var i = 0; i < backgroundImages.length; i++) 
 			draw(characterCreator, backgroundImages[i], characterCreator.width/2, characterCreator.height/2, characterCreator.width, characterCreator.height);
-	});
+	});*/
 	drawCharacter(characterCanvas, myCharacter, characterCanvas.width/1.3, characterCanvas.height/2., characterAspectRatio*(characterCanvas.height/1.4) , (characterCanvas.height/1.4));
 };
 
@@ -33,11 +33,19 @@ placeUI = function(canvas) {
 	var rect = canvas.getBoundingClientRect();
 	console.log(rect.top, rect.right, rect.bottom, rect.left);
 
+	// size ui
 	var ui = document.querySelectorAll('#ui')[0];
 	ui.style.width = canvas.width/2+'px';
 	ui.style.height = canvas.height+'px';
 	ui.style.left = rect.left+'px';
 	ui.style.top = rect.top+'px';
+
+	
+	// size each item of ui group
+	/*for (int i = 0; i < uiGroups.length; i++)
+	{
+		console.log(uiGroups[i]);
+	}*/
 }
 
 // variables
