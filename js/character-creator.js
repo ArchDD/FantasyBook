@@ -1,32 +1,103 @@
+// character class
+character = function() {
+	this.characterName = "";
+	this.ownerName = "";
+
+	this.hair = {type: "medium", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.nose = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.lash = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.brow = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.socket = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.pupil = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.mouth = {type: "feminine", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.cheek = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.ear = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.chin = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.head = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	this.neck = {type: "default", hueShift: 0, 
+				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+
+	this.features = [this.neck, this.head, this.chin, this.ear, 
+					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
+					this.brow, this.lash, this.nose, this.hair];
+}
+
+// character instance
+var myCharacter = new character();
+
+// variables //
+var characterAspectRatio = 191.2/236;
+
+// images to load
+var backgroundImages = [
+    "../images/bg.jpg"
+];
+
+// appearance list
+var hairList = ["medium", "short"];
+var mouthList = ["masculine", "feminine"]
+
+// cached asset management using dictionary
+var cachedImages = {};
+
 // initialise when document is ready
 $(document).ready(function() {
     init();
   });
 
 init = function() {
-	var characterCreator = document.getElementById("character-creator");
-	var characterCanvas = document.getElementById("character");
 
 	// resizing listeners for responsive canvas
-	resizeCanvas(characterCreator);
-	resizeCanvas(characterCanvas);
+	resizeAll();
 	window.addEventListener('resize', function() {
-    	resizeCanvas(characterCreator);
-    	resizeCanvas(characterCanvas);
+    	resizeAll();
 	}, false);
 
 	/*loadImages(backgroundImages, function() {
 		for (var i = 0; i < backgroundImages.length; i++) 
 			draw(characterCreator, backgroundImages[i], characterCreator.width/2, characterCreator.height/2, characterCreator.width, characterCreator.height);
 	});*/
-	drawCharacter(characterCanvas, myCharacter, characterCanvas.width/1.3, characterCanvas.height/2., characterAspectRatio*(characterCanvas.height/1.4) , (characterCanvas.height/1.4));
+	setupUI();
 };
 
+// required for IE8 since it does not support indexOf
+getIndex = function(val, list) {
+    for (var i = 0; i < list.length; i++) {
+        if (list[i] == val) {
+            return i;
+        }
+    }
+}
+
 setupUI = function() {
-	// UI
-	/*document.querySelectorAll('.ui-button')[0].addEventListener('click', function(event) {
-	   console.log('Button clicked'); 
-	});*/
+	console.log(myCharacter);
+	// UI listeners
+	document.getElementById("previous-hair").addEventListener('click', function(event) {
+		var i = getIndex(myCharacter.hair.type, hairList)-1;
+		// mod in range
+		i = ((i % hairList.length) + hairList.length) % hairList.length;
+		myCharacter.hair.type = hairList[i];
+		drawCharacter();
+	});
+
+	document.getElementById("next-hair").addEventListener('click', function(event) {
+		var i = getIndex(myCharacter.hair.type, hairList)+1;
+		// mod in range
+		i = ((i % hairList.length) + hairList.length) % hairList.length;
+		myCharacter.hair.type = hairList[i];
+		drawCharacter();
+	});
 }
 
 placeUI = function(canvas) {
@@ -39,82 +110,45 @@ placeUI = function(canvas) {
 	ui.style.height = canvas.height+'px';
 	ui.style.left = rect.left+'px';
 	ui.style.top = rect.top+'px';
-
-	
-	// size each item of ui group
-	/*for (int i = 0; i < uiGroups.length; i++)
-	{
-		console.log(uiGroups[i]);
-	}*/
 }
 
-// variables
-var characterAspectRatio = 191.2/236;
-// images to load
-var backgroundImages = [
-    "../images/bg.jpg"
-];
-// cached asset management using dictionary
-var cachedImages = {};
-// character class
-character = function() {
-	this.characterName = "";
-	this.ownerName = "";
+drawCharacter = function()
+{	
+	var canvas = document.getElementById("character");
+	var character = myCharacter;
+	var x = canvas.width/1.3;
+	var y = canvas.height/2;
+	var width = characterAspectRatio*(canvas.height/1.4);
+	var height = (canvas.height/1.4);
 
-	this.hair = {type: "hair_medium", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.nose = {type: "nose_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.lash = {type: "lash_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.brow = {type: "brow_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.socket = {type: "socket_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.pupil = {type: "pupil_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.mouth = {type: "mouth_feminine", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.cheek = {type: "cheek_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.ear = {type: "ear_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.chin = {type: "chin_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.head = {type: "head", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.neck = {type: "neck_default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+	var context = canvas.getContext("2d");
+	// clear only the section drawn on
+	context.clearRect(x-width,y-height,x+width,y+height);
 
-	this.features = [this.neck, this.head, this.chin, this.ear, 
-					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
-					this.brow, this.lash, this.nose, this.hair];
-}
-// character instance
-var myCharacter = new character();
-
-drawCharacter = function(canvas, character, x, y, width, height, callback)
-{
 	// images to load
 	var characterImages = [
-		"../images/character/"+character.neck.type+".png",
-		"../images/character/head.png",
-		"../images/character/"+character.chin.type+".png",
-		"../images/character/"+character.ear.type+".png",
-		"../images/character/"+character.cheek.type+".png",
-		"../images/character/"+character.mouth.type+".png",
-		"../images/character/"+character.pupil.type+".png",
-		"../images/character/"+character.socket.type+".png",
-		"../images/character/"+character.brow.type+".png",
-		"../images/character/"+character.lash.type+".png",
-		"../images/character/"+character.nose.type+".png",
-		"../images/character/"+character.hair.type+".png"];
+		"../images/character/neck_"+character.neck.type+".png",
+		"../images/character/head_"+character.head.type+".png",
+		"../images/character/chin_"+character.chin.type+".png",
+		"../images/character/ear_"+character.ear.type+".png",
+		"../images/character/cheek_"+character.cheek.type+".png",
+		"../images/character/mouth_"+character.mouth.type+".png",
+		"../images/character/pupil_"+character.pupil.type+".png",
+		"../images/character/socket_"+character.socket.type+".png",
+		"../images/character/brow_"+character.brow.type+".png",
+		"../images/character/lash_"+character.lash.type+".png",
+		"../images/character/nose_"+character.nose.type+".png",
+		"../images/character/hair_"+character.hair.type+".png"];
+
+	var featuresPrefixes = ["neck_", "head_", "chin_", "ear_", "mouth_", "pupil_", "socket_", "brow_", "lash_", "nose_", "hair_"];
+	console.log(character.features[0]);
 
 	loadImages(characterImages, function() {
 		for (var i = 0; i < character.features.length; i++)
 		{
+			console.log("aaa: "+"../images/character/"+featuresPrefixes[i]+character.features[i].type+".png");
 			draw(canvas, 
-				"../images/character/"+character.features[i].type+".png",
+				"../images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
 				x+character.features[i].xOffset, 
 				y+character.features[i].yOffset,
 				width*character.features[i].xScale, 
@@ -163,6 +197,34 @@ draw = function(canvas, src, x, y, width, height) {
 	context.drawImage(cachedImages[src], x-width/2, y-height/2, width, height);
 };
 
+resizeAll = function()
+{
+	var characterCreator = document.getElementById("character-creator");
+	var characterCanvas = document.getElementById("character");
+	var previousWidth = characterCanvas.width;
+
+	resizeCanvas(characterCreator);
+    var obj = resizeCanvas(characterCanvas);
+    var resizeWidth = obj.resizeHeight;
+    var dataURL = obj.dataURL;
+
+    // redraw is scaling up, otherwise reuse context
+	if (previousWidth > resizeWidth)
+	{
+		var image = new Image();
+		image.src = dataURL;
+		image.onload = function() {
+			context.drawImage(image, 0, 0, canvas.width, canvas.height);
+		};
+	}
+	else
+	{
+		drawCharacter();
+	}
+
+	placeUI(characterCreator);
+}
+
 // event function that makes canvas responsive
 resizeCanvas = function(canvas) {
 		canvas.style.marginLeft = "0px";
@@ -192,12 +254,5 @@ resizeCanvas = function(canvas) {
 		canvas.style.marginLeft = (gameContainer.clientWidth-resizeWidth)/2 + 'px';
 		canvas.style.marginTop = (gameContainer.clientHeight-resizeHeight)/2 + 'px';
 
-
-		var image = new Image();
-		image.src = dataURL;
-		image.onload = function() {
-			context.drawImage(image, 0, 0, canvas.width, canvas.height);
-		};
-
-		placeUI(canvas);
+		return {resizeWidth, dataURL};
 };

@@ -22,7 +22,7 @@
 <body>
 	<section id = "wrapper">
 	<!-- header contains introductory content -->
-    <header class="banner">
+    <header class="banner">	
         <!-- navigation links -->
         <nav class="block">
             <ul class="navbar">
@@ -50,10 +50,14 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Hair</p>
+							<p class = "feature-text">
+								<button type="button" id = "previous-hair"> &lt; </button>
+								Hair
+								<button type="button" id = "next-hair"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<input type="range" name="points" id="points" value="0" min="-50" max="50"/>
 							<span class = "value-text">Y:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
 							<p class = "attribute-text">Scale</p>
@@ -66,7 +70,11 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Brow</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Brow
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -82,7 +90,11 @@
 						</section>
 						
 					    <section class = "ui-group">
-							<p class = "feature-text">Lash</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Lash
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -98,7 +110,11 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Pupil</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Pupil
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -114,7 +130,11 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Eye</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Eye
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -128,7 +148,11 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Nose</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Nose
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -142,65 +166,11 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Mouth</p>
-							<p class = "attribute-text">Poisition</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-							<p class = "attribute-text">Scale</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-							<p class = "attribute-text">Colour</p>
-							<input type="text" name="firstname"/>
-						</section>
-
-						<section class = "ui-group">
-							<p class = "feature-text">Cheek</p>
-							<p class = "attribute-text">Poisition</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-							<p class = "attribute-text">Scale</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-						</section>
-
-						<section class = "ui-group">
-							<p class = "feature-text">Chin</p>
-							<p class = "attribute-text">Poisition</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-							<p class = "attribute-text">Scale</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-						</section>
-
-						<section class = "ui-group">
-							<p class = "feature-text">Ear</p>
-							<p class = "attribute-text">Poisition</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-							<p class = "attribute-text">Scale</p>
-							<span class = "value-text">X:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
-							<span class = "value-text">Y:</span>
-							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-						</section>
-
-						<section class = "ui-group">
-							<p class = "feature-text">Head</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Mouth
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
@@ -216,7 +186,85 @@
 						</section>
 
 						<section class = "ui-group">
-							<p class = "feature-text">Neck</p>
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Cheek
+								<button type="button"> &gt; </button>
+							</p>
+							<p class = "attribute-text">Poisition</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+							<p class = "attribute-text">Scale</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+						</section>
+
+						<section class = "ui-group">
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Chin
+								<button type="button"> &gt; </button>
+							</p>
+							<p class = "attribute-text">Poisition</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+							<p class = "attribute-text">Scale</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+						</section>
+
+						<section class = "ui-group">
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Ear
+								<button type="button"> &gt; </button>
+							</p>
+							<p class = "attribute-text">Poisition</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+							<p class = "attribute-text">Scale</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+						</section>
+
+						<section class = "ui-group">
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Head
+								<button type="button"> &gt; </button>
+							</p>
+							<p class = "attribute-text">Poisition</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+							<p class = "attribute-text">Scale</p>
+							<span class = "value-text">X:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
+							<span class = "value-text">Y:</span>
+							<input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
+							<p class = "attribute-text">Colour</p>
+							<input type="text" name="firstname"/>
+						</section>
+
+						<section class = "ui-group">
+							<p class = "feature-text">
+								<button type="button"> &lt; </button>
+								Neck
+								<button type="button"> &gt; </button>
+							</p>
 							<p class = "attribute-text">Poisition</p>
 							<span class = "value-text">X:</span>
 							<input type="range" name="points" id="points" value="50" min="0" max="100"/>
