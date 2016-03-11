@@ -81,7 +81,6 @@ getIndex = function(val, list) {
 }
 
 setupUI = function() {
-	console.log(myCharacter);
 	// UI listeners
 	document.getElementById("previous-hair").addEventListener('click', function(event) {
 		var i = getIndex(myCharacter.hair.type, hairList)-1;
@@ -101,11 +100,14 @@ setupUI = function() {
 }
 
 placeUI = function(canvas) {
+	// clearing
+	var ui = document.querySelectorAll('#ui')[0];
+	ui.style.width = '0px';
+	ui.style.height = '0px';
 	var rect = canvas.getBoundingClientRect();
 	console.log(rect.top, rect.right, rect.bottom, rect.left);
 
 	// size ui
-	var ui = document.querySelectorAll('#ui')[0];
 	ui.style.width = canvas.width/2+'px';
 	ui.style.height = canvas.height+'px';
 	ui.style.left = rect.left+'px';
