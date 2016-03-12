@@ -32,19 +32,26 @@ $(window).on("load", function() {
                             top:1.5*mainHeight/10
                          });
         } else {
+
+            // resize all books other than book creator book
             for (var key in books) {
                 var $book = $("#"+key);
-                //$book.removeClass("book-transition"); // dont animate css changes
-                $book.removeClass("book-transition"); // renable transitions
-                $book.addClass("no-transition"); // set transitions to none.
-                var shelfHeight = $('#bookshelf').height();
-                $book.css({top:shelfHeight - $book.height()});
-                $book[0].offsetHeight; // causes css changes to be applied
-                $book.removeClass("no-transition"); // renable transitions
-                $book.addClass("book-transition");
+                resizeBook($book,0);
             }
-            
+            // resize the book creator book
+            var $addBook = $("#addBook");
+            resizeBook($addBook, 6);
         }
+    }
+
+    function resizeBook(book, border) {
+        book.removeClass("book-transition"); // remove transitions
+        book.addClass("no-transition"); // set transitions to none.
+        var shelfHeight = $('#bookshelf').height();
+        book.css({top:shelfHeight - (book.height()+border)});
+        book[0].offsetHeight; // causes css changes to be applied
+        book.removeClass("no-transition"); // renable transitions
+        book.addClass("book-transition");
     }
 
     function initialiseBookshelf() {
@@ -83,46 +90,51 @@ $(window).on("load", function() {
 
     var books = {
         "book1" : {
-            bookTitle: "Lord of the Rings", desc: "[Theme description]", pages: 5, height: 400, width: 96, colour: "#2a6f41", texture: "leather"
+            bookTitle: "Lord of the Rings", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: "#2a6f41", texture: "leather"
         },
         "book2" : {
-            bookTitle: "Alice in Wonderland", desc: "[Theme description]", pages: 5, height: 400, width: 48, colour: '#42548a', texture: "leather"
+            bookTitle: "Alice in Wonderland", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#42548a', texture: "leather"
         },
         "book3" : {
-            bookTitle: "The Colour of Magic", desc: "[Theme description]", pages: 5, height: 400, width: 36, colour: '#661919', texture: "leather"
+            bookTitle: "The Colour of Magic", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#661919', texture: "leather"
         },
         "book4" : {
-            bookTitle: "Coraline", desc: "[Theme description]", pages: 5, height: 400, width: 50, colour: '#4d3960', texture: "leather"
+            bookTitle: "Coraline", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#4d3960', texture: "leather"
         }
     }
 
     //Populate the shelf with previously saved books
     function populateBooks() {
-        //Create each example 
         for (var key in books) {
-            //console.log($('#bookshelf').height());
-            $('#bookshelf').append(createNewBook(key, books[key]));
+            // insert books before the 'new book' template
+            createNewBook(key, books[key]).insertBefore($("#addBook"));
         }
     }
 
     // Open flipbook and exit book shelf
     $("body").on("click", ".book", function() {
         if(!bookIsOpen) {
+            // special case - book creator
+            if(this.id === "addBook") {
 
-            bookIsOpen = true;
-            currentBook = books[this.id];
-            resizeBooks();
+            }
+            else {
 
-            if(isSinglePage)
-                loadFirstPageSingle(currentBook);
-            else
-                loadFirstPage(currentBook);
+                bookIsOpen = true;
+                currentBook = books[this.id];
+                resizeBooks();
 
-            // Make flipbook visible
-            $("#flipbook-container").css("display","flex");
-            $("#flipbook-container").css("visibility","visible");
-            $("#bookshelf-container").css("display","none");
-            $("#bookshelf-container").css("visibility","hidden");
+                if(isSinglePage)
+                    loadFirstPageSingle(currentBook);
+                else
+                    loadFirstPage(currentBook);
+
+                // Make flipbook visible
+                $("#flipbook-container").css("display","flex");
+                $("#flipbook-container").css("visibility","visible");
+                $("#bookshelf-container").css("display","none");
+                $("#bookshelf-container").css("visibility","hidden");
+            }
         }
     });
 
@@ -328,8 +340,8 @@ $(window).on("load", function() {
     function createNewBook(key, settings) {
         //default settings
         settings = $.extend(true, {
-            height: 300,
-            width: 48,
+            height: 400,
+            width: 70,
             bookTitle: key,
             colour: "#02B8Be"
         }, settings);
