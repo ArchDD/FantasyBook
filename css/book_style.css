@@ -142,7 +142,7 @@ body{
     margin-left: 4%;
     margin-right: 4%;
     max-width: 100%;
-    background-image: url("../images/template_image.jpg");
+    background-image: url("../images/character/anon.png");
     background-size: contain;
     background-repeat: no-repeat;
     flex: 4;
