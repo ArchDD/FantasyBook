@@ -7,7 +7,13 @@ html, body {
     width: 100%;
 	padding: 0;
 	margin: 0;
-    background-color: black;
+}
+
+body {
+    background-image: url("/images/background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #container {
@@ -40,7 +46,6 @@ header {
 }
 
 main {
-    background-image: url("/images/basicpaper.png");
     border-radius: 5px;
     width: 100%;
 }
@@ -93,7 +98,7 @@ fieldset {
 
 .block {
    /* background-color: #eae5cb; */
-    background-color: black;
+    /*background-color: black;*/
     display: -ms-flexbox;
     display: flex;
 }
@@ -239,6 +244,7 @@ article {
     padding-right: 10%;
     padding-bottom: 5%;
     padding-top: 30px;
+    background-image: url("/images/basicpaper.png");
 }
 
 .unselectable {
