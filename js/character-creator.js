@@ -256,5 +256,6 @@ resizeCanvas = function(canvas) {
 		canvas.style.marginLeft = (gameContainer.clientWidth-resizeWidth)/2 + 'px';
 		canvas.style.marginTop = (gameContainer.clientHeight-resizeHeight)/2 + 'px';
 
-		return {resizeWidth, dataURL};
+		var obj = {resizeWidth: this.resizeWidth, dataURL: this.dataURL};
+		return obj;
 };
