@@ -49,7 +49,7 @@ $(window).on("load", function() {
         book.addClass("no-transition"); // set transitions to none.
         var shelfHeight = $('#bookshelf').height();
         book.css({top:shelfHeight - (book.height()+border)});
-        book[0].offsetHeight; // causes css changes to be applied
+        book.height(); // causes css changes to be applied
         book.removeClass("no-transition"); // renable transitions
         book.addClass("book-transition");
     }
@@ -332,7 +332,7 @@ $(window).on("load", function() {
         //draw the book
         context.fillRect(0,0,settings.width,settings.height);
         //overlay the book texture
-        canvases[settings.texture].get(0).getContext('2d').blendOnto(context,'overlay');
+       // canvases[settings.texture].get(0).getContext('2d').blendOnto(context,'overlay');
 
         return canvas;
     }
