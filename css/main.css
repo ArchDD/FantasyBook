@@ -261,6 +261,8 @@ article {
   user-select: none;           
 }
 
+
+
 @media (max-device-width: 800px) {
     #wrapper {
         margin: 0;

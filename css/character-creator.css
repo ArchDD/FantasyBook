@@ -43,7 +43,7 @@ fieldset{
 	width: 100%;
 }
 
-#character, #ui {
+#character-creator, #character, #ui {
 	position: absolute;
 }
 

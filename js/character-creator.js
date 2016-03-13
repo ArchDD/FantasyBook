@@ -51,13 +51,18 @@ var mouthList = ["masculine", "feminine"]
 // cached asset management using dictionary
 var cachedImages = {};
 
+// Aspect ratio information for resizing
+var oldAspectRatio;
+
 // initialise when document is ready
 $(document).ready(function() {
     init();
   });
 
 init = function() {
-
+	// decide initial aspect ratio
+	var gameContainer = document.getElementById("main");
+	oldAspectRatio = gameContainer.clientWidth/gameContainer.clientHeight;
 	// resizing listeners for responsive canvas
 	resizeAll();
 	window.addEventListener('resize', function() {
@@ -105,7 +110,6 @@ placeUI = function(canvas) {
 	ui.style.width = '0px';
 	ui.style.height = '0px';
 	var rect = canvas.getBoundingClientRect();
-	console.log(rect.top, rect.right, rect.bottom, rect.left);
 
 	// size ui
 	ui.style.width = canvas.width/2+'px';
@@ -143,12 +147,10 @@ drawCharacter = function()
 		"../images/character/hair_"+character.hair.type+".png"];
 
 	var featuresPrefixes = ["neck_", "head_", "chin_", "ear_", "mouth_", "pupil_", "socket_", "brow_", "lash_", "nose_", "hair_"];
-	console.log(character.features[0]);
 
 	loadImages(characterImages, function() {
 		for (var i = 0; i < character.features.length; i++)
 		{
-			console.log("aaa: "+"../images/character/"+featuresPrefixes[i]+character.features[i].type+".png");
 			draw(canvas, 
 				"../images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
 				x+character.features[i].xOffset, 
@@ -235,19 +237,18 @@ resizeCanvas = function(canvas) {
 		var context = canvas.getContext("2d");
 		var dataURL = canvas.toDataURL("image/png", 1.0);
 
-		var flexVal = 12.0;
-		var aspectRatio = 16.0/12.0;
-		var resizeWidth = window.innerWidth*(10.0/flexVal);
-		var resizeHeight = window.innerHeight*(10.0/flexVal);
+		//var aspectRatio = gameContainer.clientWidth/gameContainer.clientHeight;
+		var resizeWidth = gameContainer.clientWidth;
+		var resizeHeight = gameContainer.clientHeight;
 		var newAspectRatio = resizeWidth/resizeHeight;
 
 		// resize, retaining aspect ratio
-		if (newAspectRatio > aspectRatio) {
+		if (newAspectRatio > oldAspectRatio) {
 			// shrink by width
-			resizeWidth = resizeHeight * aspectRatio;
+			resizeWidth = resizeHeight * oldAspectRatio;
 		} else {
 			// shrink by height
-			resizeHeight = resizeWidth / aspectRatio;
+			resizeHeight = resizeWidth / oldAspectRatio;
 		}
 	
 		canvas.width = resizeWidth;
