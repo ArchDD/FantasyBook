@@ -13,6 +13,13 @@ $(window).on("load", function() {
     window.addEventListener('resize', resizeBooks, false);
 
     var canvases = {};
+
+    //Texture container
+    var textures = {
+        leather : new Image()
+    };
+    textures.leather.src = "../images/leather_grey.png";
+
     initialiseBookshelf();
 
     function resizeBooks() {
@@ -55,29 +62,14 @@ $(window).on("load", function() {
     }
 
     function initialiseBookshelf() {
-        //Texture container
-        var textures = {
-            leather : new Image()
-        };
-        textures.leather.src = "../images/leather_grey.png";
+        
         //loaded texture counter
         var loadedTextures = 0;
-        //Canvas container
 
-
-        //For each loaded texture, create a canvas of the same size and draw it
+        //For each texture
         $.each(textures, function(i,tex) {
             $('#hidden-textures').append(tex);
             tex.onload = function() {
-                canvases[i] = $("<canvas/>");
-                canvases[i]
-                    .attr('width', tex.width)
-                    .attr('height', tex.height)
-                    .addClass('bookiewookie')
-                    .attr('id', i);
-
-                //Draw texture onto canvas
-                canvases[i].get(0).getContext('2d').drawImage(tex,0,0);
                 loadedTextures++;
                 //when all textures are loaded
                 if(loadedTextures == Object.keys(textures).length) {
@@ -313,29 +305,31 @@ $(window).on("load", function() {
     });
 
     function createBookCanvas(settings) {
-        var canvas = document.createElement('canvas');
-        canvas.className = 'canvas-texture';
-        canvas.width = settings.width;
-        canvas.height = settings.height;
+        var tex = textures.leather;
+        var drawCanvas = document.createElement("canvas");
+        drawCanvas.className = "canvas-texture";
+        drawCanvas.width = settings.width;
+        drawCanvas.height = settings.height;
+        var drawContext = drawCanvas.getContext("2d");
 
-        var context = canvas.getContext('2d');
-        //create gradient, with black shadows on either side
-        var gradient = context.createLinearGradient(0,0,settings.width,0);
+        var gradient = drawContext.createLinearGradient(0,0,settings.width,0);
         gradient.addColorStop(0,"black");
         gradient.addColorStop(0.1,settings.colour);
         gradient.addColorStop(0.9,settings.colour);
         gradient.addColorStop(1,"black");
 
+        drawContext.drawImage(tex,0,0);
+
+        drawContext.globalCompositeOperation = "overlay";
         //fill the book with the gradient colour
-        context.fillStyle = gradient;
+        drawContext.fillStyle = gradient;
 
         //draw the book
-        context.fillRect(0,0,settings.width,settings.height);
-        //overlay the book texture
-       // canvases[settings.texture].get(0).getContext('2d').blendOnto(context,'overlay');
+        drawContext.fillRect(0,0,settings.width,settings.height);
 
-        return canvas;
+        return drawCanvas;
     }
+
 
     function createNewBook(key, settings) {
         //default settings
