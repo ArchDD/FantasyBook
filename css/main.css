@@ -244,7 +244,12 @@ article {
     padding-right: 10%;
     padding-bottom: 5%;
     padding-top: 30px;
-    background-image: url("/images/basicpaper.png");
+    /*background-image: url("/images/basicpaper.png");*/
+    background-color: rgba(207,219,250,0.55);
+    font-weight: bold;
+    color: #3E2F2F;
+    font-family: Garamond, Serif;
+    font-size: 1.25em;
 }
 
 .unselectable {
