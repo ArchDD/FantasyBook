@@ -39,14 +39,10 @@ input {
 	margin: 0 auto;
 }
 
-fieldset{
-	width: 100%;
-}
-
 #character-creator, #character, #ui {
 	position: absolute;
 }
 
 #ui {
-	overflow: scroll;
+	overflow: auto;
 }

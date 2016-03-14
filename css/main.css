@@ -292,3 +292,31 @@ article {
         height: 30px;
     }
 }
+
+.form {
+	flex: 1;
+    border-radius: 0.2em;
+    border: 0.1em solid black;
+    margin: 5%;
+    padding: 3%;
+}
+
+.feature-text {
+	font-size: 1.2em;
+	margin: 0 auto;
+}
+
+.attribute-text {
+	font-size: 1em;
+}
+
+
+input {
+	width: 80%;
+	margin: 0 auto;
+}
+
+input[type="submit"] {
+	width: 40%;
+	margin: 5% auto;
+}
