@@ -98,7 +98,7 @@ body{
     width: 100%;
     display: flex;
     flex: 1 0 auto;
-    background-image: url("../images/wood_back.png");
+    background-image: url("/images/wood_back.png");
     -webkit-box-shadow:inset 0 0 70px 70px rgba(0,0,0,0.3);
     -moz-box-shadow:inset 0 0 70px 70px rgba(0,0,0,0.3);
     -o-box-shadow:inset 0 0 70px 70px rgba(0,0,0,0.3);
@@ -161,7 +161,7 @@ body{
     margin-left: 4%;
     margin-right: 4%;
     max-width: 100%;
-    background-image: url("../images/character/anon.png");
+    background-image: url("/images/character/anon.png");
     background-size: contain;
     background-repeat: no-repeat;
     height: 150px;
@@ -201,23 +201,3 @@ body{
     -ms-box-shadow:inset 0 0 5px #666;
     box-shadow:inset 0 0 5px #666;
 }
-/*
-#flipbook .page-wrapper{
-    -webkit-perspective:2000px;
-    -moz-perspective:2000px;
-    -ms-perspective:2000px;
-    -o-perspective:2000px;
-    perspective:2000px;
-}
-
-#flipbook .hard{
-    background:#00ccff
-    color:black;
-    -webkit-box-shadow:inset 0 0 5px #666;
-    -moz-box-shadow:inset 0 0 5px #666;
-    -o-box-shadow:inset 0 0 5px #666;
-    -ms-box-shadow:inset 0 0 5px #666;
-    box-shadow:inset 0 0 5px #666;
-    font-weight:bold;
-}
-*/
