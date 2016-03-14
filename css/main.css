@@ -246,6 +246,7 @@ article {
     border: 0.1em solid black;
     margin: 5%;
     padding: 3%;
+    background-color: rgba(207,219,250,0.55);
 }
 
 .form-text {

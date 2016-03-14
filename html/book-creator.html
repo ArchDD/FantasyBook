@@ -3,146 +3,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
 <head>
     <meta charset="UTF-8"/>
-    <title>BookyWooky</title>
+    <title>WeStory</title>
 
     <!-- conditional comments for polyfills first -->
     <!--[if IE]>
-    <script src="//cdnjs./html5shiv.min.js"></script>
+    <script src="//cdnjs.../html5shiv.min.js"></script>
     <![endif]--> 
 
-    <!-- normalise css -->
+    <!-- use cdn for minified normalise css -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"></script>
     <!-- style sheet link -->
     <link href="../css/main.css" rel="stylesheet" type="text/css" media="all"/>
-    <link href="../css/character-creator.css" rel="stylesheet" type="text/css" media="all"/>
-    <!-- use google's content delivery network for minified jQuery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <section id = "wrapper">
-    <!-- header contains introductory content -->
-    <header class="banner"> 
-        <!-- navigation links -->
-        <nav class="block">
-            <ul class="wood-panel navbar">
-                <!--<li><div class="flex-image"></div></li>-->
-                <li><a href="book.html"><span class="nav-top">Books</span></a></li>
-                <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
-                <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
-                <li><a href="register-login.html"><span class="nav-top">Register</span></a></li>
-                <li><a href="#"><span class="nav-top">Logout</span></a></li>
-            </ul>   
-        </nav>
-    </header>
+    <div id = "wrapper">
+        <!-- header contains introductory content -->
+        <header class="banner">
+            <!-- navigation links -->
+            <nav class="block">
+                <ul class="wood-panel navbar">
+                    <li><a href="book.html"><span class="nav-top">Books</span></a></li>
+                    <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
+                    <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
+                    <li><a href="register-login.html"><span class="nav-top">Register</span></a></li>
+                    <li><a href="#"><span class="nav-top">Logout</span></a></li>
+                </ul>   
+            </nav>
+        </header>
 
-    <section id = "container">
-        <!-- main contains the primary content -->
-        <main id = "main" class = "block">
-            <!-- game wrapper to scale relatively to page-->
-            <section id = "game">
-                <!-- UI wrapper to scale relatively to game -->
-                <section id = "ui">
-                    <form id = "ui-form">
-                        <section class = "ui-group" id = "test">
-                            <p class = "feature-text">Name</p>
-                            <input type="text" name="name" class = "ui-item"/>
-                        </section>
+        <div id = "container">
+            <!-- main contains the primary content -->
+            <main id = "main" class = "block">
+                <form class = "form">
+                    <p class = "feature-text">New Book</p>
 
-                        <section class = "ui-group">
-                            <p class = "feature-text">
-                                <button type="button" id = "previous-hair"> &lt; </button>
-                                Hair
-                                <button type="button" id = "next-hair"> &gt; </button>
-                            </p>
-                            <p class = "attribute-text">Poisition</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="0" min="-50" max="50"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Scale</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Colour</p>
-                            <input type="text" name="firstname"/>
-                        </section>
+                    <p class = "field-text">Title</p>
+                    <input type="text" name="login-username" class = "form-field"/>
 
-                        <section class = "ui-group">
-                            <p class = "feature-text">
-                                <button type="button"> &lt; </button>
-                                Brow
-                                <button type="button"> &gt; </button>
-                            </p>
-                            <p class = "attribute-text">Poisition</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Scale</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Colour</p>
-                            <input type="text" name="firstname"/>
-                        </section>
-                        
-                        <section class = "ui-group">
-                            <p class = "feature-text">
-                                <button type="button"> &lt; </button>
-                                Lash
-                                <button type="button"> &gt; </button>
-                            </p>
-                            <p class = "attribute-text">Poisition</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Scale</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Colour</p>
-                            <input type="text" name="firstname"/>
-                        </section>
+                    <p class = "field-text">Theme</p>
+                    <input type="password" name="login-password" class = "form-field"/>
 
-                        <section class = "ui-group">
-                            <p class = "feature-text">
-                                <button type="button"> &lt; </button>
-                                Pupil
-                                <button type="button"> &gt; </button>
-                            </p>
-                            <p class = "attribute-text">Poisition</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Scale</p>
-                            <span class = "value-text">X:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/>
-                            <span class = "value-text">Y:</span>
-                            <input type="range" name="points" id="points" value="50" min="0" max="100"/><br/>
-                            <p class = "attribute-text">Colour</p>
-                            <input type="text" name="firstname"/>
-                        </section>
+                    <p class = "field-text">Max-players</p>
+                    <input type="password" name="login-password" class = "form-field"/>
 
-                        <section class = "ui-group">
-                            <input type="submit" value="Submit"/>
-                        </section>
-                    </form>
-                </section>
-            </section>
-        </main>
-    </section>
-
-    <!--<footer class ="block">
-        <div>Page footer content</div>
-        <small>Site developed by Dillon Keith Diep and Jason Haciepiri</small>
-    </footer>-->
-
-    </section>
+                    <input type="submit" value="Create book"/>
+                </form>
+            </main>
+        </div>
+    </div>
 </body>
 </html>

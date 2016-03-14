@@ -80,6 +80,7 @@ $(window).on("load", function() {
         });
     }
 
+    // Example books
     var books = {
         "book1" : {
             bookTitle: "Lord of the Rings", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: "#2a6f41", texture: "leather"
