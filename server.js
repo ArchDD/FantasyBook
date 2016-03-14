@@ -39,6 +39,7 @@ var types = {
     '.doc'  : '#proprietary, non-standard, platform dependent, ' +
               'closed source, unstable over versions and installations, ' +
               'contains unsharable personal and printer preferences, use .pdf',
+    '.ico'  : 'image/x-icon'
 };
 
 // Start both the http and https services.  Requests can only come from
