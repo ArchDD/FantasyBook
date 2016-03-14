@@ -4,7 +4,6 @@
 }
 
 .ui-group {
-    border-radius: 0.2em;
     display: flex;
     flex-direction: column;
     border-top: 0.1em solid black;
