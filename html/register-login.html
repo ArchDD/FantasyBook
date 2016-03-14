@@ -3,93 +3,69 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
 <head>
     <meta charset="UTF-8"/>
-    <title>BookyWooky</title>
+    <title>WeStory</title>
 
     <!-- conditional comments for polyfills first -->
     <!--[if IE]>
     <script src="//cdnjs.../html5shiv.min.js"></script>
     <![endif]--> 
 
-    <!-- normalise css -->
+    <!-- use cdn for minified normalise css -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css"></script>
     <!-- style sheet link -->
     <link href="../css/main.css" rel="stylesheet" type="text/css" media="all"/>
-    <!-- use google's content delivery network for minified jQuery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
 </head>
 
 <body>
-    <section id = "wrapper">
-    <!-- header contains introductory content -->
-    <header class="banner">
-        <!--<section id = "logo" class = "block">
-            <div>
-                <img src="images/logo.svg" alt="logo depicting a magical book"/>
-            </div>
-        </section>-->
-        <!-- navigation links -->
-        <nav class="block">
-            <ul class="navbar">
-                <!--<li><div class="flex-image"></div></li>-->
-                <li><a href="book.html"><span class="nav-top">Books</span></a></li>
-                <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
-                <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
-                <li><a href="#"><span class="nav-top">Register</span></a></li>
-                <li><a href="#"><span class="nav-top">Logout</span></a></li>
-            </ul>   
-        </nav>
-    </header>
+    <div id = "wrapper">
+        <!-- header contains introductory content -->
+        <header class="banner">
+            <!-- navigation links -->
+            <nav class="block">
+                <ul class="navbar">
+                    <li><a href="book.html"><span class="nav-top">Books</span></a></li>
+                    <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
+                    <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
+                    <li><a href="#"><span class="nav-top">Register</span></a></li>
+                    <li><a href="#"><span class="nav-top">Logout</span></a></li>
+                </ul>   
+            </nav>
+        </header>
 
-    <section id = "container">
-        <!-- aside contains secondary content, the sidebar -->
-        <!--<aside class="block">
-            <ul class="sidebar">
-                <li><a href="#"><button type="image" class="button">Profile</button></a></li>
-                <li><a href="#"><button type="image" class="button">Characters</button></a></li>
-                <li><a href="book.html"><button type="image" class="button">Books</button></a></li>
-            </ul> 
-        </aside>-->
+        <div id = "container">
+            <!-- main contains the primary content -->
+            <main id = "main" class = "block">
+                <form class = "form">
+                    <p class = "feature-text">Login</p>
 
-        <!-- main contains the primary content -->
-        <main id = "main" class = "block">
-            <form class = "form">
-                <p class = "feature-text">Login</p>
+                    <p class = "field-text">Username</p>
+                    <input type="text" name="login-username" class = "form-field"/>
 
-                <p class = "attribute-text">Username</p>
-                <input type="text" name="username" class = "form-item"/>
+                    <p class = "field-text">Password</p>
+                    <input type="password" name="login-password" class = "form-field"/>
 
-                <p class = "attribute-text">Password</p>
-                <input type="password" name="password" class = "form-item"/>
+                    <input type="submit" value="login-submit"/>
+                </form>
 
-                <input type="submit" value="Submit"/>
-            </form>
+                <form class = "form">
+                    <p class = "form-text">Register</p>
 
-            <form class = "form">
-                <p class = "feature-text">Register</p>
+                    <p class = "field-text">Username</p>
+                    <input type="text" name="register-username" class = "form-field"/>
 
-                <p class = "attribute-text">Username</p>
-                <input type="text" name="username" class = "form-item"/>
+                    <p class = "field-text">Email</p>
+                    <input type="text" name="register-email" class = "form-field"/>
 
-                <p class = "attribute-text">Email</p>
-                <input type="text" name="email" class = "form-item"/>
+                    <p class = "field-text">Password</p>
+                    <input type="password" name="register-password" class = "form-field"/>
 
-                <p class = "attribute-text">Password</p>
-                <input type="password" name="password" class = "form-item"/>
+                    <p class = "field-text">Confirm Password</p>
+                    <input type="password" name="register-confirm" class = "form-field"/>
 
-                <p class = "attribute-text">Confirm Password</p>
-                <input type="password" name="password" class = "form-item"/>
-
-                <input type="submit" value="Submit"/>
-            </form>
-        </main>
-    </section>
-
-    <!--<footer class ="block">
-        <div>Page footer content</div>
-        <small>Site developed by Dillon Keith Diep and Jason Haciepiri</small>
-    </footer>-->
-
-    </section>
+                    <input type="submit" value="register-submit"/>
+                </form>
+            </main>
+        </div>
+    </div>
 </body>
 </html>

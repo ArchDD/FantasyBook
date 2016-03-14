@@ -22,66 +22,60 @@
 </head>
 
 <body>
-    <section id = "wrapper">
-    <!-- header contains introductory content -->
-    <header class="banner">
-        <!--<section id = "logo" class = "block">
-            <div>
-                <img src="images/logo.svg" alt="logo depicting a magical book"/>
-            </div>
-        </section>-->
-        <!-- navigation links -->
-        <nav class="block">
-            <ul class="wood-panel navbar">
-                <!--<li><div class="flex-image"></div></li>-->
-                <li><a href="book.html"><span class="nav-top">Books</span></a></li>
-                <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
-                <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
-                <li><a href="register-login.html"><span class="nav-top">Register</span></a></li>
-                <li><a href="#"><span class="nav-top">Logout</span></a></li>
-            </ul>   
-        </nav>
-    </header>
+    <div id = "wrapper">
+        <!-- header contains introductory content -->
+        <header class="banner">
+            <!--<section id = "logo" class = "block">
+                <section>
+                    <img src="images/logo.svg" alt="logo depicting a magical book"/>
+                </section>
+            </section>-->
+            <!-- navigation links -->
+            <nav class="block">
+                <ul class="wood-panel navbar">
+                    <!--<li><section class="flex-image"></section></li>-->
+                    <li><a href="book.html"><span class="nav-top">Books</span></a></li>
+                    <li><a href="character-creator.html"><span class="nav-top">Characters</span></a></li>
+                    <li><a href="index.html"><img src="/images/title.png" alt="WeStory"/></a></li>
+                    <li><a href="register-login.html"><span class="nav-top">Register</span></a></li>
+                    <li><a href="#"><span class="nav-top">Logout</span></a></li>
+                </ul>   
+            </nav>
+        </header>
 
-    <section id = "container">
-        <!-- main contains the primary content -->
-        <main id="main" class = "block">  
-            <div id="hidden-textures"></div>
-            <div id="bookshelf-container">
-                <div id="bookshelf">
-                    <a href="book-creator.html" class="book book-transition" id="addBook" style="width:70px; height:400px;">
-                    <span class="spineText unselectable">+</span>
-                    </a>
-                </div>
-                <div id="bookshelf-base" class="wood-panel"></div>
-            </div>
-            <div id="flipbook-container">
-                <div id="flipbook">
-                    <!--<canvas id="front_cover"></canvas>-->
-                    <div id="left_page" class="page"> 
-                        <div class="page-top"></div>
-                        <div class="page-title"> </div>
-                        <div class="page-content"> </div>
-                        <div class="page-image"> </div>
-                        <div class ="page-number"> </div>
+        <div id = "container">
+            <!-- main contains the primary content -->
+            <main id="main" class = "block">  
+                <div id="hidden-textures"></div>
+                <section id="bookshelf-container">
+                    <div id="bookshelf" class="wood-panel">
+                        <a href="book-creator.html" class="book book-transition" id="addBook" style="width:70px; height:400px;">
+                        <span class="spineText unselectable">+</span>
+                        </a>
                     </div>
-                    <div id="right_page" class="page"> 
-                        <div class="page-top"></div>
-                        <div class="page-title"> Event </div>
-                        <div class="page-content"> </div>
-                        <div class="page-image"> </div>
-                        <div class ="page-number"> </div>
+                    <div id="bookshelf-base"></div>
+                </section>
+                <section id="flipbook-container">
+                    <div id="flipbook">
+                        <!--<canvas id="front_cover"></canvas>-->
+                        <div id="left_page" class="page"> 
+                            <div class="page-top"></div>
+                            <div class="page-title"> </div>
+                            <div class="page-content"> </div>
+                            <div class="page-image"> </div>
+                            <div class ="page-number"> </div>
+                        </div>
+                        <div id="right_page" class="page"> 
+                            <div class="page-top"></div>
+                            <div class="page-title"> Event </div>
+                            <div class="page-content"> </div>
+                            <div class="page-image"> </div>
+                            <div class ="page-number"> </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </main>
-    </section>
-
-    <!--<footer class ="block">
-        <div>Page footer content</div>
-        <small>Site developed by Dillon Keith Diep and Jason Haciepiri</small>
-    </footer>-->
-
-    </section>
+                </section>
+            </main>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,3 +1,8 @@
+// initialise when document is ready
+document.addEventListener("DOMContentLoaded", function(event) {
+	init();
+});
+
 // character class
 character = function() {
 	this.characterName = "";
@@ -53,12 +58,6 @@ var cachedImages = {};
 
 // Aspect ratio information for resizing
 var oldAspectRatio;
-
-// initialise when document is ready
-$(document).ready(function() {
-    init();
-  });
-
 init = function() {
 	// decide initial aspect ratio
 	var gameContainer = document.getElementById("main");
@@ -128,7 +127,7 @@ drawCharacter = function()
 	var height = (canvas.height/1.4);
 
 	var context = canvas.getContext("2d");
-	// clear only the section drawn on
+	// clear only the div drawn on
 	context.clearRect(x-width,y-height,x+width,y+height);
 
 	// images to load

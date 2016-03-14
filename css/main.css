@@ -25,7 +25,6 @@ body {
     flex: 1 0 auto;
 }
 
-
 #wrapper {
     display: -ms-flexbox;
     display: flex;
@@ -50,21 +49,11 @@ main {
     width: 100%;
 }
 
-footer {
-    background-color: blue;
-    /* height: 50px; */
-}
-
 nav {
     -ms-flex: 10;
 	flex: 10;
 	align-items: center;
 
-}
-
-aside {
-    -ms-flex: 1;
-	flex: 1;
 }
 
 img {
@@ -77,9 +66,6 @@ ul {
     /* reset placement for centering */
     padding: 0;
 	margin: 0;
-}
-
-fieldset {
 }
 
 #logo {
@@ -97,8 +83,6 @@ fieldset {
 }
 
 .block {
-   /* background-color: #eae5cb; */
-    /*background-color: black;*/
     display: -ms-flexbox;
     display: flex;
 }
@@ -164,22 +148,6 @@ fieldset {
    /* margin: auto;*/
 }
 
-.sidebar
-{
-    -ms-flex: 1;
-	flex: 1;
-    display: -ms-flexbox;
-	display: flex;
-    -ms-flex-direction: column;
-	flex-direction: column;
-	align-items: center;
-}
-
-.sidebar li
-{
-	text-align: center;
-}
-
 a {
 	/* remove underlines from links */
 	text-decoration: none;
@@ -200,28 +168,6 @@ a {
     display: -ms-flexbox;
     display: flex;
     width: 100%;
-}
-
-.ui-button {
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    position: absolute;
-    left: 500px;
-    top: 150px;
-    color: #FFF;
-    text-decoration: none;
-    background: linear-gradient(#1879BD 50%, #084D79 50%);
-    text-align: center;
-    font-size: 15px;
-    font-family: sans-serif;
-    z-index: 1;
-}
-.ui-button:hover {
-    background: linear-gradient(#678834 50%, #093905 50%);
-}
-.ui-button:active {
-    background: linear-gradient(#EB7723 50%, #A80000 50%);
 }
 
 .article-title {
@@ -264,8 +210,6 @@ article {
   user-select: none;           
 }
 
-
-
 @media (max-device-width: 800px) {
     #wrapper {
         margin: 0;
@@ -304,12 +248,12 @@ article {
     padding: 3%;
 }
 
-.feature-text {
+.form-text {
 	font-size: 1.2em;
 	margin: 0 auto;
 }
 
-.attribute-text {
+.field-text {
 	font-size: 1em;
 }
 
