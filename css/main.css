@@ -145,6 +145,7 @@ ul {
 
 .navbar a > img {
     height: 50px;
+
 }
 
 .navbar a > img:hover{
@@ -277,10 +278,6 @@ article h2 {
     }
     .navbar {
         font-size: 0.7em;
-    }
-
-    .navbar a > img {
-        height: 30px;
     }
 }
 
