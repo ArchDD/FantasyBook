@@ -108,6 +108,9 @@ fieldset {
 	flex: 1;
     display: -ms-flexbox;
 	display: flex;
+}
+
+.wood-panel {
     background-image: url("/images/navbar.png");
     border-radius: 5px;
     -webkit-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
@@ -247,7 +250,7 @@ article {
     /*background-image: url("/images/basicpaper.png");*/
     background-color: rgba(207,219,250,0.55);
     font-weight: bold;
-    color: #3E2F2F;
+    color: black;
     font-family: Garamond, Serif;
     font-size: 1.25em;
 }
