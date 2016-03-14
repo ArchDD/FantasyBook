@@ -14,6 +14,9 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 #container {
@@ -30,7 +33,7 @@ body {
     display: flex;
     -ms-flex-direction: column;
     flex-direction:column;
-    height: 100vh;
+    height: 100%;
     margin-left: 15%;
     margin-right: 15%;
     -webkit-box-orient: vertical;
@@ -38,10 +41,10 @@ body {
 }
 
 header {
-	height: 50px;
     flex-shrink: 0;
     display: -ms-flexbox;
 	display: flex;
+    flex-direction: column;
 }
 
 main {
@@ -50,10 +53,7 @@ main {
 }
 
 nav {
-    -ms-flex: 10;
-	flex: 10;
 	align-items: center;
-
 }
 
 img {
@@ -68,30 +68,9 @@ ul {
 	margin: 0;
 }
 
-#logo {
-    -ms-flex: 1;
-	flex: 1;
-    display: -ms-flexbox;
-	display: flex;
-}
-
-#logo > div {
-    display: -ms-flexbox;
-    display: flex;
-    padding: 3%;
-    min-width: 0; /*don't forget this line, see the explanation below*/
-}
-
 .block {
     display: -ms-flexbox;
     display: flex;
-}
-
-.navbar {
-    -ms-flex: 1;
-	flex: 1;
-    display: -ms-flexbox;
-	display: flex;
 }
 
 .wood-panel {
@@ -102,6 +81,48 @@ ul {
     -o-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
     -ms-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
     box-shadow: inset 0 0 5px 5px rgba(0,0,0,0.3);
+}
+
+#topbar {
+    background: linear-gradient(0deg,rgba(132, 132, 132, 0.52), rgba(119, 70, 70, 0.44), rgba(58, 58, 58, 0.56));
+    border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+.navbar,#loginbar {
+    -ms-flex: 1;
+    flex: 1;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+#loginbar {
+    justify-content: flex-end;
+    margin-left: 15%;
+    margin-right: 2.5%;
+}
+
+#loginbar:first-of-type {
+    flex: 1 0 auto;
+}
+
+#loginbar li {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#loginbar a {
+    height: 25px;
+}
+
+#loginbar a > span:hover {
+    color: rgba(255, 240, 255,0.8);
+}
+
+#loginbar span {
+    font-family: Garamond, Serif;
+    font-weight: bold;
+    color: rgb(255, 240, 255);
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.2), -1px -1px 1px rgba(0,0,0,0.8);
 }
 
 .navbar li {
@@ -134,9 +155,7 @@ ul {
 }
 
 .navbar a {
-    border: none;
     height: 50px;
-    background-color: rgba(0,0,0,0);
 
     /* center text in button */
     display: -ms-flexbox;
@@ -146,6 +165,19 @@ ul {
     align-items: center;
 
    /* margin: auto;*/
+}
+
+#loginbar a {
+    border: none;
+    height: 25px;
+    background-color: rgba(0,0,0,0);
+
+    /* center text in button */
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    align-items: center;
 }
 
 a {
@@ -172,7 +204,7 @@ a {
 
 .article-title {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.3em;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: center;
@@ -181,6 +213,18 @@ a {
 
 .article-content {
     font-size: 1.2em; 
+}
+
+#articles {
+    display: ms-flexbox;
+    display: flex;
+    flex-direction:column;
+}
+
+#articles article {
+    margin-top: 1.5%;
+    margin-bottom: 1.5%;
+    border: 1px solid black;
 }
 
 article {

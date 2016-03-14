@@ -112,7 +112,7 @@ placeUI = function(canvas) {
 
 	// size ui
 	ui.style.width = canvas.width/2+'px';
-	ui.style.height = 18*canvas.height/20+'px';
+	ui.style.height = 16*canvas.height/20+'px';
 	ui.style.left = rect.left+'px';
 	ui.style.top = rect.top+canvas.height/20+'px';
 }
