@@ -213,8 +213,8 @@ a {
 }
 
 #articles article {
-    margin-top: 1.5%;
-    margin-bottom: 1.5%;
+    margin-top: 15px;
+    margin-bottom: 15px;
     border: 1px solid black;
 }
 
@@ -224,10 +224,10 @@ article {
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-bottom: 5%;
-    padding-top: 30px;
+    padding-left: 75px;
+    padding-right: 75px;
+    padding-bottom: 30px;
+    padding-top: 15px;
     /*background-image: url("/images/basicpaper.png");*/
     background-color: rgba(207,219,250,0.55);
     font-weight: bold;
@@ -289,8 +289,7 @@ article h2 {
 	flex: 1;
     border-radius: 0.2em;
     border: 0.1em solid black;
-    margin: 5%;
-    padding: 3%;
+    padding: 60px;
     background-color: rgba(207,219,250,0.55);
 }
 

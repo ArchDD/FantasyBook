@@ -28,7 +28,7 @@ $(window).on("load", function() {
         var mainWidth = $("#main").width();
 
         if(bookIsOpen) {
-            if(window.screen.width < 800)
+            if(window.screen.width < 600 || mainWidth < 600)
                 changeToSinglePage(currentBook);
             else
                 changeToDoublePage(currentBook);
@@ -83,16 +83,16 @@ $(window).on("load", function() {
     // Example books
     var books = {
         "book1" : {
-            bookTitle: "Lord of the Rings", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: "#2a6f41", texture: "leather"
+            bookTitle: "Chasing Centaurs", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: "#2a6f41", texture: "leather"
         },
         "book2" : {
-            bookTitle: "Alice in Wonderland", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#42548a', texture: "leather"
+            bookTitle: "Into Space", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#42548a', texture: "leather"
         },
         "book3" : {
-            bookTitle: "The Colour of Magic", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#661919', texture: "leather"
+            bookTitle: "A Murder Mystery", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#661919', texture: "leather"
         },
         "book4" : {
-            bookTitle: "Coraline", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#4d3960', texture: "leather"
+            bookTitle: "The Adventures of Me", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#4d3960', texture: "leather"
         }
     }
 
