@@ -10,7 +10,7 @@ html, body {
 }
 
 body {
-    background-image: url("/images/background.png");
+    background-image: url("../images/background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -74,7 +74,7 @@ ul {
 }
 
 .wood-panel {
-    background-image: url("/images/navbar.png");
+    background-image: url("../images/navbar.png");
     border-radius: 5px;
     -webkit-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
     -moz-box-shadow:inset 0 0 5px 5px rgba(0,0,0,0.3);
@@ -191,7 +191,7 @@ a {
 	border: none;
 	height: 40px;
 	width: 40px;
-	background: url(/images/square.svg);
+	background: url(../images/square.svg);
 	background-size: cover;	
 
 	/* center text in button */
@@ -229,7 +229,7 @@ article {
     padding-right: 75px;
     padding-bottom: 30px;
     padding-top: 15px;
-    /*background-image: url("/images/basicpaper.png");*/
+    /*background-image: url("../images/basicpaper.png");*/
     background-color: rgba(207,219,250,0.55);
     font-weight: bold;
     color: black;

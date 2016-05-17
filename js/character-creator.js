@@ -46,7 +46,7 @@ var characterAspectRatio = 191.2/236;
 
 // images to load
 var backgroundImages = [
-    "../images/bg.jpg"
+    "images/bg.jpg"
 ];
 
 // appearance list
@@ -132,18 +132,18 @@ drawCharacter = function()
 
 	// images to load
 	var characterImages = [
-		"../images/character/neck_"+character.neck.type+".png",
-		"../images/character/head_"+character.head.type+".png",
-		"../images/character/chin_"+character.chin.type+".png",
-		"../images/character/ear_"+character.ear.type+".png",
-		"../images/character/cheek_"+character.cheek.type+".png",
-		"../images/character/mouth_"+character.mouth.type+".png",
-		"../images/character/pupil_"+character.pupil.type+".png",
-		"../images/character/socket_"+character.socket.type+".png",
-		"../images/character/brow_"+character.brow.type+".png",
-		"../images/character/lash_"+character.lash.type+".png",
-		"../images/character/nose_"+character.nose.type+".png",
-		"../images/character/hair_"+character.hair.type+".png"];
+		"images/character/neck_"+character.neck.type+".png",
+		"images/character/head_"+character.head.type+".png",
+		"images/character/chin_"+character.chin.type+".png",
+		"images/character/ear_"+character.ear.type+".png",
+		"images/character/cheek_"+character.cheek.type+".png",
+		"images/character/mouth_"+character.mouth.type+".png",
+		"images/character/pupil_"+character.pupil.type+".png",
+		"images/character/socket_"+character.socket.type+".png",
+		"images/character/brow_"+character.brow.type+".png",
+		"images/character/lash_"+character.lash.type+".png",
+		"images/character/nose_"+character.nose.type+".png",
+		"images/character/hair_"+character.hair.type+".png"];
 
 	var featuresPrefixes = ["neck_", "head_", "chin_", "ear_", "mouth_", "pupil_", "socket_", "brow_", "lash_", "nose_", "hair_"];
 
@@ -151,7 +151,7 @@ drawCharacter = function()
 		for (var i = 0; i < character.features.length; i++)
 		{
 			draw(canvas, 
-				"../images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
+				"images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
 				x+character.features[i].xOffset, 
 				y+character.features[i].yOffset,
 				width*character.features[i].xScale, 

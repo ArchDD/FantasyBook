@@ -18,7 +18,7 @@ $(window).on("load", function() {
     var textures = {
         leather : new Image()
     };
-    textures.leather.src = "/images/leather_grey.png";
+    textures.leather.src = "images/leather_grey.png";
 
     initialiseBookshelf();
 
