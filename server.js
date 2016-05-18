@@ -8,6 +8,10 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var util = require('util');
+var util = require('formidable');
+
+require('./server-character.js');
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
