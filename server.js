@@ -120,9 +120,23 @@ function serve(request, response) {
     function ready(error, content) {
         if (error) return fail(response, NotFound);
         // Deal with request
-        if (!serverCharacter.handleRequest(request, response))
-            succeed(response, type, content);
+        if(!handleRequest(request,response))
+            succeed(response,type,content);
     }
+}
+
+function handleRequest(request,response) {
+    if (request.method.toLowerCase() == 'post') { 
+        if(request.url.toLowerCase() == '/character-creator.html'){
+            serverCharacter.submitCharacterForm(request, response);
+            return true;
+        }
+    } else if (request.method.toLowerCase() == 'get') {
+        if(request.url.toLowerCase() == '/book.html') {
+            return true;
+        }
+    }
+    return false;
 }
 
 // Find the content type (MIME type) to respond with.
