@@ -129,6 +129,8 @@ function handleRequest(request,response) {
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/character-creator.html'){
             serverCharacter.submitCharacterForm(request, response);
+            // Redirect
+            redirect(response, '/book.html')
             return true;
         }
     } else if (request.method.toLowerCase() == 'get') {

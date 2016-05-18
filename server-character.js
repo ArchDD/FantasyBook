@@ -3,15 +3,6 @@ var util = require('util');
 var formidable = require('formidable');
 
 module.exports = {
-    handleRequest: function (request, response) {
-        if (request.method.toLowerCase() == 'post' && request.url.toLowerCase() == '/character-creator.html'){
-            //debugLog('create');
-            this.submitCharacterForm(request, response);
-            return true;
-        }
-        return false;
-    },
-
     // Parses form to store in database and redirects
     submitCharacterForm: function (request, response) {
         // Creating form object
@@ -19,13 +10,7 @@ module.exports = {
         // Parsing form input to store in file or database
         form.parse(request, function (err, fields, files) {
             // Deal with form
-            console.log('Adding to database');
-
-            // redirects
-            var locationHeader = { 'Location': '/book.html' };
-            response.writeHead(307, locationHeader);
-            response.end();
-
+            console.log('Add to database here');
             /*  response.writeHead(200, {
                 'Content-Type': 'text/plain'
             });
