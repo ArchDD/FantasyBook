@@ -116,6 +116,9 @@ function serve(request, response) {
     try { fs.readFile(file, ready); }
     catch (err) { return fail(response, Error); }
 
+    // Deal with request
+    serverCharacter.handleRequest(request, response);
+
     function ready(error, content) {
         if (error) return fail(response, NotFound);
         succeed(response, type, content);
