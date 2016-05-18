@@ -9,7 +9,12 @@ var https = require('https');
 var fs = require('fs');
 var path = require('path');
 
+
 var book_serve = require("./server-book.js");
+
+var ipAddress = 'localhost'; //127.0.0.1
+
+var serverCharacter = require("./server-character.js");
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
@@ -114,7 +119,9 @@ function serve(request, response) {
 
     function ready(error, content) {
         if (error) return fail(response, NotFound);
-        succeed(response, type, content);
+        // Deal with request
+        if (!serverCharacter.handleRequest(request, response))
+            succeed(response, type, content);
     }
 }
 
