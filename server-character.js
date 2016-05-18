@@ -1,3 +1,4 @@
+"use strict";
 var http = require('http');
 var util = require('util');
 var formidable = require('formidable');

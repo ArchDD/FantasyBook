@@ -1,7 +1,4 @@
-// Run a minimal node.js web server for local development of a web site.
-// Put this program in a site folder and start it with "node server.js".
-// Then visit the site at the addresses printed on the console.
-// The server is configured to match the most restrictive publishing sites.
+"use strict";
 
 // Load the web-server, file-system and file-path modules.
 var http = require('http');
