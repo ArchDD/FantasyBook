@@ -8,8 +8,6 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
-var util = require('util');
-var util = require('formidable');
 
 var ipAddress = 'localhost'; //127.0.0.1
 

@@ -1,9 +1,12 @@
+var util = require('util');
+var formidable = require('formidable');
+
 module.exports = {
     handleRequest: function (request, response) {
-        if (request.method.toLowerCase() == 'post') {
-            this.debugLog("rawr");
+        if (request.method.toLowerCase() == 'post' && request.url.toLowerCase() == '/character-creator.html'){
+            //debugLog('create');
+            this.submitCharacterForm(request, response);
         }
-        this.debugLog(request.method);
     },
 
     submitCharacterForm: function (request, response) {
