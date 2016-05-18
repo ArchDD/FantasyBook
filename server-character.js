@@ -12,22 +12,29 @@ module.exports = {
         return false;
     },
 
+    // Parses form to store in database and redirects
     submitCharacterForm: function (request, response) {
         // Creating form object
         var form = new formidable.IncomingForm();
         // Parsing form input to store in file or database
         form.parse(request, function (err, fields, files) {
-            response.writeHead(200, {
+            // Deal with form
+            console.log('Adding to database');
+
+            // redirects
+            var locationHeader = { 'Location': '/book.html' };
+            response.writeHead(307, locationHeader);
+            response.end();
+
+            /*  response.writeHead(200, {
                 'Content-Type': 'text/plain'
             });
             response.write('Received Data: \n\n');
             response.end(util.inspect({
                 fields: fields,
                 files: files
-            }));
+            }));*/
         });
-
-        return response;
     },
 
     debugLog: function(output){
