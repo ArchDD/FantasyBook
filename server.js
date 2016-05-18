@@ -9,6 +9,8 @@ var https = require('https');
 var fs = require('fs');
 var path = require('path');
 
+var book_serve = require("./server-book.js");
+
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
 var ports = [80, 443];
