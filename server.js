@@ -3,6 +3,8 @@
 // Then visit the site at the addresses printed on the console.
 // The server is configured to match the most restrictive publishing sites.
 
+var ip_address = 'localhost' // 127.0.0.1
+
 // Load the web-server, file-system and file-path modules.
 var http = require('http');
 var https = require('https');
@@ -178,6 +180,30 @@ function failTest(s) {
     console.log(s);
     process.exit(1);
 }
+
+///////////////////////////////////////////////////////////////////////
+//  CHARACTER CREATOR SERVER METHODS
+///////////////////////////////////////////////////////////////////////
+
+function processCharacterForm(req, res) {
+    var form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+        //Store the data from the fields in your data store.
+        //The data store could be a file or database or any other store based
+        //on your application.
+        res.writeHead(200, {
+            'content-type': 'text/plain'
+        });
+        res.write('received the data:\n\n');
+        res.end(util.inspect({
+            fields: fields,
+            files: files
+        }));
+    });
+}
+
+///////////////////////////////////////////////////////////////////////
 
 // A dummy key and certificate are provided for https.
 // They should not be used on a public site because they are insecure.
