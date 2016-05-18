@@ -11,9 +11,9 @@ var path = require('path');
 var util = require('util');
 var util = require('formidable');
 
-var ip_address = 'localhost'; //127.0.0.1
+var ipAddress = 'localhost'; //127.0.0.1
 
-require('./server-character.js');
+var serverCharacter = require("./server-character.js");
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
