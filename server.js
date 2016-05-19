@@ -132,6 +132,7 @@ function handleRequest(request,response) {
         }
     } else if (request.method.toLowerCase() == 'get') {
         if(request.url.toLowerCase() == '/book.html') {
+            book_serve.getBooks(request,response);
             return true;
         }
     }
