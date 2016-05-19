@@ -136,29 +136,35 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
-    if (request.method.toLowerCase() == 'post') { 
-        if(request.url.toLowerCase() == '/register-login.html'){
+    if (request.method.toLowerCase() === 'post') { 
+        if(request.url.toLowerCase() === '/register-login.html'){
             register(request, response);
             // Redirect to homepage after registering
             redirect(response, '/index.html');
             return true;
         }
-        else if(request.url.toLowerCase() == '/character-creator.html'){
+        else if(request.url.toLowerCase() === '/character-creator.html'){
             serverCharacter.submitCharacterForm(request, response);
             // Redirect
             redirect(response, '/book.html')
             return true;
         }
-    } else if (request.method.toLowerCase() == 'get') {
-        if(url_methods.parse(request.url).pathname == '/book.html') {
+    } else if (request.method.toLowerCase() === 'get') {
+        if(url_methods.parse(request.url).pathname === '/book.html') {
             var params = url_methods.parse(request.url, true).query;
-            if(params['userSession']) {
+            var action = params['action'];
+            if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
-                var books = server_book.getBooks();
-                var jsonObj = JSON.stringify(books);
+                var data;
+                if(action === "getBooks")
+                    data = server_book.getBooks();
+                else if(action == "getEvent")
+                    data = server_book.getEvent();
+                var jsonObj = JSON.stringify(data);
                 response.end(jsonObj);
                 return true;
             }
+
 
        // if(request.url.toLowerCase() == '/book.html') {
          //   book_serve.getBooks(request,response);

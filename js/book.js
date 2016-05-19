@@ -2,31 +2,28 @@
 
 //when the document is ready
 $(window).on("load", function() {
+    
     var books = {};
-    $.get("?userSession=default&uniqueId="+Math.random(), function(data, status){
-        //alert("Data: " + data + "\nStatus: " + status);
-        books = data;
-    });
-
     var bookIsOpen = false;
     var pageNumber = 0;
     var currentBook = null;
     var isSinglePage = false;
-
-    // call initial window resize function
-    resizeBooks();
-    // add event to listen for future window resizes
-    window.addEventListener('resize', resizeBooks, false);
-
     var canvases = {};
-
     //Texture container
     var textures = {
         leather : new Image()
     };
     textures.leather.src = "images/leather_grey.png";
 
-    initialiseBookshelf();
+    $.get("?action=getBooks&uniqueId="+Math.random(), function(data, status){
+        books = data;
+        // call initial window resize function
+        resizeBooks();
+        // add event to listen for future window resizes
+        window.addEventListener('resize', resizeBooks, false);
+
+        initialiseBookshelf();
+    });
 
     function resizeBooks() {
 
@@ -140,8 +137,9 @@ $(window).on("load", function() {
             $(pageId+" .page-image").hide();
         }
         else {
-            $(pageId+" .page-title").html(getEventTitle(currentBook, pageNumber));
-            $(pageId+" .page-content").html(getEventContent(currentBook, pageNumber));
+            setPageEvent(currentBook,pageNumber,pageId);
+           // $(pageId+" .page-title").html(getEventTitle(currentBook, pageNumber));
+           // $(pageId+" .page-content").html(getEventContent(currentBook, pageNumber));
             $(pageId+" .page-number").html(pageNumber);
             $(pageId+" .page-image").show();
         }
@@ -349,14 +347,13 @@ $(window).on("load", function() {
         return $book;
     }
 
-    // contacts server to get the event name for the page
-    function getEventTitle(book, pageNumber) {
-        return "Event";
-    }
-
-    // contacts server to get either an event description or past event result
-    function getEventContent(book, pageNumber) {
-        return "Event description";
+    function setPageEvent(book, requestPageNum,pageId) {
+        $.get("?action=getEvent&uniqueId="+Math.random(),function(data, status){
+            if(requestPageNum == pageNumber || requestPageNum == pageNumber + 1) {
+                $(pageId+" .page-title").html(data['eventName']);
+                $(pageId+" .page-content").html(data['eventDesc']);
+            }
+        });
     }
 
     // contacts server to get active status of the event 

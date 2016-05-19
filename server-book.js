@@ -17,3 +17,10 @@ exports.getBooks = function () {
     };
     return books;
 };
+
+exports.getEvent = function () {
+    return {
+        "eventName" : "DRAGONS!??!?!",
+        "eventDesc" : "A dragon nest has been left empty! You spot eggs. What to do?!"
+    };
+}
