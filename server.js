@@ -56,7 +56,11 @@ var types = {
 // shouldn't be removed, otherwise the site becomes public.)
 function start() {
     test();
-    var httpService = http.createServer(serve);
+    var httpService = http.createServer(function(request, response) {
+        // redirect to secure connection
+        response.writeHead(301, {"Location": "https://" + request.headers['host']+request.url});
+        response.end();
+    });
     httpService.listen(ports[0], 'localhost');
     var options = { key: key, cert: cert };
     var httpsService = https.createServer(options, serve);
@@ -90,12 +94,6 @@ function succeed(response, type, content) {
 function redirect(response, url) {
     var locationHeader = { 'Location': url };
     response.writeHead(Redirect, locationHeader);
-    response.end();
-}
-
-// redirect to https and url location within website
-function redirect_secure(request, response, url) {
-    response.writeHead(301, {'Location': 'https://' + request.headers['host'] + '/'+ url});
     response.end();
 }
 
