@@ -4,12 +4,22 @@ var db = new sql.Database("westory.db");
 db.serialize(startup);
 
 function startup() {
-        db.run(
+    db.run(
         "CREATE TABLE IF NOT EXISTS Users                           \
         (                                                           \
             username VARCHAR(32) PRIMARY KEY NOT NULL,              \
             password VARCHAR(32) NOT NULL,                          \
             email VARCHAR(64)                                       \
+        )"
+    , err);
+
+    db.run(
+        "CREATE TABLE IF NOT EXISTS Sessions                        \
+        (                                                           \
+            secret VARCHAR(64) PRIMARY KEY NOT NULL,                \
+            username VARCHAR(32) NOT NULL,                          \
+            date INTEGER NOT NULL,                                  \
+            FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
     , err);
 

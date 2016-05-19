@@ -5,11 +5,11 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var crypto = require('crypto');
+var url_methods = require('url');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
-var url_methods = require('url');
 var bcrypt = require('bcrypt');
-var crypto = require('crypto');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
@@ -27,6 +27,9 @@ var session = function() {
     username = "guest";
     secret = "";
 }
+
+// Manage sessions using database
+var cachedImages = {};
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
@@ -89,6 +92,16 @@ function printAddresses() {
     console.log('Server running at', httpAddress, 'and', httpsAddress);
 }
 
+function expireSessions(request, response, callback)
+{
+    console.log("checking for expired sessions!");
+
+    //var sqlString = "DELETE FROM Sessions WHERE date <= date('now','-2 day')"; 
+    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-4 hour')", function(e) {
+        if (e) throw e;
+    });
+}
+
 // Response codes: see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 var OK = 200, Redirect = 307, NotFound = 404, BadType = 415, Error = 500;
 
@@ -119,6 +132,8 @@ function fail(response, code) {
 // folder, it would inefficiently have to be redirected for the browser to get
 // relative links right).
 function serve(request, response) {
+    console.log(request.headers.cookie);
+    expireSessions(request, response, function(){});
     var file = request.url;
     if (ends(file,'/')) file = file + 'index.html';
     // If there are parameters, take them off
@@ -142,7 +157,6 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
-    console.log(request.headers.cookie);
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
@@ -204,17 +218,28 @@ function registerOrLogin(request, response)
                 bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
                     if (res)
                     {
-                        // Generate secret key
-                        var secret = CSPRNGBase64(64);
-                        console.log("logged on, secret: "+secret);
+                        createSession(row['username']);
                     }
                     else
                     {
-                        console.log("not logged on");
+                        console.log("Login Failure");
                     }
                 });
             });
         }
+    });
+}
+
+function createSession(username)
+{
+    // Generate secret key
+    var secret = CSPRNGBase64(64);
+    //response.setHeader('Set-Cookie', ['secret=', secret, 'username=', username, 'date=', sessionDate]); 
+    // Remove any possible leftover sessions of this user
+    db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
+        if (e) throw e;
+        //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
+        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', datetime('now'))", dbErr);
     });
 }
 
