@@ -5,11 +5,12 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var crypto = require('crypto');
+var url_methods = require('url');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
-var url_methods = require('url');
 var bcrypt = require('bcrypt');
-var crypto = require('crypto');
+var moment = require('moment');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
@@ -27,6 +28,9 @@ var session = function() {
     username = "guest";
     secret = "";
 }
+
+// Manage sessions using database
+var cachedImages = {};
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
@@ -209,18 +213,32 @@ function registerOrLogin(request, response)
                 bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
                     if (res)
                     {
-                        // Generate secret key
-                        var secret = CSPRNGBase64(64);
-                        console.log("logged on, secret: "+secret);
+                        createSession(row['username']);
                     }
                     else
                     {
-                        console.log("not logged on");
+                        console.log("Login Failure");
                     }
                 });
             });
         }
     });
+}
+
+function createSession(username)
+{
+    // Generate secret key
+    var secret = CSPRNGBase64(64);
+    // Get current time
+    var sessionDate = moment().format();
+    console.log(sessionDate);
+    //var secondsDiff = endDate.diff(startDate, 'hours');
+    // Remove any possible leftover sessions of this user
+    db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
+        if (e) throw e;
+        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
+    });
+    //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+sessionDate+"', '"+username+"')", dbErr);
 }
 
 // Find the content type (MIME type) to respond with.
