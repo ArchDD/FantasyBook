@@ -1,5 +1,19 @@
 var exports = module.exports = {};
 
-exports.sayHello = function () {
-    return "HEY";
+exports.getBooks = function () {
+    var books = {
+        "book1" : {
+            bookTitle: "Chasing Centaurs", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: "#2a6f41", texture: "leather"
+        },
+        "book2" : {
+            bookTitle: "Into Space", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#42548a', texture: "leather"
+        },
+        "book3" : {
+            bookTitle: "A Murder Mystery", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#661919', texture: "leather"
+        },
+        "book4" : {
+            bookTitle: "The Adventures of Me", desc: "[Theme description]", pages: 5, height: 400, width: 70, colour: '#4d3960', texture: "leather"
+        }
+    };
+    return books;
 };

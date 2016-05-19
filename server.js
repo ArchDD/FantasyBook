@@ -153,10 +153,11 @@ function handleRequest(request,response) {
         if(url_methods.parse(request.url).pathname == '/book.html') {
             var params = url_methods.parse(request.url, true).query;
             if(params['userSession']) {
-                var content = server_book.getBooks();
-                response.write(content);
-                //esponse.end();
-                //return true;
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var books = server_book.getBooks();
+                var jsonObj = JSON.stringify(books);
+                response.end(jsonObj);
+                return true;
             }
 
        // if(request.url.toLowerCase() == '/book.html') {
