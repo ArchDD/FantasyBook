@@ -10,7 +10,6 @@ var url_methods = require('url');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
 var bcrypt = require('bcrypt');
-var moment = require('moment');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
@@ -93,6 +92,16 @@ function printAddresses() {
     console.log('Server running at', httpAddress, 'and', httpsAddress);
 }
 
+function expireSessions(request, response, callback)
+{
+    console.log("checking for expired sessions!");
+
+    //var sqlString = "DELETE FROM Sessions WHERE date <= date('now','-2 day')"; 
+    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-4 hour')", function(e) {
+        if (e) throw e;
+    });
+}
+
 // Response codes: see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 var OK = 200, Redirect = 307, NotFound = 404, BadType = 415, Error = 500;
 
@@ -123,6 +132,8 @@ function fail(response, code) {
 // folder, it would inefficiently have to be redirected for the browser to get
 // relative links right).
 function serve(request, response) {
+    console.log(request.headers.cookie);
+    expireSessions(request, response, function(){});
     var file = request.url;
     if (ends(file,'/')) file = file + 'index.html';
     // If there are parameters, take them off
@@ -146,7 +157,6 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
-    console.log(request.headers.cookie);
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
@@ -229,16 +239,13 @@ function createSession(username)
 {
     // Generate secret key
     var secret = CSPRNGBase64(64);
-    // Get current time
-    var sessionDate = moment().format();
-    console.log(sessionDate);
-    //var secondsDiff = endDate.diff(startDate, 'hours');
+    //response.setHeader('Set-Cookie', ['secret=', secret, 'username=', username, 'date=', sessionDate]); 
     // Remove any possible leftover sessions of this user
     db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
         if (e) throw e;
-        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
+        //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
+        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', datetime('now'))", dbErr);
     });
-    //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+sessionDate+"', '"+username+"')", dbErr);
 }
 
 // Find the content type (MIME type) to respond with.
