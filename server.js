@@ -8,10 +8,13 @@ var path = require('path');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
 var url_methods = require('url');
+var bcrypt = require('bcrypt');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
 var db = new sql.Database(file);
+
+const saltRounds = 10;
 
 // App modules
 var server_book = require("./server-book.js");
@@ -137,7 +140,7 @@ function handleRequest(request,response) {
         if(request.url.toLowerCase() == '/register-login.html'){
             register(request, response);
             // Redirect to homepage after registering
-            redirect(request, response, 'index.html');
+            redirect(response, '/index.html');
             return true;
         }
         else if(request.url.toLowerCase() == '/character-creator.html'){
@@ -172,9 +175,11 @@ function register(request, response)
     var form = new formidable.IncomingForm();
     // Parsing form input to store in file or database
     form.parse(request, function (err, fields, files) {
-        console.log(fields['register-username']);
-        // Access database and insert
-        db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+fields['register-password']+"', '"+fields['register-email']+"')", db_err);
+        // Salt and hash password
+        bcrypt.hash(fields['register-password'], saltRounds, function(h_err, hash) {
+            // Access database and insert
+            db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", db_err);
+        });
     });
 }
 

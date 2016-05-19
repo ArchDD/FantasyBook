@@ -64,10 +64,7 @@ function startup() {
             FOREIGN KEY(b_id) REFERENCES Users(b_id)                \
         )"
     , err);
-
-    // Default user
-    db.run("INSERT INTO Users (username, password, email) VALUES ('Admin','COMS32500', '')", err);
-
+    
     db.close();
 }
 
