@@ -5,13 +5,18 @@ var http = require('http');
 var https = require('https');
 var fs = require('fs');
 var path = require('path');
+var sql = require("sqlite3").verbose();
+var formidable = require('formidable');
 
+var file = "westory.db";
+var exists = fs.existsSync(file);
+var db = new sql.Database(file);
 
+// App modules
 var book_serve = require("./server-book.js");
+var serverCharacter = require("./server-character.js");
 
 var ipAddress = 'localhost'; //127.0.0.1
-
-var serverCharacter = require("./server-character.js");
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
@@ -124,7 +129,13 @@ function serve(request, response) {
 
 function handleRequest(request,response) {
     if (request.method.toLowerCase() == 'post') { 
-        if(request.url.toLowerCase() == '/character-creator.html'){
+        if(request.url.toLowerCase() == '/register-login.html'){
+            register(request, response);
+            // Redirect to homepage after registering
+            redirect(response, '/index.html')
+            return true;
+        }
+        else if(request.url.toLowerCase() == '/character-creator.html'){
             serverCharacter.submitCharacterForm(request, response);
             // Redirect
             redirect(response, '/book.html')
@@ -136,6 +147,20 @@ function handleRequest(request,response) {
         }
     }
     return false;
+}
+
+function db_err(e) { if (e) throw e; }
+
+function register(request, response)
+{
+    // Read register form
+    var form = new formidable.IncomingForm();
+    // Parsing form input to store in file or database
+    form.parse(request, function (err, fields, files) {
+        console.log(fields['register-username']);
+        // Access database and insert
+        db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+fields['register-password']+"', '"+fields['register-email']+"')", db_err);
+    });
 }
 
 // Find the content type (MIME type) to respond with.
