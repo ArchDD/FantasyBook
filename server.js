@@ -136,7 +136,7 @@ function handleRequest(request,response) {
         if(request.url.toLowerCase() == '/register-login.html'){
             register(request, response);
             // Redirect to homepage after registering
-            redirect_secure(request, response, 'index.html');
+            redirect(request, response, 'index.html');
             return true;
         }
         else if(request.url.toLowerCase() == '/character-creator.html'){
