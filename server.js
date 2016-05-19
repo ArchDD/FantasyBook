@@ -7,13 +7,14 @@ var fs = require('fs');
 var path = require('path');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
+var url_methods = require('url');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
 var db = new sql.Database(file);
 
 // App modules
-var book_serve = require("./server-book.js");
+var server_book = require("./server-book.js");
 var serverCharacter = require("./server-character.js");
 
 var ipAddress = 'localhost'; //127.0.0.1
@@ -146,10 +147,19 @@ function handleRequest(request,response) {
             return true;
         }
     } else if (request.method.toLowerCase() == 'get') {
+        if(url_methods.parse(request.url).pathname == '/book.html') {
+            var params = url_methods.parse(request.url, true).query;
+            if(params['userSession']) {
+                var content = server_book.getBooks();
+                response.write(content);
+                //esponse.end();
+                //return true;
+            }
+
        // if(request.url.toLowerCase() == '/book.html') {
          //   book_serve.getBooks(request,response);
            // return true;
-        //}
+        }
     }
     return false;
 }
