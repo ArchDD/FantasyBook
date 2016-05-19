@@ -93,6 +93,12 @@ function redirect(response, url) {
     response.end();
 }
 
+// redirect to https and url location within website
+function redirect_secure(request, response, url) {
+    response.writeHead(301, {'Location': 'https://' + request.headers['host'] + '/'+ url});
+    response.end();
+}
+
 // Give a failure response with a given code.
 function fail(response, code) {
     response.writeHead(code);
@@ -132,7 +138,7 @@ function handleRequest(request,response) {
         if(request.url.toLowerCase() == '/register-login.html'){
             register(request, response);
             // Redirect to homepage after registering
-            redirect(response, '/index.html')
+            redirect_secure(request, response, 'index.html');
             return true;
         }
         else if(request.url.toLowerCase() == '/character-creator.html'){
@@ -142,10 +148,10 @@ function handleRequest(request,response) {
             return true;
         }
     } else if (request.method.toLowerCase() == 'get') {
-        if(request.url.toLowerCase() == '/book.html') {
-            book_serve.getBooks(request,response);
-            return true;
-        }
+       // if(request.url.toLowerCase() == '/book.html') {
+         //   book_serve.getBooks(request,response);
+           // return true;
+        //}
     }
     return false;
 }
