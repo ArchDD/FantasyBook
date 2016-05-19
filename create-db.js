@@ -46,7 +46,8 @@ function startup() {
             b_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
             username INTEGER NOT NULL,                              \
             name VARCHAR(64) NOT NULL,                              \
-            FOREIGN KEY(username) REFERENCES Users(username)        \
+            FOREIGN KEY(username) REFERENCES Users(username),       \
+            PRIMARY KEY(b_id,username)
         )"
     , err);
 

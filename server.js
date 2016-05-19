@@ -171,11 +171,6 @@ function handleRequest(request,response) {
                 response.end(jsonObj);
                 return true;
             }
-
-
-       // if(request.url.toLowerCase() == '/book.html') {
-         //   book_serve.getBooks(request,response);
-           // return true;
         }
     }
     return false;
