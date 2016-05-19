@@ -136,9 +136,9 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
-    if (request.method.toLowerCase() === 'post') { 
-        if(request.url.toLowerCase() === '/register-login.html'){
-            register(request, response);
+    if (request.method.toLowerCase() == 'post') { 
+        if(request.url.toLowerCase() == '/register-login.html'){
+            registerOrLogin(request, response);
             // Redirect to homepage after registering
             redirect(response, '/index.html');
             return true;
@@ -174,19 +174,39 @@ function handleRequest(request,response) {
     return false;
 }
 
-function db_err(e) { if (e) throw e; }
+function dbErr(e) { if (e) throw e; }
 
-function register(request, response)
+function registerOrLogin(request, response)
 {
     // Read register form
     var form = new formidable.IncomingForm();
     // Parsing form input to store in file or database
     form.parse(request, function (err, fields, files) {
         // Salt and hash password
-        bcrypt.hash(fields['register-password'], saltRounds, function(h_err, hash) {
-            // Access database and insert
-            db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", db_err);
-        });
+        if (fields['form-name'] == 'register')
+        {
+            bcrypt.hash(fields['register-password'], saltRounds, function(h_err, hash) {
+                // Access database and insert
+                db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", dbErr);
+            });
+        }
+        else if (fields['form-name'] == 'login')
+        {
+            // Query user ID to retrieve hash table
+            db.each("SELECT username, password FROM Users WHERE username = '"+fields['login-username']+"'", function(err, row) {
+                bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
+                    if (res)
+                    {
+                        // Authenticate
+                        console.log("logged on");
+                    }
+                    else
+                    {
+                        console.log("not logged on");
+                    }
+                });
+            });
+        }
     });
 }
 

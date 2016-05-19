@@ -7,8 +7,7 @@ function startup() {
         db.run(
         "CREATE TABLE IF NOT EXISTS Users                           \
         (                                                           \
-            u_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            username VARCHAR(32) NOT NULL,                          \
+            username VARCHAR(32) PRIMARY KEY NOT NULL,              \
             password VARCHAR(32) NOT NULL,                          \
             email VARCHAR(64)                                       \
         )"
@@ -19,7 +18,7 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS Character                       \
         (                                                           \
             c_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            u_id INTEGER NOT NULL,                                  \
+            username INTEGER NOT NULL,                              \
             name VARCHAR(64) NOT NULL,                              \
             hair_type INTEGER NOT NULL,                             \
             nose_type INTEGER NOT NULL,                             \
@@ -36,7 +35,7 @@ function startup() {
             hair_colour VARCHAR(6) NOT NULL,                        \
             skin_colour VARCHAR(6) NOT NULL,                        \
             pupil_colour VARCHAR(6) NOT NULL,                       \
-            FOREIGN KEY(u_id) REFERENCES Users(u_id)                \
+            FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
     , err);
 
@@ -45,9 +44,9 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS Books                           \
         (                                                           \
             b_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            u_id INTEGER NOT NULL,                                  \
+            username INTEGER NOT NULL,                              \
             name VARCHAR(64) NOT NULL,                              \
-            FOREIGN KEY(u_id) REFERENCES Users(u_id)                \
+            FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
     , err);
 
@@ -64,7 +63,7 @@ function startup() {
             FOREIGN KEY(b_id) REFERENCES Users(b_id)                \
         )"
     , err);
-    
+
     db.close();
 }
 
