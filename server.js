@@ -9,6 +9,7 @@ var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
 var url_methods = require('url');
 var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
@@ -21,6 +22,11 @@ var server_book = require("./server-book.js");
 var serverCharacter = require("./server-character.js");
 
 var ipAddress = 'localhost'; //127.0.0.1
+
+var session = function() {
+    username = "guest";
+    secret = "";
+}
 
 // The default port numbers are the standard ones [80,443] for convenience.
 // Change them to e.g. [8080,8443] to avoid privilege or clash problems.
@@ -136,6 +142,7 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
+    console.log(request.headers.cookie);
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
@@ -174,6 +181,11 @@ function handleRequest(request,response) {
     return false;
 }
 
+function CSPRNGBase64 (len) {
+    // Generates a CSPRN using crypto module, converted to base64 with '+' and '/' replaced by '0'
+    return crypto.randomBytes(Math.ceil(len * 3 / 4)).toString('base64').slice(0, len).replace(/\+/g, '0').replace(/\//g, '0');
+}
+
 function dbErr(e) { if (e) throw e; }
 
 function registerOrLogin(request, response)
@@ -197,8 +209,9 @@ function registerOrLogin(request, response)
                 bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
                     if (res)
                     {
-                        // Authenticate
-                        console.log("logged on");
+                        // Generate secret key
+                        var secret = CSPRNGBase64(64);
+                        console.log("logged on, secret: "+secret);
                     }
                     else
                     {
