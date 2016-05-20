@@ -234,6 +234,7 @@ function registerOrLogin(request, response, cb)
                 // Access database and insert
                 db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", dbErr);
             });
+            redirect(response, '/index.html');
         }
         else if (fields['form-name'] == 'login')
         {
