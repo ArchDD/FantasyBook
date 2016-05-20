@@ -139,41 +139,43 @@ function serve(request, response) {
     //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
         if (e) throw e;
         // Check if there is existing session
-        db.each("SELECT * FROM Sessions WHERE secret = '"+list['secret']+"'", function(err, row) {
+        db.all("SELECT secret FROM Sessions WHERE secret = '"+list['secret']+"'", function(err, row) {
             console.log("row: "+row);
             // Match found
-            console.log("session found secret "+row['secret']);
-            secret = row['secret'];
-            response.setHeader('Set-Cookie', ['secret='+row['secret']]);
+            if (row[0])
+            {
+                console.log("session found secret "+row[0]['secret']);
+                secret = row['secret'];
+                response.setHeader('Set-Cookie', ['secret='+row[0]['secret']]);
+            }
+            else
+            {
+                // No match, leave empty string
+                console.log("no session");
+                //response.setHeader('Set-Cookie', ['secret='+'']); // no need to set cookie if not logged on
+            }
+
+            var file = request.url;
+            if (ends(file,'/')) file = file + 'index.html';
+            // If there are parameters, take them off
+            var parts = file.split("?");
+            if (parts.length > 1) file = parts[0];
+            file = "." + file;
+            var type = findType(request, path.extname(file));
+            if (! type) return fail(response, BadType);
+            if (! inSite(file)) return fail(response, NotFound);
+            if (! matchCase(file)) return fail(response, NotFound);
+            if (! noSpaces(file)) return fail(response, NotFound);
+            try { fs.readFile(file, ready); }
+            catch (err) { return fail(response, Error); }
+
+            function ready(error, content) {
+                if (error) return fail(response, NotFound);
+                // Deal with request
+                if(!handleRequest(request,response))
+                    succeed(response,type,content);
+            }
         });
-
-        if (secret == '')
-        {
-            // No match, leave empty string
-            console.log("no session");
-            //response.setHeader('Set-Cookie', ['secret='+'']); // no need to set cookie if not logged on
-        }
-
-        var file = request.url;
-        if (ends(file,'/')) file = file + 'index.html';
-        // If there are parameters, take them off
-        var parts = file.split("?");
-        if (parts.length > 1) file = parts[0];
-        file = "." + file;
-        var type = findType(request, path.extname(file));
-        if (! type) return fail(response, BadType);
-        if (! inSite(file)) return fail(response, NotFound);
-        if (! matchCase(file)) return fail(response, NotFound);
-        if (! noSpaces(file)) return fail(response, NotFound);
-        try { fs.readFile(file, ready); }
-        catch (err) { return fail(response, Error); }
-
-        function ready(error, content) {
-            if (error) return fail(response, NotFound);
-            // Deal with request
-            if(!handleRequest(request,response))
-                succeed(response,type,content);
-        }
     });
 }
 
