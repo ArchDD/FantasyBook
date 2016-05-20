@@ -122,59 +122,58 @@ function fail(response, code) {
 // folder, it would inefficiently have to be redirected for the browser to get
 // relative links right).
 function serve(request, response) {
-    //console.log(request.headers.cookie);
-    //checkSessions(request, response, function(){});
-
+    // secret for guests will remain an empty string
+    var secret = '';
     // Parse cookies
-    console.log("cookie secret: "+request.headers.cookie);
     var list = {};
     var rc = request.headers.cookie;
-    rc = rc.split(';').forEach(function(cookie){
-        var parts = cookie.split('=');
-        list[parts.shift().trim()] = decodeURI(parts.join('='));
-    });
-    console.log("list secret: "+list['secret']);
+    if (rc)
+    {
+        rc = rc.split(';').forEach(function(cookie){
+            var parts = cookie.split('=');
+            list[parts.shift().trim()] = decodeURI(parts.join('='));
+        });
+    }
     // Check for expired sessions
     db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
     //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
         if (e) throw e;
         // Check if there is existing session
-        db.each("SELECT * FROM Sessions ", function(err, row) {
+        db.each("SELECT * FROM Sessions WHERE secret = '"+list['secret']+"'", function(err, row) {
             console.log("row: "+row);
-            if (row)
-            {
-                // Match found
-                console.log("session found secret "+row['secret']);
-                //response.setHeader('Set-Cookie', ['secret='+row['secret']]);
-            }
-            else
-            {
-                // No match, set blank
-                console.log("no session");
-                //response.setHeader('Set-Cookie', ['secret='+'']);
-            }
-
-            var file = request.url;
-            if (ends(file,'/')) file = file + 'index.html';
-            // If there are parameters, take them off
-            var parts = file.split("?");
-            if (parts.length > 1) file = parts[0];
-            file = "." + file;
-            var type = findType(request, path.extname(file));
-            if (! type) return fail(response, BadType);
-            if (! inSite(file)) return fail(response, NotFound);
-            if (! matchCase(file)) return fail(response, NotFound);
-            if (! noSpaces(file)) return fail(response, NotFound);
-            try { fs.readFile(file, ready); }
-            catch (err) { return fail(response, Error); }
-
-            function ready(error, content) {
-                if (error) return fail(response, NotFound);
-                // Deal with request
-                if(!handleRequest(request,response))
-                    succeed(response,type,content);
-            }
+            // Match found
+            console.log("session found secret "+row['secret']);
+            secret = row['secret'];
+            response.setHeader('Set-Cookie', ['secret='+row['secret']]);
         });
+
+        if (secret == '')
+        {
+            // No match, leave empty string
+            console.log("no session");
+            //response.setHeader('Set-Cookie', ['secret='+'']); // no need to set cookie if not logged on
+        }
+
+        var file = request.url;
+        if (ends(file,'/')) file = file + 'index.html';
+        // If there are parameters, take them off
+        var parts = file.split("?");
+        if (parts.length > 1) file = parts[0];
+        file = "." + file;
+        var type = findType(request, path.extname(file));
+        if (! type) return fail(response, BadType);
+        if (! inSite(file)) return fail(response, NotFound);
+        if (! matchCase(file)) return fail(response, NotFound);
+        if (! noSpaces(file)) return fail(response, NotFound);
+        try { fs.readFile(file, ready); }
+        catch (err) { return fail(response, Error); }
+
+        function ready(error, content) {
+            if (error) return fail(response, NotFound);
+            // Deal with request
+            if(!handleRequest(request,response))
+                succeed(response,type,content);
+        }
     });
 }
 
