@@ -348,7 +348,7 @@ $(window).on("load", function() {
     }
 
     function setPageEvent(book, requestPageNum,pageId) {
-        $.get("?action=getEvent&uniqueId="+Math.random(),function(data, status){
+        $.get("?action=getEvent&book="+book['bookId']+"&page="+requestPageNum+"&uniqueId="+Math.random(),function(data, status){
             if(requestPageNum == pageNumber || requestPageNum == pageNumber + 1) {
                 $(pageId+" .page-title").html(data['eventName']);
                 $(pageId+" .page-content").html(data['eventDesc']);

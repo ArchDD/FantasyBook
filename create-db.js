@@ -68,13 +68,14 @@ function startup() {
 
     // List of entries of a book : IDs, Info
     db.run(
-        "CREATE TABLE IF NOT EXISTS BookEntries                     \
+        "CREATE TABLE IF NOT EXISTS BookEvents                      \
         (                                                           \
-            e_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
+            e_id INTEGER NOT NULL,                                  \
             b_id INTEGER NOT NULL,                                  \
             title VARCHAR(32) NOT NULL,                             \
             description VARCHAR(255) NOT NULL,                      \
-            FOREIGN KEY(b_id) REFERENCES Users(b_id)                \
+            FOREIGN KEY(b_id) REFERENCES Books(b_id),               \
+            PRIMARY KEY(b_id,e_id)                                  \
         )"
     , err);
 

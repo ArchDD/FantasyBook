@@ -174,10 +174,18 @@ function handleRequest(request,response) {
             var action = params['action'];
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
-                if(action === "getBooks")
-                    server_book.sendBooks(response);
-                else if(action == "getEvent")
-                    server_book.sendEvent(response);
+                if(action === "getBooks") {
+                    // TO-DO get user from session
+                    var user = "guest";
+                    server_book.sendBooks(user,response);
+                }
+                else if(action == "getEvent") {
+                    // TO-DO get user from session
+                    var user = "guest";
+                    var book = parseInt(params['book']);
+                    var page = parseInt(params['page']);
+                    server_book.sendEvent(user,book,page,response);
+                }
                 return true;
             }
         }
