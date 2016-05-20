@@ -26,8 +26,8 @@ function retrieveBookById(bookId,callback){
 // retrieve book event with event id and book id from database
 function retrieveBookEvent(bookId,page,callback){
     var db = new sql.Database("westory.db");
-
-    db.all("SELECT * FROM BookEvents WHERE (b_id,e_id) = ("+bookId+","+page+")", function(err, rows) {
+    console.log("lookin for"+bookId+","+page);
+    db.all("SELECT * FROM BookEvents WHERE b_id="+bookId+" and e_id="+page, function(err, rows) {
         callback(err,rows);
     });
 
@@ -101,8 +101,12 @@ function sendExistingEvent(bookId,page,response){
     retrieveBookEvent(bookId,page,function(err,rows){
         if(rows) {
             var row = rows[0];
-            console.log(row);
-            
+            var eventObj = {
+                "eventName" : row['title'],
+                "eventDesc" : row['description']
+            }
+            var jsonObj = JSON.stringify(eventObj);
+            response.end(jsonObj);
         }
     }); 
 }

@@ -26,7 +26,6 @@ $(window).on("load", function() {
     });
 
     function resizeBooks() {
-
         var mainHeight = $("#main").height();
         var mainWidth = $("#main").width();
 
@@ -85,7 +84,9 @@ $(window).on("load", function() {
 
     //Populate the shelf with previously saved books
     function populateBooks() {
+        console.log(books);
         for (var key in books) {
+            console.log(key);
             // insert books before the 'new book' template
             createNewBook(key, books[key]).insertBefore($("#addBook"));
         }
