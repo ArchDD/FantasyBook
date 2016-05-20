@@ -160,8 +160,6 @@ function handleRequest(request,response) {
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
-            // Redirect to homepage after registering
-            redirect(response, '/index.html');
             return true;
         }
         else if(request.url.toLowerCase() === '/character-creator.html'){
@@ -194,7 +192,7 @@ function CSPRNGBase64 (len) {
 
 function dbErr(e) { if (e) throw e; }
 
-function registerOrLogin(request, response)
+function registerOrLogin(request, response, cb)
 {
     // Read register form
     var form = new formidable.IncomingForm();
@@ -215,7 +213,7 @@ function registerOrLogin(request, response)
                 bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
                     if (res)
                     {
-                        createSession(row['username']);
+                        createSession(row['username'], response);
                     }
                     else
                     {
@@ -227,17 +225,19 @@ function registerOrLogin(request, response)
     });
 }
 
-function createSession(username)
+function createSession(username, response)
 {
     // Generate secret key
     var secret = CSPRNGBase64(64);
-    //response.setHeader('Set-Cookie', ['secret=', secret, 'username=', username, 'date=', sessionDate]); 
+    response.setHeader('Set-Cookie', ['secret=', secret]);
     // Remove any possible leftover sessions of this user
     db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
         if (e) throw e;
         //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
         db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', datetime('now'))", dbErr);
     });
+    // Redirect to homepage after registering
+    redirect(response, '/index.html');
 }
 
 // Find the content type (MIME type) to respond with.
