@@ -176,13 +176,10 @@ function handleRequest(request,response) {
             var action = params['action'];
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
-                var data;
                 if(action === "getBooks")
-                    data = server_book.getBooks();
+                    server_book.sendBooks(response);
                 else if(action == "getEvent")
-                    data = server_book.getEvent();
-                var jsonObj = JSON.stringify(data);
-                response.end(jsonObj);
+                    server_book.sendEvent(response);
                 return true;
             }
         }

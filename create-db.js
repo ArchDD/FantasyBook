@@ -56,8 +56,11 @@ function startup() {
             b_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
             username INTEGER NOT NULL,                              \
             name VARCHAR(64) NOT NULL,                              \
-            FOREIGN KEY(username) REFERENCES Users(username),       \
-            PRIMARY KEY(b_id,username)
+            desc VARCHAR(128) NOT NULL,                             \
+            pages INTEGER NOT NULL,                                 \
+            colour CHAR(7) NOT NULL,                                \
+            texture VARCHAR(32) NOT NULL,                           \
+            FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
     , err);
 
