@@ -92,16 +92,6 @@ function printAddresses() {
     console.log('Server running at', httpAddress, 'and', httpsAddress);
 }
 
-function expireSessions(request, response, callback)
-{
-    console.log("checking for expired sessions!");
-
-    //var sqlString = "DELETE FROM Sessions WHERE date <= date('now','-2 day')"; 
-    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-4 hour')", function(e) {
-        if (e) throw e;
-    });
-}
-
 // Response codes: see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 var OK = 200, Redirect = 307, NotFound = 404, BadType = 415, Error = 500;
 
@@ -132,28 +122,60 @@ function fail(response, code) {
 // folder, it would inefficiently have to be redirected for the browser to get
 // relative links right).
 function serve(request, response) {
-    console.log(request.headers.cookie);
-    expireSessions(request, response, function(){});
-    var file = request.url;
-    if (ends(file,'/')) file = file + 'index.html';
-    // If there are parameters, take them off
-    var parts = file.split("?");
-    if (parts.length > 1) file = parts[0];
-    file = "." + file;
-    var type = findType(request, path.extname(file));
-    if (! type) return fail(response, BadType);
-    if (! inSite(file)) return fail(response, NotFound);
-    if (! matchCase(file)) return fail(response, NotFound);
-    if (! noSpaces(file)) return fail(response, NotFound);
-    try { fs.readFile(file, ready); }
-    catch (err) { return fail(response, Error); }
+    //console.log(request.headers.cookie);
+    //checkSessions(request, response, function(){});
 
-    function ready(error, content) {
-        if (error) return fail(response, NotFound);
-        // Deal with request
-        if(!handleRequest(request,response))
-            succeed(response,type,content);
-    }
+    // Parse cookies
+    console.log("cookie secret: "+request.headers.cookie);
+    var list = {};
+    var rc = request.headers.cookie;
+    rc = rc.split(';').forEach(function(cookie){
+        var parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+    console.log("list secret: "+list['secret']);
+    // Check for expired sessions
+    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
+    //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
+        if (e) throw e;
+        // Check if there is existing session
+        db.each("SELECT * FROM Sessions ", function(err, row) {
+            console.log("row: "+row);
+            if (row)
+            {
+                // Match found
+                console.log("session found secret "+row['secret']);
+                //response.setHeader('Set-Cookie', ['secret='+row['secret']]);
+            }
+            else
+            {
+                // No match, set blank
+                console.log("no session");
+                //response.setHeader('Set-Cookie', ['secret='+'']);
+            }
+
+            var file = request.url;
+            if (ends(file,'/')) file = file + 'index.html';
+            // If there are parameters, take them off
+            var parts = file.split("?");
+            if (parts.length > 1) file = parts[0];
+            file = "." + file;
+            var type = findType(request, path.extname(file));
+            if (! type) return fail(response, BadType);
+            if (! inSite(file)) return fail(response, NotFound);
+            if (! matchCase(file)) return fail(response, NotFound);
+            if (! noSpaces(file)) return fail(response, NotFound);
+            try { fs.readFile(file, ready); }
+            catch (err) { return fail(response, Error); }
+
+            function ready(error, content) {
+                if (error) return fail(response, NotFound);
+                // Deal with request
+                if(!handleRequest(request,response))
+                    succeed(response,type,content);
+            }
+        });
+    });
 }
 
 function handleRequest(request,response) {
@@ -218,6 +240,8 @@ function registerOrLogin(request, response, cb)
                     else
                     {
                         console.log("Login Failure");
+                        response.setHeader('Set-Cookie', ["secret="]);
+                        redirect(response, '/index.html');
                     }
                 });
             });
@@ -229,7 +253,8 @@ function createSession(username, response)
 {
     // Generate secret key
     var secret = CSPRNGBase64(64);
-    response.setHeader('Set-Cookie', ['secret=', secret]);
+    console.log(secret);        
+    response.setHeader('Set-Cookie', ["secret="+secret]);
     // Remove any possible leftover sessions of this user
     db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
         if (e) throw e;
