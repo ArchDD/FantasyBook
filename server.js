@@ -196,6 +196,7 @@ function serve(request, response) {
 }
 
 function handleRequest(request,response) {
+    var secret = GetSecret(request);
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
@@ -208,8 +209,10 @@ function handleRequest(request,response) {
             return true;
         }
         else if(request.url.toLowerCase() == '/book-creator.html') {
-            server_book.submitBookForm(request,response,db);
-            redirect(response, '/book.html');
+            getUserSession(secret, function(user){
+                server_book.submitBookForm(user,request,db);
+                redirect(response, '/book.html');
+            });
             return true;
         }
     } else if (request.method.toLowerCase() === 'get') {
@@ -219,23 +222,23 @@ function handleRequest(request,response) {
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action === "get_books") {
-                    // TO-DO get user from session
-                    var user = "guest";
-                    server_book.sendBooks(user,response);
+                    getUserSession(secret, function(user){
+                        server_book.sendBooks(user,response);
+                    });
                 }
                 else if(action === "get_event") {
-                    // TO-DO get user from session
-                    var user = "guest";
-                    var book = parseInt(params['book']);
-                    var page = parseInt(params['page']);
-                    server_book.getAndSendEvent(user,book,page,response);
+                    getUserSession(secret, function(user){
+                        var book = parseInt(params['book']);
+                        var page = parseInt(params['page']);
+                        server_book.getAndSendEvent(user,book,page,response);
+                    });
                 }
                 else if(action === "event_choice") {
-                    // TO-DO get user from session
-                    var user = "guest";
-                    var book = parseInt(params['book']);
-                    var choice = parseInt(params['choice']);
-                    server_book.setOutcome(user,book,choice,response);
+                    getUserSession(secret, function(user){
+                        var book = parseInt(params['book']);
+                        var choice = parseInt(params['choice']);
+                        server_book.setOutcome(user,book,choice,response);
+                    });
                 }
                 return true;
             }
@@ -254,6 +257,16 @@ function handleRequest(request,response) {
         }
     }
     return false;
+}
+
+function getUserSession(secret,callback) {
+    db.all("SELECT username FROM Sessions WHERE secret = '"+secret+"'", function(err, row) {
+        // Retrieve logged user's character or show default
+        if (row[0])
+        { 
+            callback(row[0]['username']);
+        }
+    });
 }
 
 function CSPRNGBase64 (len) {

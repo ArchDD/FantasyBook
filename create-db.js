@@ -47,7 +47,7 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS Books                           \
         (                                                           \
             b_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            username INTEGER NOT NULL,                              \
+            username VARCHAR(32) NOT NULL,                          \
             name VARCHAR(64) NOT NULL,                              \
             desc VARCHAR(128) NOT NULL,                             \
             pages INTEGER NOT NULL,                                 \

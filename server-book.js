@@ -3,11 +3,10 @@ var sql = require("sqlite3").verbose();
 var formidable = require("formidable");
 var util = require('util');
 
-exports.submitBookForm = function(request,response,db) {
+exports.submitBookForm = function(user,request,db) {
     var form = new formidable.IncomingForm();
     // Parsing form input to store in file or database
     form.parse(request, function (err, fields, files) {
-        // insert new book into database from form data
         db.run("INSERT INTO Books "+ 
             "("+
                 "username,"+
@@ -16,22 +15,19 @@ exports.submitBookForm = function(request,response,db) {
                 "pages,"+
                 "colour,"+
                 "texture"+
-            ") VALUES ("+
-                "'guest','"+
+            ") VALUES ('"+
+                user+"','"+
                 fields['book-title']+"',"+
                 "'A "+fields['category']+" book.',"+
                 2+",'"+
                 fields['colour']+"',"+
                 "'leather')"
             , dbErr);
-        response.writeHead(200, {
-            'Content-Type': 'text/plain'
+        // get new book id and create event
+        db.get("SELECT last_insert_rowid()",function(err,data){
+            addNewEvent(data['last_insert_rowid()'],2);
         });
-        //response.write('Received Data: \n\n');
-        response.end(util.inspect({
-            fields: fields,
-            files: files
-        }));
+        
     });
 }
 
@@ -50,9 +46,8 @@ function retrieveUserBooks(username,callback){
 function retrieveBookById(bookId,callback){
     var db = new sql.Database("westory.db");
 
-    db.each("SELECT * FROM Books WHERE b_id = "+bookId, function(err, row) {
-        if(row)
-            callback(err,row);
+    db.get("SELECT * FROM Books WHERE b_id = "+bookId, function(err, row) {
+        callback(err,row);
     });
 
     db.close();
@@ -62,9 +57,8 @@ function retrieveBookById(bookId,callback){
 function retrieveRandomEvent(callback){
     var db = new sql.Database("westory.db");
 
-    db.each("SELECT * FROM BookEvents ORDER BY RANDOM() LIMIT 1", function(err, row) {
-        if(row)
-            callback(err,row);
+    db.get("SELECT * FROM BookEvents ORDER BY RANDOM() LIMIT 1", function(err, row) {
+        callback(err,row);
     });
 
     db.close();
@@ -73,9 +67,8 @@ function retrieveRandomEvent(callback){
 // retrieve book entry with page number and book id
 function retrieveBookEntry(bookId,page,callback){
     var db = new sql.Database("westory.db");
-    db.each("SELECT * FROM BookEntries WHERE b_id="+bookId+" and page_id="+page, function(err, row) {
-        if(row)
-            callback(err,row);
+    db.get("SELECT * FROM BookEntries WHERE b_id="+bookId+" and page_id="+page, function(err, row) {
+        callback(err,row);
     });
 
     db.close();
@@ -84,9 +77,8 @@ function retrieveBookEntry(bookId,page,callback){
 // retrieve event with event id 
 function retrieveBookEvent(eventId,callback){
     var db = new sql.Database("westory.db");
-    db.each("SELECT * FROM BookEvents WHERE e_id="+eventId, function(err, row) {
-        if(row)
-            callback(err,row);
+    db.get("SELECT * FROM BookEvents WHERE e_id="+eventId, function(err, row) {
+        callback(err,row);
     });
 
     db.close();
