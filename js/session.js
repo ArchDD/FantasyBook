@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var session = JSON.parse(xhr.responseText || "null");
             var secret = session['secret'];
-            if (secret)
+            console.log(secret);
+            if (!secret || secret.length == 0)
             {
                 // Hide logout
                 var l = document.getElementById("logout");

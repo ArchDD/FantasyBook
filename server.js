@@ -151,7 +151,7 @@ function serve(request, response) {
             if (row[0])
             {
                 console.log("session found secret "+row[0]['secret']);
-                secret = row['secret'];
+                secret = row[0]['secret'];
                 response.setHeader('Set-Cookie', ['secret='+row[0]['secret']]);
             }
             else
