@@ -28,7 +28,7 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS Characters                      \
         (                                                           \
             c_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            username INTEGER NOT NULL,                              \
+            username VARCHAR(32) NOT NULL,                          \
             name VARCHAR(64) NOT NULL,                              \
             hair_type INTEGER NOT NULL,                             \
             nose_type INTEGER NOT NULL,                             \
