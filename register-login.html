@@ -46,7 +46,7 @@
         <div id = "container">
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
-                <form class = "form" name = "login" method = "post" onsubmit="return validateLogin()">
+                <form class = "form" name = "login" method = "post">
                     <input type="hidden" name="form-name" value="login" />
 
                     <p class = "feature-text">Login</p>
@@ -57,10 +57,10 @@
                     <p class = "field-text">Password</p>
                     <input type="password" name="login-password" class = "form-field"/>
 
-                    <input type="submit" value="Submit"/>
+                    <input type="button" value="Submit" onclick="return validateLogin()"/>
                 </form>
 
-                <form class = "form" name = "register" method = "post" onsubmit="return validateRegister()">
+                <form class = "form" name = "register" method = "post">
                     <input type="hidden" name="form-name" value="register" />
                     <p class = "form-text">Register</p>
 
@@ -76,7 +76,7 @@
                     <p class = "field-text">Confirm Password</p>
                     <input type="password" name="register-confirm" class = "form-field"/>
 
-                    <input type="submit" value="Submit"/>
+                    <input type="button" value="Submit" onclick="return validateRegister()"/>
                 </form>
             </main>
         </div>

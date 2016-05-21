@@ -10,6 +10,7 @@ var url_methods = require('url');
 var sql = require("sqlite3").verbose();
 var formidable = require('formidable');
 var bcrypt = require('bcrypt');
+var qs = require('querystring');
 
 var file = "westory.db";
 var exists = fs.existsSync(file);
@@ -198,7 +199,7 @@ function serve(request, response) {
             if (! noSpaces(file)) return fail(response, NotFound);
             try { fs.readFile(file, ready); }
             catch (err) { return fail(response, Error); }
-    
+            
             function ready(error, content) {
                 if (error) return fail(response, NotFound);
                 // Deal with request
@@ -295,6 +296,42 @@ function handleRequest(request,response,secret) {
     return false;
 }
 
+function validatePassword(str, minLength, maxLength) {
+    var reg = new RegExp("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{"+minLength.toString()+","+maxLength.toString()+"}$");
+    return reg.test(str);
+}
+
+function validateText(str, minLength, maxLength) {
+    var reg = new RegExp("^(?=.*([a-z]|[A-Z]|d)).{"+minLength.toString()+","+maxLength.toString()+"}$");
+    return reg.test(str);
+}
+
+function validateLogin(username, password)
+{
+    // Input validation
+    if (!validateText(username, 4, 32))
+    {
+        return false;
+    }
+    if (!validatePassword(username, 6, 32)) {
+        return false;
+    }
+    return true;
+}
+
+function validateRegister()
+{   
+    var username = document.forms["register"]["register-username"].value;
+    if (!validateText(username, 4, 32))
+    {
+        //redirect
+    }
+    var password = document.forms["register"]["register-password"].value;
+    if (!validatePassword(username, 6, 32)) {
+        //redirect
+    }
+}
+
 function getUserSession(secret,callback) {
     db.all("SELECT username FROM Sessions WHERE secret = '"+secret+"'", function(err, row) {
         // Retrieve logged user's character or show default
@@ -317,36 +354,67 @@ function dbErr(e) { if (e) throw e; }
 
 function registerOrLogin(request, response, cb)
 {
-    // Read register form
-    var form = new formidable.IncomingForm();
-    // Parsing form input to store in file or database
-    form.parse(request, function (err, fields, files) {
-        // Salt and hash password
-        if (fields['form-name'] == 'register')
+    var body='';
+    request.on('data', function (data) {
+        body +=data;
+    });
+    request.on('end',function(){
+        var POST =  qs.parse(body);
+        console.log(POST);
+        if (POST['type'] == 'login')
         {
-            bcrypt.hash(fields['register-password'], saltRounds, function(h_err, hash) {
-                // Access database and insert
-                db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", dbErr);
-                db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
-                    "VALUES ('"+fields['register-username']+"','"+fields['register-username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",dbErr);
-            });
-            redirect(response, '/index.html');
+            // Validate input
+            if (validateLogin(POST['username'], POST['password']))
+            {
+                // Query user ID to retrieve hash table
+                db.each("SELECT username, password FROM Users WHERE username = '"+POST['username']+"'", function(err, row) {
+                    bcrypt.compare(POST['password'], row['password'], function(err, res) {
+                        if (res)
+                        {
+                            createSession(row['username'], response);
+                        }
+                        else
+                        {
+                            console.log("Login Failure");
+                            // Respond unsuccessful login attempt
+                            response.writeHead(200,{"Content-Type": "application/json"});
+                            var r = {
+                                "result" : false
+                            };
+                            var jsonObj = JSON.stringify(r);
+                            response.end(jsonObj);
+                        }
+                    });
+                });
+            }
+            else
+            {
+                // Respond failing server side validation
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var r = {
+                    "result" : false
+                };
+                var jsonObj = JSON.stringify(r);
+                response.end(jsonObj);
+            }
         }
-        else if (fields['form-name'] == 'login')
+        else if (POST['type'] == 'register')
         {
-            // Query user ID to retrieve hash table
-            db.each("SELECT username, password FROM Users WHERE username = '"+fields['login-username']+"'", function(err, row) {
-                bcrypt.compare(fields['login-password'], row['password'], function(err, res) {
-                    if (res)
-                    {
-                        createSession(row['username'], response);
-                    }
-                    else
-                    {
-                        console.log("Login Failure");
-                        response.setHeader('Set-Cookie', ["secret="]);
-                        redirect(response, '/index.html');
-                    }
+            // Salt and hash password
+            bcrypt.hash(POST['password'], saltRounds, function(h_err, hash) {
+                // Create user
+                db.run("INSERT INTO Users (username, password, email) VALUES ('"+POST['username']+"', '"+hash+"', '"+POST['email']+"')", function() {
+                    // Create default character for user
+                    db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
+                        "VALUES ('"+POST['username']+"','"+POST['username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",function(){
+                        //JSON respond redirect to character on success
+                        response.writeHead(200,{"Content-Type": "application/json"});
+                        var r = {
+                            "result" : true
+                        };
+                        var jsonObj = JSON.stringify(r);
+                        response.end(jsonObj);
+                    });
                 });
             });
         }
@@ -356,17 +424,22 @@ function registerOrLogin(request, response, cb)
 function createSession(username, response)
 {
     // Generate secret key
-    var secret = CSPRNGBase64(64);
-    console.log(secret);        
+    var secret = CSPRNGBase64(64); 
     response.setHeader('Set-Cookie', ["secret="+secret]);
     // Remove any possible leftover sessions of this user
     db.run("DELETE FROM Sessions WHERE username = '"+username+"'", function(e) {
         if (e) throw e;
         //db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', '"+sessionDate+"')", dbErr);
-        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', datetime('now'))", dbErr);
+        db.run("INSERT INTO Sessions (secret, username, date) VALUES ('"+secret+"', '"+username+"', datetime('now'))", function(){
+            //JSON respond redirect to character
+            response.writeHead(200,{"Content-Type": "application/json"});
+            var r = {
+                "result" : true
+            };
+            var jsonObj = JSON.stringify(r);
+            response.end(jsonObj);
+        });
     });
-    // Redirect to homepage after registering
-    redirect(response, '/index.html');
 }
 
 // Find the content type (MIME type) to respond with.
