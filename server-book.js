@@ -44,8 +44,10 @@ function setNewEventData(bookId,page,bookEvent){
             page+","+
             bookId+",'"+
             bookEvent['eventName']+"','"+
-            bookEvent['eventDesc']+
-        "')"
+            bookEvent['eventDesc']+"','"+
+            bookEvent['outcome']+"',"+
+            "0"+
+        ")"
         , dbErr);
 
     db.close();
@@ -56,7 +58,6 @@ exports.sendBooks = function (user,response) {
         var books = {};
         for(var i = 0; i < rows.length; i++){
             row = rows[i];
-            console.log(row);
             books[i] = {
                 bookId : row['b_id'],
                 bookTitle: row['name'],
@@ -89,7 +90,9 @@ exports.sendEvent = function (user,bookId,page,response) {
 function sendNewEvent(bookId,page,response){
     var bookEvent = {
         "eventName" : "DRAGONS!??!?!",
-        "eventDesc" : "A dragon nest has been left empty! You spot eggs. What to do?!"
+        "eventDesc" : "A dragon nest has been left empty! You spot eggs. What to do?!",
+        "isCompleted" : false,
+        "outcome"   : "Unicorns save the day!"
     };
     console.log("new event");
     setNewEventData(bookId,page,bookEvent);
@@ -100,10 +103,14 @@ function sendNewEvent(bookId,page,response){
 function sendExistingEvent(bookId,page,response){
     retrieveBookEvent(bookId,page,function(err,rows){
         if(rows) {
+            console.log(rows.length);
             var row = rows[0];
+            console.log(row);
             var eventObj = {
                 "eventName" : row['title'],
-                "eventDesc" : row['description']
+                "eventDesc" : row['description'],
+                "isCompleted" : row['is_completed'],
+                "outcome"   : row['outcome']
             }
             var jsonObj = JSON.stringify(eventObj);
             response.end(jsonObj);

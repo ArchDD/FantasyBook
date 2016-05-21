@@ -67,14 +67,17 @@ $(window).on("load", function() {
         
         //loaded texture counter
         var loadedTextures = 0;
-
+        //console.log(textures);
+        //console.log("texes: "+Object.keys(textures).length);
         //For each texture
         $.each(textures, function(i,tex) {
             $('#hidden-textures').append(tex);
             tex.onload = function() {
                 loadedTextures++;
                 //when all textures are loaded
+                console.log(loadedTextures);
                 if(loadedTextures == Object.keys(textures).length) {
+                    console.log("GO POPULATE!");
                     populateBooks();
                 }
 
@@ -92,64 +95,57 @@ $(window).on("load", function() {
         }
     }
 
-    // Open flipbook and exit book shelf
-    $("body").on("click", ".book", function() {
-        if(!bookIsOpen) {
-            // special case - book creator
-            if(this.id === "addBook") {
-
-            }
-            else {
-
-                bookIsOpen = true;
-                currentBook = books[this.id];
-                resizeBooks();
-
-                if(isSinglePage)
-                    loadFirstPageSingle(currentBook);
-                else
-                    loadFirstPage(currentBook);
-
-                // Make flipbook visible
-                $("#flipbook-container").css("display","flex");
-                $("#flipbook-container").css("visibility","visible");
-                $("#bookshelf-container").css("display","none");
-                $("#bookshelf-container").css("visibility","hidden");
-            }
+    // Update and load pages on page turn.
+    function updatePages(book, pageNumber) {
+        // not in single page mode, update left element   
+        if(!isSinglePage) {
+            setPageEvents(currentBook,pageNumber,"#left_page");
+            setPageEvents(currentBook,pageNumber+1,"#right_page");
         }
-    });
-
-    $("body").on("click", "#right_page", function(e) {
-        if(!isSinglePage)
-            nextPage();
-        else
-            changePageSingle(e);
-    });
-
-    $("body").on("click", "#left_page", function(e) {
-        previousPage();
-    });
-
-    function updatePage(pageId, book, pageNumber) {
-        if(pageNumber == 0 || pageNumber == book.pages) {
-            $(pageId+" .page-title").html("");
-            $(pageId+" .page-content").html("");
-            $(pageId+" .page-number").html("");
-            $(pageId+" .page-image").hide();
-        }
+        // single page mode, update right element
         else {
-            setPageEvent(currentBook,pageNumber,pageId);
-           // $(pageId+" .page-title").html(getEventTitle(currentBook, pageNumber));
-           // $(pageId+" .page-content").html(getEventContent(currentBook, pageNumber));
-            $(pageId+" .page-number").html(pageNumber);
-            $(pageId+" .page-image").show();
+            setPageEvents(currentBook,pageNumber,"#right_page");
         }
-        
+    }
+
+    function setPageEvents(book, requestPageNum,pageId) {
+        if(requestPageNum < book.pages) {
+            $.get("?action=getEvent&book="+book['bookId']+"&page="+requestPageNum+"&uniqueId="+Math.random(),function(data, status){
+                if(requestPageNum == pageNumber || requestPageNum == pageNumber + 1) {
+                    $(pageId+" .page-title").html(data['eventName']);
+                    $(pageId+" .page-number").html(requestPageNum);
+                    $(pageId+" .page-image").show();
+
+                    // if the event is undecided
+                    if(!data['isCompleted']) {
+                        $(pageId+" .page-content").html(data['eventDesc']);
+                        $(pageId+" .page-choices").show();
+                    // otherwise
+                    } else {
+                        $(pageId+" .page-content").html(data['outcome']);
+                        $(pageId+" .page-choices").hide();
+                    }
+                    
+                }
+            });
+        } else {
+            setBlankPage(pageId);
+        }
+    }
+
+    function setBlankPage(pageId) {
+        $(pageId+" .page-title").html("");
+        $(pageId+" .page-choices").hide();
+        $(pageId+" .page-image").hide();
+
+        $(pageId+" .page-content").html("");
+        $(pageId+" .page-number").html("");
     }
 
     function loadFirstPage(book) {
         pageNumber = 0;
         $("#left_page .page-title").hide();
+        $("#left_page .page-choices").hide();
         $("#left_page .page-image").hide();
 
         $("#left_page .page-content").html("");
@@ -160,6 +156,8 @@ $(window).on("load", function() {
         // write book description
         $("#right_page .page-content").html(book.desc);
         $("#right_page .page-number").html(pageNumber+1);
+        $("#right_page .page-choices").hide();
+        $("#right_page .page-image").hide();
     }
 
     function loadFirstPageSingle(book) {
@@ -169,6 +167,8 @@ $(window).on("load", function() {
         // write book description
         $("#right_page .page-content").html(book.desc);
         $("#right_page .page-number").html(pageNumber);
+        $("#right_page .page-choices").hide();
+        $("#right_page .page-image").hide();
     }
 
     function changeToSinglePage(book) {
@@ -182,7 +182,7 @@ $(window).on("load", function() {
             if(pageNumber == 1) {
                 loadFirstPageSingle(book);
             } else {
-                updatePage("#right_page",book,pageNumber);
+                updatePages(book,pageNumber);
             }
         }
     }
@@ -199,8 +199,7 @@ $(window).on("load", function() {
             } else {
                 $("#left_page .page-title").show();
                 $("#left_page .page-image").show();
-                updatePage("#left_page",book,pageNumber);
-                updatePage("#right_page",book,pageNumber+1);
+                updatePages(book,pageNumber);
             }
         }
     }
@@ -218,7 +217,7 @@ $(window).on("load", function() {
             if(pageNumber + 1 < currentBook.pages) {
                 pageNumber += 1;
                 // get new page
-                updatePage("#right_page",currentBook,pageNumber);
+                updatePages(currentBook,pageNumber);
             }
         }
         else {
@@ -232,7 +231,7 @@ $(window).on("load", function() {
                 }
                 // otherwise
                 else {
-                    updatePage("#right_page",currentBook,pageNumber);
+                    updatePages(currentBook,pageNumber);
                 }
             }
         }
@@ -250,8 +249,7 @@ $(window).on("load", function() {
 
             // Update content of the left page
             // Contact server to get either new event, saved result, or empty string
-            updatePage("#left_page",currentBook,pageNumber);
-            updatePage("#right_page",currentBook,pageNumber+1);
+            updatePages(currentBook,pageNumber);
         }
     }
 
@@ -268,13 +266,27 @@ $(window).on("load", function() {
             }
             // otherwise
             else {
-                // update left page
-                updatePage("#left_page",currentBook,pageNumber);
-                updatePage("#right_page",currentBook,pageNumber+1);
+                // update pages
+                updatePages(currentBook,pageNumber);
             }
         }
     }
 
+    // contacts server to get active status of the event 
+    function isEventComplete(book, pageNumber) {
+        return "False";
+    }
+
+    // contacts server to get active status of the event 
+    function getEventChoices(book, pageNumber) {
+
+        var choices = {
+            choice1 : "Go",
+            choice2 : "Leave"
+        }
+
+        return choices;
+    }
 
     // Do not propagate click to the flipbook container beneath
     $("body").on("click", "#flipbook", function(e) {
@@ -294,6 +306,42 @@ $(window).on("load", function() {
         }
     });
 
+    // Open flipbook and exit book shelf
+    $("body").on("click", ".book", function() {
+        if(!bookIsOpen) {
+            bookIsOpen = true;
+            currentBook = books[this.id];
+            resizeBooks();
+
+            if(isSinglePage)
+                loadFirstPageSingle(currentBook);
+            else
+                loadFirstPage(currentBook);
+
+            // Make flipbook visible
+            $("#flipbook-container").css("display","flex");
+            $("#flipbook-container").css("visibility","visible");
+            $("#bookshelf-container").css("display","none");
+            $("#bookshelf-container").css("visibility","hidden");
+        }
+    });
+
+    // right page clicked
+    $("body").on("click", "#right_page", function(e) {
+        // go forward if not single page mode
+        if(!isSinglePage)
+            nextPage();
+        // otherwise go back or forwards depending on mouse position (in e)
+        else
+            changePageSingle(e);
+    });
+
+    // if the left page is clicked, turn back a page
+    $("body").on("click", "#left_page", function(e) {
+        previousPage();
+    });
+
+    // Draw book canvas
     function createBookCanvas(settings) {
         var tex = textures.leather;
         var drawCanvas = document.createElement("canvas");
@@ -320,7 +368,7 @@ $(window).on("load", function() {
         return drawCanvas;
     }
 
-
+    // Create book elements and add to shelf
     function createNewBook(key, settings) {
         //default settings
         settings = $.extend(true, {
@@ -348,30 +396,6 @@ $(window).on("load", function() {
         return $book;
     }
 
-    function setPageEvent(book, requestPageNum,pageId) {
-        $.get("?action=getEvent&book="+book['bookId']+"&page="+requestPageNum+"&uniqueId="+Math.random(),function(data, status){
-            if(requestPageNum == pageNumber || requestPageNum == pageNumber + 1) {
-                $(pageId+" .page-title").html(data['eventName']);
-                $(pageId+" .page-content").html(data['eventDesc']);
-            }
-        });
-    }
-
-    // contacts server to get active status of the event 
-    function isEventComplete(book, pageNumber) {
-        return "False";
-    }
-
-    // contacts server to get active status of the event 
-    function getEventChoices(book, pageNumber) {
-
-        var choices = {
-            choice1 : "Go",
-            choice2 : "Leave"
-        }
-
-        return choices;
-    }
 
 });
 

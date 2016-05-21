@@ -167,11 +167,28 @@ body{
     height: 150px;
 }
 
+#flipbook .page-choices {
+    display: flex;
+    flex-direction: row;
+    justify-content:center;
+}
+
+#flipbook .choice-buttons {
+    width: 128px;
+    border-radius: 0.2em;
+    border: 0.1em solid black;
+    margin-left: 1em;
+    margin-right: 2em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    padding: 0.2em;
+    text-align: center;
+}
+
 #flipbook .page-number {
     margin-right: 4%;
     margin-bottom: 4%;
     text-align: right;
-
 }
 
 #right_page {

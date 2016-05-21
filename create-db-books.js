@@ -22,7 +22,7 @@ function startup() {
             (                                       \
                 1,                                  \
                 'guest',                            \
-                'Chasing Centaurs',                 \
+                'Into Space',                 \
                 '[Theme description]',              \
                 3,                                  \
                 '#42548a',                          \

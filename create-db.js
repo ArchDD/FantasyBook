@@ -74,6 +74,8 @@ function startup() {
             b_id INTEGER NOT NULL,                                  \
             title VARCHAR(32) NOT NULL,                             \
             description VARCHAR(255) NOT NULL,                      \
+            outcome VARCHAR(255) NOT NULL,                          \
+            is_completed INTEGER NOT NULL,                          \
             FOREIGN KEY(b_id) REFERENCES Books(b_id),               \
             PRIMARY KEY(b_id,e_id)                                  \
         )"
