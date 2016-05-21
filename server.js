@@ -266,6 +266,9 @@ function getUserSession(secret,callback) {
         { 
             callback(row[0]['username']);
         }
+        else {
+            callback("guest");
+        }
     });
 }
 
