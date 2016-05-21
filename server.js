@@ -78,6 +78,10 @@ function start() {
     var options = { key: key, cert: cert };
     var httpsService = https.createServer(options, serve);
     httpsService.listen(ports[1], 'localhost');
+    // turn on foreign key constraints
+    db.run(
+        "PRAGMA foreign_keys = ON"
+    , dbErr);
     printAddresses();
 }
 
@@ -257,21 +261,21 @@ function handleRequest(request,response,secret) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action === "get_books") {
                     getUserSession(secret, function(user){
-                        server_book.sendBooks(user,response);
+                        server_book.sendBooks(user,response,db);
                     });
                 }
                 else if(action === "get_event") {
                     getUserSession(secret, function(user){
                         var book = parseInt(params['book']);
                         var page = parseInt(params['page']);
-                        server_book.getAndSendEvent(user,book,page,response);
+                        server_book.getAndSendEvent(user,book,page,response,db);
                     });
                 }
                 else if(action === "event_choice") {
                     getUserSession(secret, function(user){
                         var book = parseInt(params['book']);
                         var choice = parseInt(params['choice']);
-                        server_book.setOutcome(user,book,choice,response);
+                        server_book.setOutcome(user,book,choice,response,db);
                     });
                 }
                 return true;

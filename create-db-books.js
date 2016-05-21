@@ -5,6 +5,19 @@ db.serialize(startup);
 
 function startup() {
     db.run(
+        "PRAGMA foreign_keys = ON"
+    , err);
+
+    db.run(
+            "INSERT INTO Users VALUES "+
+            "("+
+                "'guest',"+
+                "'Guest1',"+
+                "'guest@guest'"+
+            ")"
+    , err);
+
+    db.run(
             "INSERT INTO Books VALUES               \
             (                                       \
                 0,                                  \
@@ -22,7 +35,7 @@ function startup() {
             (                                       \
                 1,                                  \
                 'guest',                            \
-                'Into Space',                 \
+                'Into Space',                       \
                 '[Theme description]',              \
                 2,                                  \
                 '#42548a',                          \

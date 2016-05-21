@@ -5,6 +5,10 @@ db.serialize(startup);
 
 function startup() {
     db.run(
+        "PRAGMA foreign_keys = ON"
+    , err);
+
+    db.run(
         "CREATE TABLE IF NOT EXISTS Users                           \
         (                                                           \
             username VARCHAR(32) PRIMARY KEY NOT NULL,              \

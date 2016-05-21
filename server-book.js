@@ -27,14 +27,19 @@ exports.submitBookForm = function(user,request,db) {
         db.get("SELECT last_insert_rowid()",function(err,data){
             var bookId = data['last_insert_rowid()'];
             // add event entry to book
-            addNewEvent(bookId,2);
+            addNewEvent(bookId,2,db);
             // register users who can participate in book
             insertContributorRow(bookId,user,db);
-            console.log(fields['player']);
-            console.log(fields['player'].length);
             var players = fields['player'];
-            for(var i = 0; i < players.length; i++) {
-                insertContributorRow(bookId,players[i],db);
+            if(players) {
+                console.log(typeof(players));
+                if(typeof(players)==='object') {
+                    for(var i = 0; i < players.length; i++)
+                        insertContributorRow(bookId,players[i],db);
+                }
+                else {
+                    insertContributorRow(bookId,players,db);
+                }
             }
         });
     });
@@ -49,63 +54,41 @@ function insertContributorRow(bookId,user,db) {
 }
 
 // retrieve books associated with username from database
-function retrieveUserBooks(username,callback){
-    var db = new sql.Database("westory.db");
-
+function retrieveUserBooks(username,db,callback){
     db.all("SELECT * FROM Books WHERE username = '"+username+"'", function(err, rows) {
         callback(err,rows);
     });
-
-    db.close();
 }
 
 // retrieve book by book id
-function retrieveBookById(bookId,callback){
-    var db = new sql.Database("westory.db");
-
+function retrieveBookById(bookId,db,callback){
     db.get("SELECT * FROM Books WHERE b_id = "+bookId, function(err, row) {
         callback(err,row);
     });
-
-    db.close();
 }
 
 // retrieve random event
-function retrieveRandomEvent(callback){
-    var db = new sql.Database("westory.db");
-
+function retrieveRandomEvent(db,callback){
     db.get("SELECT * FROM BookEvents ORDER BY RANDOM() LIMIT 1", function(err, row) {
         callback(err,row);
     });
-
-    db.close();
 }
 
 // retrieve book entry with page number and book id
-function retrieveBookEntry(bookId,page,callback){
-    var db = new sql.Database("westory.db");
+function retrieveBookEntry(bookId,page,db,callback){
     db.get("SELECT * FROM BookEntries WHERE b_id="+bookId+" and page_id="+page, function(err, row) {
         callback(err,row);
     });
-
-    db.close();
 }
 
 // retrieve event with event id 
-function retrieveBookEvent(eventId,callback){
-    var db = new sql.Database("westory.db");
+function retrieveBookEvent(eventId,db,callback){
     db.get("SELECT * FROM BookEvents WHERE e_id="+eventId, function(err, row) {
         callback(err,row);
     });
-
-    db.close();
 }
 
-function insertNewEventData(bookId,page,eventId){
-    var db = new sql.Database("westory.db");
-    // Increment total page count of book
-    //db.run("UPDATE Books SET pages=pages+1"+" WHERE b_id = "+bookId, dbErr);
-
+function insertNewEventData(bookId,page,eventId,db){
     // insert new page event into database
     db.run("INSERT INTO BookEntries VALUES("+
             bookId+","+
@@ -115,12 +98,9 @@ function insertNewEventData(bookId,page,eventId){
             "0"+
         ")"
         , dbErr);
-
-    db.close();
 }
 
-function updateEventChoice(bookId,page,choice){
-    var db = new sql.Database("westory.db");
+function updateEventChoice(bookId,page,choice,db){
     // Increment total page count of book
     db.run("UPDATE Books SET pages=pages+1"+" WHERE b_id = "+bookId, dbErr);
 
@@ -128,12 +108,10 @@ function updateEventChoice(bookId,page,choice){
     db.run("UPDATE BookEntries SET is_completed = 1, choice_id="+choice+
         " WHERE b_id="+bookId+" and page_id="+page
         , dbErr);
-
-    db.close();
 }
 
-exports.sendBooks = function (user,response) {
-    retrieveUserBooks(user, function(err,rows){
+exports.sendBooks = function (user,response,db) {
+    retrieveUserBooks(user, db, function(err,rows){
         var books = {};
         for(var i = 0; i < rows.length; i++){
             row = rows[i];
@@ -151,14 +129,14 @@ exports.sendBooks = function (user,response) {
     });
 };
 
-exports.setOutcome = function(user,bookId,choice,response){
-    retrieveBookById(bookId, function(err, row) {
+exports.setOutcome = function(user,bookId,choice,response,db){
+    retrieveBookById(bookId, db,function(err, row) {
             if(row['username']===user) {
                 // event is last page of book
                 var page = row['pages'];
                 // update book size and entry to reflect choice
-                updateEventChoice(bookId,page,choice);
-                addNewEvent(bookId,page+1);
+                updateEventChoice(bookId,page,choice,db);
+                addNewEvent(bookId,page+1,db);
                 var pageObj = {"pages" : page+1};
                 
                 response.end(JSON.stringify(pageObj));
@@ -166,12 +144,12 @@ exports.setOutcome = function(user,bookId,choice,response){
     });
 }
 
-exports.getAndSendEvent = function (user,bookId,page,response) {
-    retrieveBookById(bookId, function(err, row) {
+exports.getAndSendEvent = function (user,bookId,page,response,db) {
+    retrieveBookById(bookId, db, function(err, row) {
             if(row['username']===user) {
                 // send existing event
-                retrieveBookEntry(bookId,page,function(err,bookEntry){
-                    retrieveBookEvent(bookEntry['e_id'], function(err,eventEntry) {
+                retrieveBookEntry(bookId,page,db,function(err,bookEntry){
+                    retrieveBookEvent(bookEntry['e_id'], db, function(err,eventEntry) {
                         sendEvent(bookEntry,eventEntry,response);
                     });
                 });
@@ -201,13 +179,12 @@ function sendEvent(bookEntry,eventEntry,response){
             "choice2" : eventEntry['choice2']
         }
     }
-    console.log(bookEntry['is_completed']);
     var jsonObj = JSON.stringify(eventObj);
     response.end(jsonObj);
 }
 
-function addNewEvent(bookId,page){
-    retrieveRandomEvent(function(err,row){
+function addNewEvent(bookId,page,db){
+    retrieveRandomEvent(db,function(err,row){
         var eventObj = {
             "eventName" : row['title'],
             "eventDesc" : row['description'],
@@ -215,7 +192,7 @@ function addNewEvent(bookId,page){
             "choice2" : row['choice2']
         }
         // record new event in bookentries table
-        insertNewEventData(bookId,page,row['e_id']);
+        insertNewEventData(bookId,page,row['e_id'],db);
     });
 }
 
