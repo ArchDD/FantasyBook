@@ -59,18 +59,30 @@ function startup() {
 
     // Possibly character status per book?
 
-    // List of entries of a book : IDs, Info
+    db.run(
+        "CREATE TABLE IF NOT EXISTS BookEntries                     \
+        (                                                           \
+            b_id INTEGER NOT NULL,                                  \
+            page_id INTEGER NOT NULL,                               \
+            e_id INTEGER NOT NULL,                                  \
+            choice_id INTEGER,                                      \
+            is_completed INTEGER NOT NULL,                          \
+            FOREIGN KEY(b_id) REFERENCES Books(b_id),               \
+            FOREIGN KEY(e_id) REFERENCES BookEvents(e_id),          \
+            PRIMARY KEY(b_id,page_id)                               \
+        )"
+    , err);
+
     db.run(
         "CREATE TABLE IF NOT EXISTS BookEvents                      \
         (                                                           \
-            e_id INTEGER NOT NULL,                                  \
-            b_id INTEGER NOT NULL,                                  \
+            e_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
             title VARCHAR(32) NOT NULL,                             \
             description VARCHAR(255) NOT NULL,                      \
-            outcome VARCHAR(255) NOT NULL,                          \
-            is_completed INTEGER NOT NULL,                          \
-            FOREIGN KEY(b_id) REFERENCES Books(b_id),               \
-            PRIMARY KEY(b_id,e_id)                                  \
+            choice1 VARCHAR(255) NOT NULL,                          \
+            choice2 VARCHAR(255) NOT NULL,                          \
+            outcome1 VARCHAR(255) NOT NULL,                         \
+            outcome2 VARCHAR(255) NOT NULL                          \
         )"
     , err);
 

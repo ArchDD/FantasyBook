@@ -15,7 +15,7 @@ $(window).on("load", function() {
     };
     textures.leather.src = "images/leather_grey.png";
 
-    $.get("?action=getBooks&uniqueId="+Math.random(), function(data, status){
+    $.get("?action=get_books&uniqueId="+Math.random(), function(data, status){
         books = data;
         // call initial window resize function
         resizeBooks();
@@ -67,17 +67,13 @@ $(window).on("load", function() {
         
         //loaded texture counter
         var loadedTextures = 0;
-        //console.log(textures);
-        //console.log("texes: "+Object.keys(textures).length);
         //For each texture
         $.each(textures, function(i,tex) {
             $('#hidden-textures').append(tex);
             tex.onload = function() {
                 loadedTextures++;
                 //when all textures are loaded
-                console.log(loadedTextures);
                 if(loadedTextures == Object.keys(textures).length) {
-                    console.log("GO POPULATE!");
                     populateBooks();
                 }
 
@@ -87,9 +83,7 @@ $(window).on("load", function() {
 
     //Populate the shelf with previously saved books
     function populateBooks() {
-        console.log(books);
         for (var key in books) {
-            console.log(key);
             // insert books before the 'new book' template
             createNewBook(key, books[key]).insertBefore($("#addBook"));
         }
@@ -109,20 +103,21 @@ $(window).on("load", function() {
     }
 
     function setPageEvents(book, requestPageNum,pageId) {
-        if(requestPageNum < book.pages) {
-            $.get("?action=getEvent&book="+book['bookId']+"&page="+requestPageNum+"&uniqueId="+Math.random(),function(data, status){
+        if(requestPageNum <= book.pages) {
+            $.get("?action=get_event&book="+book['bookId']+"&page="+requestPageNum+"&uniqueId="+Math.random(),function(data, status){
                 if(requestPageNum == pageNumber || requestPageNum == pageNumber + 1) {
                     $(pageId+" .page-title").html(data['eventName']);
+                    $(pageId+" .page-content").html(data['eventDesc']);
                     $(pageId+" .page-number").html(requestPageNum);
                     $(pageId+" .page-image").show();
 
-                    // if the event is undecided
+                    // if the event choice has not been made
                     if(!data['isCompleted']) {
-                        $(pageId+" .page-content").html(data['eventDesc']);
+                        $(pageId+" .choice-buttons:nth-child(1)").html(data['choice1']);;
+                        $(pageId+" .choice-buttons:nth-child(2)").html(data['choice2']);
                         $(pageId+" .page-choices").show();
-                    // otherwise
+                    // otherwise the event is incomplete
                     } else {
-                        $(pageId+" .page-content").html(data['outcome']);
                         $(pageId+" .page-choices").hide();
                     }
                     
@@ -240,8 +235,9 @@ $(window).on("load", function() {
 
     // Change page content to next page
     function nextPage() {
+        console.log(currentBook.pages+","+pageNumber);
         // If there are more pages left
-        if(pageNumber + 2 < currentBook.pages) {
+        if(pageNumber+1 < currentBook.pages) {
             pageNumber += 2;
             // show left title and image
             $("#left_page .page-title").show();
@@ -272,23 +268,47 @@ $(window).on("load", function() {
         }
     }
 
-    // contacts server to get active status of the event 
-    function isEventComplete(book, pageNumber) {
-        return "False";
+    function makeChoice(choice) {
+        $.get(
+            "?action=event_choice"+
+            "&book="+currentBook['bookId']+
+            "&choice="+choice+
+            "&uniqueId="+Math.random(),
+            function(data, status){
+                //update pages to reflect new book state
+                currentBook.pages = data['pages'];
+                updatePages(currentBook,pageNumber);
+        });
     }
 
-    // contacts server to get active status of the event 
-    function getEventChoices(book, pageNumber) {
+    // Does not propagate click to the flipbook beneath
+    $("body").on("click", ".choice-buttons.choice-1", function(e) {
+        makeChoice(1);
+        e.stopPropagation();
+    });
 
-        var choices = {
-            choice1 : "Go",
-            choice2 : "Leave"
-        }
+    // Does not propagate click to the flipbook beneath
+    $("body").on("click", ".choice-buttons.choice-2", function(e) {
+        makeChoice(2);
+        e.stopPropagation();
+    });
 
-        return choices;
-    }
+    // right page clicked
+    $("body").on("click", "#right_page", function(e) {
+        // go forward if not single page mode
+        if(!isSinglePage)
+            nextPage();
+        // otherwise go back or forwards depending on mouse position (in e)
+        else
+            changePageSingle(e);
+    });
 
-    // Do not propagate click to the flipbook container beneath
+    // if the left page is clicked, turn back a page
+    $("body").on("click", "#left_page", function(e) {
+        previousPage();
+    });
+
+    // Does not propagate click to the flipbook container beneath
     $("body").on("click", "#flipbook", function(e) {
         e.stopPropagation();
     });
@@ -324,21 +344,6 @@ $(window).on("load", function() {
             $("#bookshelf-container").css("display","none");
             $("#bookshelf-container").css("visibility","hidden");
         }
-    });
-
-    // right page clicked
-    $("body").on("click", "#right_page", function(e) {
-        // go forward if not single page mode
-        if(!isSinglePage)
-            nextPage();
-        // otherwise go back or forwards depending on mouse position (in e)
-        else
-            changePageSingle(e);
-    });
-
-    // if the left page is clicked, turn back a page
-    $("body").on("click", "#left_page", function(e) {
-        previousPage();
     });
 
     // Draw book canvas

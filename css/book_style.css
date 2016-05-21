@@ -183,6 +183,7 @@ body{
     margin-bottom: 0.2em;
     padding: 0.2em;
     text-align: center;
+    cursor: pointer;
 }
 
 #flipbook .page-number {

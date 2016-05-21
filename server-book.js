@@ -16,38 +16,74 @@ function retrieveUserBooks(username,callback){
 function retrieveBookById(bookId,callback){
     var db = new sql.Database("westory.db");
 
-    db.all("SELECT * FROM Books WHERE b_id = "+bookId, function(err, rows) {
-        callback(err,rows);
+    db.each("SELECT * FROM Books WHERE b_id = "+bookId, function(err, row) {
+        if(row)
+            callback(err,row);
     });
 
     db.close();
 }
 
-// retrieve book event with event id and book id from database
-function retrieveBookEvent(bookId,page,callback){
+// retrieve random event
+function retrieveRandomEvent(callback){
     var db = new sql.Database("westory.db");
-    console.log("lookin for"+bookId+","+page);
-    db.all("SELECT * FROM BookEvents WHERE b_id="+bookId+" and e_id="+page, function(err, rows) {
-        callback(err,rows);
+
+    db.each("SELECT * FROM BookEvents ORDER BY RANDOM() LIMIT 1", function(err, row) {
+        if(row)
+            callback(err,row);
     });
 
     db.close();
 }
 
-function setNewEventData(bookId,page,bookEvent){
+// retrieve book entry with page number and book id
+function retrieveBookEntry(bookId,page,callback){
+    var db = new sql.Database("westory.db");
+    db.each("SELECT * FROM BookEntries WHERE b_id="+bookId+" and page_id="+page, function(err, row) {
+        if(row)
+            callback(err,row);
+    });
+
+    db.close();
+}
+
+// retrieve event with event id 
+function retrieveBookEvent(eventId,callback){
+    var db = new sql.Database("westory.db");
+    db.each("SELECT * FROM BookEvents WHERE e_id="+eventId, function(err, row) {
+        if(row)
+            callback(err,row);
+    });
+
+    db.close();
+}
+
+function insertNewEventData(bookId,page,eventId){
     var db = new sql.Database("westory.db");
     // Increment total page count of book
-    db.run("UPDATE Books SET pages="+(page+2)+" WHERE b_id = "+bookId, dbErr);
+    //db.run("UPDATE Books SET pages=pages+1"+" WHERE b_id = "+bookId, dbErr);
 
     // insert new page event into database
-    db.run("INSERT INTO BookEvents VALUES("+
+    db.run("INSERT INTO BookEntries VALUES("+
+            bookId+","+
             page+","+
-            bookId+",'"+
-            bookEvent['eventName']+"','"+
-            bookEvent['eventDesc']+"','"+
-            bookEvent['outcome']+"',"+
+            eventId+","+
+            "0,"+
             "0"+
         ")"
+        , dbErr);
+
+    db.close();
+}
+
+function updateEventChoice(bookId,page,choice){
+    var db = new sql.Database("westory.db");
+    // Increment total page count of book
+    db.run("UPDATE Books SET pages=pages+1"+" WHERE b_id = "+bookId, dbErr);
+
+    // insert new page event into database
+    db.run("UPDATE BookEntries SET is_completed = 1, choice_id="+choice+
+        " WHERE b_id="+bookId+" and page_id="+page
         , dbErr);
 
     db.close();
@@ -72,50 +108,72 @@ exports.sendBooks = function (user,response) {
     });
 };
 
-exports.sendEvent = function (user,bookId,page,response) {
-    retrieveBookById(bookId, function(err, rows) {
-        if(rows) {
-            var row = rows[0];
+exports.setOutcome = function(user,bookId,choice,response){
+    retrieveBookById(bookId, function(err, row) {
             if(row['username']===user) {
-                console.log((page+1)+","+row['pages']);
-                if(row['pages'] == page+1) 
-                    sendNewEvent(bookId,page,response);
-                else
-                    sendExistingEvent(bookId,page,response);
+                // event is last page of book
+                var page = row['pages'];
+                // update book size and entry to reflect choice
+                updateEventChoice(bookId,page,choice);
+                addNewEvent(bookId,page+1);
+                var pageObj = {"pages" : page+1};
+                
+                response.end(JSON.stringify(pageObj));
             }
-        }
     });
 }
 
-function sendNewEvent(bookId,page,response){
-    var bookEvent = {
-        "eventName" : "DRAGONS!??!?!",
-        "eventDesc" : "A dragon nest has been left empty! You spot eggs. What to do?!",
-        "isCompleted" : false,
-        "outcome"   : "Unicorns save the day!"
-    };
-    console.log("new event");
-    setNewEventData(bookId,page,bookEvent);
-    var jsonObj = JSON.stringify(bookEvent);
+exports.getAndSendEvent = function (user,bookId,page,response) {
+    retrieveBookById(bookId, function(err, row) {
+            if(row['username']===user) {
+                // send existing event
+                retrieveBookEntry(bookId,page,function(err,bookEntry){
+                    retrieveBookEvent(bookEntry['e_id'], function(err,eventEntry) {
+                        sendEvent(bookEntry,eventEntry,response);
+                    });
+                });
+            }
+    });
+}
+
+
+
+function sendEvent(bookEntry,eventEntry,response){
+    var eventObj;
+    if(bookEntry['is_completed']==true) {
+        // return event title and outcome
+        var choice = bookEntry['choice_id'];
+        eventObj = {
+            "eventName" : eventEntry['title'],
+            "eventDesc" : eventEntry['description']+" "+eventEntry['outcome'+choice],
+            "isCompleted" : true
+        }
+    } else {
+        // return choices and desc
+        eventObj = {
+            "eventName" : eventEntry['title'],
+            "eventDesc" : eventEntry['description'],
+            "isCompleted" : false,
+            "choice1" : eventEntry['choice1'],
+            "choice2" : eventEntry['choice2']
+        }
+    }
+    console.log(bookEntry['is_completed']);
+    var jsonObj = JSON.stringify(eventObj);
     response.end(jsonObj);
 }
 
-function sendExistingEvent(bookId,page,response){
-    retrieveBookEvent(bookId,page,function(err,rows){
-        if(rows) {
-            console.log(rows.length);
-            var row = rows[0];
-            console.log(row);
-            var eventObj = {
-                "eventName" : row['title'],
-                "eventDesc" : row['description'],
-                "isCompleted" : row['is_completed'],
-                "outcome"   : row['outcome']
-            }
-            var jsonObj = JSON.stringify(eventObj);
-            response.end(jsonObj);
+function addNewEvent(bookId,page){
+    retrieveRandomEvent(function(err,row){
+        var eventObj = {
+            "eventName" : row['title'],
+            "eventDesc" : row['description'],
+            "choice1" : row['choice1'],
+            "choice2" : row['choice2']
         }
-    }); 
+        // record new event in bookentries table
+        insertNewEventData(bookId,page,row['e_id']);
+    });
 }
 
 function dbErr(e) { if (e) throw e; }

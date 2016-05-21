@@ -197,17 +197,24 @@ function handleRequest(request,response) {
             var action = params['action'];
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
-                if(action === "getBooks") {
+                if(action === "get_books") {
                     // TO-DO get user from session
                     var user = "guest";
                     server_book.sendBooks(user,response);
                 }
-                else if(action == "getEvent") {
+                else if(action === "get_event") {
                     // TO-DO get user from session
                     var user = "guest";
                     var book = parseInt(params['book']);
                     var page = parseInt(params['page']);
-                    server_book.sendEvent(user,book,page,response);
+                    server_book.getAndSendEvent(user,book,page,response);
+                }
+                else if(action === "event_choice") {
+                    // TO-DO get user from session
+                    var user = "guest";
+                    var book = parseInt(params['book']);
+                    var choice = parseInt(params['choice']);
+                    server_book.setOutcome(user,book,choice,response);
                 }
                 return true;
             }
