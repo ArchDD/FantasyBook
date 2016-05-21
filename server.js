@@ -178,8 +178,6 @@ function serve(request, response) {
             var accepts = header.split(",");
             if (accepts.indexOf(ntype) >= 0) type = ntype;
             else if (accepts.indexOf(otype) >= 0) type = otype;
-            console.log("acc: "+request.headers.accept);
-            console.log("type: "+type);
 
             // URL Validation
             var urlValidation = new RegExp("\\.\\.|//|/\\.");

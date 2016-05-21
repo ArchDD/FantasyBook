@@ -14,6 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" type="text/css" rel="stylesheet"></script>
     <!-- style sheet link -->
     <link href="/css/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <!-- scripts after styling -->
+    <script src="js/credential-validator.js"></script>
 </head>
 
 <body>
@@ -42,7 +44,7 @@
         <div id = "container">
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
-                <form class = "form" method = "post">
+                <form class = "form" name = "login" method = "post" onsubmit="return validateForm()">
                     <input type="hidden" name="form-name" value="login" />
 
                     <p class = "feature-text">Login</p>
@@ -56,7 +58,7 @@
                     <input type="submit" value="Submit"/>
                 </form>
 
-                <form class = "form" method = "post">
+                <form class = "form" name = "register" method = "post">
                     <input type="hidden" name="form-name" value="register" />
                     <p class = "form-text">Register</p>
 
