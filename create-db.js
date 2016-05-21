@@ -25,26 +25,19 @@ function startup() {
 
     // Character table: IDs, Info, Appearance
     db.run(
-        "CREATE TABLE IF NOT EXISTS Character                       \
+        "CREATE TABLE IF NOT EXISTS Characters                      \
         (                                                           \
             c_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
             username INTEGER NOT NULL,                              \
             name VARCHAR(64) NOT NULL,                              \
             hair_type INTEGER NOT NULL,                             \
             nose_type INTEGER NOT NULL,                             \
-            lash_type INTEGER NOT NULL,                             \
-            brow_type INTEGER NOT NULL,                             \
-            socket_type INTEGER NOT NULL,                           \
-            pupil_type INTEGER NOT NULL,                            \
             mouth_type INTEGER NOT NULL,                            \
-            cheek_type INTEGER NOT NULL,                            \
-            ear_type INTEGER NOT NULL,                              \
-            chin_type INTEGER NOT NULL,                             \
             head_type INTEGER NOT NULL,                             \
-            neck_type INTEGER NOT NULL,                             \
-            hair_colour VARCHAR(6) NOT NULL,                        \
-            skin_colour VARCHAR(6) NOT NULL,                        \
-            pupil_colour VARCHAR(6) NOT NULL,                       \
+            hair_tint VARCHAR(6) NOT NULL,                          \
+            skin_tint VARCHAR(6) NOT NULL,                          \
+            eye_tint VARCHAR(6) NOT NULL,                           \
+            mouth_tint VARCHAR(6) NOT NULL,                         \
             FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
     , err);
