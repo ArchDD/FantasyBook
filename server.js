@@ -186,7 +186,7 @@ function handleRequest(request,response) {
             return true;
         }
         else if(request.url.toLowerCase() === '/character-creator.html'){
-            serverCharacter.submitCharacterForm(request, response);
+            serverCharacter.submitCharacterForm(request, response, db);
             // Redirect
             redirect(response, '/book.html')
             return true;
@@ -235,6 +235,8 @@ function registerOrLogin(request, response, cb)
             bcrypt.hash(fields['register-password'], saltRounds, function(h_err, hash) {
                 // Access database and insert
                 db.run("INSERT INTO Users (username, password, email) VALUES ('"+fields['register-username']+"', '"+hash+"', '"+fields['register-email']+"')", dbErr);
+                db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
+                    "VALUES ('"+fields['register-username']+"','"+fields['register-username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",dbErr);
             });
             redirect(response, '/index.html');
         }
