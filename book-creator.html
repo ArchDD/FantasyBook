@@ -42,14 +42,14 @@
         <div id = "container">
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
-                <form class = "form">
+                <form class = "form" method="post" action="">
                     <p class = "feature-text">New Book</p>
 
                     <p class = "field-text">Title</p>
                     <input type="text" name="book-title" class = "form-field"/>
 
                     <p class = "form-field field-text">Theme</p>
-                    <select name="max-players">
+                    <select name="category">
                         <option value="fantasy">Fantasy </option>
                         <option value="science-fiction">Science-fiction </option>
                         <option value="horror">Horror </option>
@@ -62,6 +62,14 @@
                         <option value="2"> 2 </option>
                         <option value="3"> 3 </option>
                         <option value="4"> 4 </option>
+                    </select>
+
+                    <p class = "field-text">Cover Colour</p>
+                    <select name="colour">
+                        <option value="#2a6f41"> Green </option>
+                        <option value="#42548a"> Blue </option>
+                        <option value="#661919"> Red </option>
+                        <option value="#4d3960"> Purple </option>
                     </select>
 
                     <p></p>

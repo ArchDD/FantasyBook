@@ -204,7 +204,12 @@ function handleRequest(request,response) {
         else if(request.url.toLowerCase() == '/character-creator.html'){
             serverCharacter.submitCharacterForm(request, response, db);
             // Redirect
-            redirect(response, '/book.html')
+            redirect(response, '/book.html');
+            return true;
+        }
+        else if(request.url.toLowerCase() == '/book-creator.html') {
+            server_book.submitBookForm(request,response,db);
+            redirect(response, '/book.html');
             return true;
         }
     } else if (request.method.toLowerCase() === 'get') {

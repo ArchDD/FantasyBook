@@ -1,5 +1,39 @@
 var exports = module.exports = {};
 var sql = require("sqlite3").verbose();
+var formidable = require("formidable");
+var util = require('util');
+
+exports.submitBookForm = function(request,response,db) {
+    var form = new formidable.IncomingForm();
+    // Parsing form input to store in file or database
+    form.parse(request, function (err, fields, files) {
+        // insert new book into database from form data
+        db.run("INSERT INTO Books "+ 
+            "("+
+                "username,"+
+                "name,"+
+                "desc,"+
+                "pages,"+
+                "colour,"+
+                "texture"+
+            ") VALUES ("+
+                "'guest','"+
+                fields['book-title']+"',"+
+                "'A "+fields['category']+" book.',"+
+                2+",'"+
+                fields['colour']+"',"+
+                "'leather')"
+            , dbErr);
+        response.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        //response.write('Received Data: \n\n');
+        response.end(util.inspect({
+            fields: fields,
+            files: files
+        }));
+    });
+}
 
 // retrieve books associated with username from database
 function retrieveUserBooks(username,callback){
