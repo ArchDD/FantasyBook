@@ -92,7 +92,7 @@ init = function() {
 getCharacter = function()
 {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "/character-creator.html	?action=get_character", true);
+	xhr.open('GET', "/character-creator.html?action=get_character", true);
 	xhr.send();
 	xhr.onreadystatechange = setCharacter; 
     function setCharacter(e) {

@@ -239,6 +239,17 @@ function handleRequest(request,response,secret) {
                 }
                 return true;
             }
+        } else if(url_methods.parse(request.url).pathname === '/register-login.html') {
+            var params = url_methods.parse(request.url, true).query;
+            var action = params['action'];
+            if(action) {
+                if(action == "logout") {
+                    secret = '';
+                    response.setHeader('Set-Cookie', ["secret=''"]);
+                    redirect(response, '/register-login.html');
+                }
+                return true;
+            }
         } else if(url_methods.parse(request.url).pathname === '/book.html') {
             var params = url_methods.parse(request.url, true).query;
             var action = params['action'];
