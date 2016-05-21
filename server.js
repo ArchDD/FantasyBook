@@ -135,8 +135,8 @@ function serve(request, response) {
         });
     }
     // Check for expired sessions
-    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
-    //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
+    //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
+    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
         if (e) throw e;
         // Check if there is existing session
         db.all("SELECT secret FROM Sessions WHERE secret = '"+list['secret']+"'", function(err, row) {
