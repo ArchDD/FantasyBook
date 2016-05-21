@@ -151,7 +151,7 @@ function serve(request, response) {
             if (row[0])
             {
                 console.log("session found secret "+row[0]['secret']);
-                secret = row['secret'];
+                secret = row[0]['secret'];
                 response.setHeader('Set-Cookie', ['secret='+row[0]['secret']]);
             }
             else
@@ -178,8 +178,6 @@ function serve(request, response) {
             var accepts = header.split(",");
             if (accepts.indexOf(ntype) >= 0) type = ntype;
             else if (accepts.indexOf(otype) >= 0) type = otype;
-            console.log("acc: "+request.headers.accept);
-            console.log("type: "+type);
 
             // URL Validation
             var urlValidation = new RegExp("\\.\\.|//|/\\.");
@@ -200,15 +198,14 @@ function serve(request, response) {
             function ready(error, content) {
                 if (error) return fail(response, NotFound);
                 // Deal with request
-                if(!handleRequest(request,response))
+                if(!handleRequest(request,response,secret))
                     succeed(response,type,content);
             }
         });
     });
 }
 
-function handleRequest(request,response) {
-    var secret = GetSecret(request);
+function handleRequest(request,response,secret) {
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
@@ -228,7 +225,32 @@ function handleRequest(request,response) {
             return true;
         }
     } else if (request.method.toLowerCase() === 'get') {
-        if(url_methods.parse(request.url).pathname === '/book.html') {
+        if(url_methods.parse(request.url).pathname === '/index.html') {
+            var params = url_methods.parse(request.url, true).query;
+            var action = params['action'];
+            if(action) {
+                response.writeHead(200,{"Content-Type": "application/json"});
+                if(action == "get_session") {
+                    var session = {
+                        "secret" : secret
+                    };
+                    var jsonObj = JSON.stringify(session);
+                    response.end(jsonObj);
+                }
+                return true;
+            }
+        } else if(url_methods.parse(request.url).pathname === '/register-login.html') {
+            var params = url_methods.parse(request.url, true).query;
+            var action = params['action'];
+            if(action) {
+                if(action == "logout") {
+                    secret = '';
+                    response.setHeader('Set-Cookie', ["secret=''"]);
+                    redirect(response, '/register-login.html');
+                }
+                return true;
+            }
+        } else if(url_methods.parse(request.url).pathname === '/book.html') {
             var params = url_methods.parse(request.url, true).query;
             var action = params['action'];
             if(action) {
@@ -260,7 +282,6 @@ function handleRequest(request,response) {
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action == "get_character") {
-                    var secret = GetSecret(request);
                     serverCharacter.loadCharacter(request, response, db, secret);
                 }
                 return true;

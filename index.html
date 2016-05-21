@@ -16,13 +16,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" type="text/css" rel="stylesheet" ></script>
     <!-- style sheet link -->
     <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <!-- scripts after styling -->
+    <script src="js/session.js"></script>
 </head>
 
 <body>
     <div id = "topbar">
         <nav class="block">
                 <ul id="loginbar">
-                    <li><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="login-register"><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="logout"><a href="register-login.html?action=logout"><span>Logout</span></a></li>
                 </ul>
         </nav>
     </div>

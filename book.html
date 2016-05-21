@@ -18,6 +18,8 @@
     <link href="css/book_style.css" rel="stylesheet" type="text/css" media="all"/>
     <!-- use google's content delivery network for minified jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <!-- scripts after styling -->
+    <script src="js/session.js"></script>
     <script src="js/book.js"></script>
 </head>
 
@@ -25,7 +27,8 @@
     <div id = "topbar">
         <nav class="block">
                 <ul id="loginbar">
-                    <li><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="login-register"><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="logout"><a href="register-login.html?action=logout"><span>Logout</span></a></li>
                 </ul>
         </nav>
     </div>
