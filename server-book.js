@@ -25,10 +25,27 @@ exports.submitBookForm = function(user,request,db) {
             , dbErr);
         // get new book id and create event
         db.get("SELECT last_insert_rowid()",function(err,data){
-            addNewEvent(data['last_insert_rowid()'],2);
+            var bookId = data['last_insert_rowid()'];
+            // add event entry to book
+            addNewEvent(bookId,2);
+            // register users who can participate in book
+            insertContributorRow(bookId,user,db);
+            console.log(fields['player']);
+            console.log(fields['player'].length);
+            var players = fields['player'];
+            for(var i = 0; i < players.length; i++) {
+                insertContributorRow(bookId,players[i],db);
+            }
         });
-        
     });
+
+}
+
+function insertContributorRow(bookId,user,db) {
+    db.run("INSERT OR IGNORE INTO BookContributors VALUES ('"+
+                bookId+"','"+
+                user+"')"
+    , dbErr);
 }
 
 // retrieve books associated with username from database

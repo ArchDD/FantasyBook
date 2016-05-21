@@ -14,6 +14,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css" type="text/css" rel="stylesheet"></script>
     <!-- style sheet link -->
     <link href="css/main.css" rel="stylesheet" type="text/css" media="all"/>
+    <!-- use google's content delivery network for minified jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <script src="js/book-creator.js"></script>
 </head>
 
 <body>
@@ -43,7 +47,9 @@
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
                 <form class = "form" method="post" action="">
-                    <p class = "feature-text">Fill in the form and click the 'create book' button below to start exploring a new story!</p>
+                    <p class = "feature-text">Fill in the form and click the 'create book' button below to start exploring a new story!
+                    Add other players to your book by filling in their usernames in the Add Players section of the form.
+                    </p>
 
                     <p class = "field-text">Book Title</p>
                     <input type="text" name="book-title" maxlength="32" class = "form-field"/>
@@ -56,13 +62,12 @@
                         <option value="comedy">Comedy</option>
                     </select>
 
-                    <p class = "field-text">Maximum Number of Players</p>
-                    <select name="max-players">
-                        <option value="1"> 1 </option>
-                        <option value="2"> 2 </option>
-                        <option value="3"> 3 </option>
-                        <option value="4"> 4 </option>
-                    </select>
+                    <div id="add-players" class = "field-text">
+                        <p>Add Players </p>
+                        
+                    </div>
+                    
+                    <button id="add-button" type="button" onclick="addPlayer()">+</button>
 
                     <p class = "field-text">Book Cover Colour</p>
                     <select name="colour">

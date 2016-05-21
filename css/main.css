@@ -309,3 +309,7 @@ input[type="submit"] {
 	width: 40%;
 	margin: 5% auto;
 }
+
+#add-button {
+    border-radius: 100%;
+}

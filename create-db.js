@@ -60,6 +60,17 @@ function startup() {
     // Possibly character status per book?
 
     db.run(
+        "CREATE TABLE IF NOT EXISTS BookContributors                \
+        (                                                           \
+            b_id INTEGER NOT NULL,                                  \
+            username VARCHAR(32) NOT NULL,                          \
+            FOREIGN KEY(b_id) REFERENCES Books(b_id),               \
+            FOREIGN KEY(username) REFERENCES Users(username)        \
+            PRIMARY KEY(b_id,username)                              \
+        )"
+    , err);
+
+    db.run(
         "CREATE TABLE IF NOT EXISTS BookEntries                     \
         (                                                           \
             b_id INTEGER NOT NULL,                                  \
