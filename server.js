@@ -93,7 +93,7 @@ function printAddresses() {
 }
 
 // Response codes: see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-var OK = 200, Redirect = 307, NotFound = 404, BadType = 415, Error = 500;
+var OK = 200, Redirect = 307, NotFound = 404, BadType = 415, Error = 500, BadRequest = 400; // 418 I'm a teapot
 
 // Succeed, sending back the content and its type.
 function succeed(response, type, content) {
@@ -116,15 +116,8 @@ function fail(response, code) {
     response.end();
 }
 
-// Serve a single request.  A URL ending with / is treated as a folder and
-// index.html is added.  A file name without an extension is reported as an
-// error (because we don't know how to deliver it, or if it was meant to be a
-// folder, it would inefficiently have to be redirected for the browser to get
-// relative links right).
-function serve(request, response) {
-    // secret for guests will remain an empty string
-    var secret = '';
-    // Parse cookies
+function GetSecret(request) {
+    // Parse cookies from request
     var list = {};
     var rc = request.headers.cookie;
     if (rc)
@@ -134,13 +127,26 @@ function serve(request, response) {
             list[parts.shift().trim()] = decodeURI(parts.join('='));
         });
     }
+
+    return list['secret'];
+}
+
+// Serve a single request.  A URL ending with / is treated as a folder and
+// index.html is added.  A file name without an extension is reported as an
+// error (because we don't know how to deliver it, or if it was meant to be a
+// folder, it would inefficiently have to be redirected for the browser to get
+// relative links right).
+function serve(request, response) {
+    // secret for guests will remain an empty string
+    var secret = '';
+    // get secret from cookies
+    var cookie_secret = GetSecret(request);
     // Check for expired sessions
     //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
     db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
         if (e) throw e;
         // Check if there is existing session
-        db.all("SELECT secret FROM Sessions WHERE secret = '"+list['secret']+"'", function(err, row) {
-            console.log("row: "+row);
+        db.all("SELECT secret FROM Sessions WHERE secret = '"+cookie_secret+"'", function(err, row) {
             // Match found
             if (row[0])
             {
@@ -162,13 +168,23 @@ function serve(request, response) {
             if (parts.length > 1) file = parts[0];
             file = "." + file;
             var type = findType(request, path.extname(file));
+
+            //var urlValidation = new RegExp("\\.\\.|//|/\\.|");
+            var urlValidation = new RegExp("\\.\\.|//|/\\.");
+            var urlInvalid = urlValidation.test(request.url.toLowerCase());
+            if (urlInvalid)
+            {
+                console.log("Invalid URL: "+request.url.toLowerCase());
+                return fail(response, BadRequest);
+            }
+
             if (! type) return fail(response, BadType);
             if (! inSite(file)) return fail(response, NotFound);
             if (! matchCase(file)) return fail(response, NotFound);
             if (! noSpaces(file)) return fail(response, NotFound);
             try { fs.readFile(file, ready); }
             catch (err) { return fail(response, Error); }
-
+    
             function ready(error, content) {
                 if (error) return fail(response, NotFound);
                 // Deal with request
@@ -185,7 +201,7 @@ function handleRequest(request,response) {
             registerOrLogin(request, response);
             return true;
         }
-        else if(request.url.toLowerCase() === '/character-creator.html'){
+        else if(request.url.toLowerCase() == '/character-creator.html'){
             serverCharacter.submitCharacterForm(request, response, db);
             // Redirect
             redirect(response, '/book.html')
@@ -208,6 +224,18 @@ function handleRequest(request,response) {
                     var book = parseInt(params['book']);
                     var page = parseInt(params['page']);
                     server_book.sendEvent(user,book,page,response);
+                }
+                return true;
+            }
+        } else if(url_methods.parse(request.url).pathname === '/character-creator.html') {
+            console.log("ayyyyy");
+            var params = url_methods.parse(request.url, true).query;
+            var action = params['action'];
+            if(action) {
+                response.writeHead(200,{"Content-Type": "application/json"});
+                if(action == "get_character") {
+                    var secret = GetSecret(request);
+                    serverCharacter.loadCharacter(request, response, db, secret);
                 }
                 return true;
             }

@@ -1,6 +1,18 @@
 // initialise when document is ready
 document.addEventListener("DOMContentLoaded", function(event) {
-	init();
+	// retrieve character information from server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/character-creator.html?action=get_character", true);
+    xhr.send();
+    xhr.onreadystatechange = setCharacter; 
+    function setCharacter(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var c_info = JSON.parse(xhr.responseText || "null");
+            console.log(c_info);
+            //myCharacter.hair.type = ;
+            init();
+        }
+    }
 });
 
 // character class
@@ -72,8 +84,25 @@ init = function() {
 		for (var i = 0; i < backgroundImages.length; i++) 
 			draw(characterCreator, backgroundImages[i], characterCreator.width/2, characterCreator.height/2, characterCreator.width, characterCreator.height);
 	});*/
+
 	setupUI();
+    //getCharacter();
 };
+
+getCharacter = function()
+{
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', "/character-creator.html	?action=get_character", true);
+	xhr.send();
+	xhr.onreadystatechange = setCharacter; 
+    function setCharacter(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var c_info = JSON.parse(xhr.responseText || "null");
+            console.log(c_info);
+            //myCharacter.hair.type = ;
+        }
+    }
+}
 
 // required for IE8 since it does not support indexOf
 getIndex = function(val, list) {
