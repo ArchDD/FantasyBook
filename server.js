@@ -167,9 +167,21 @@ function serve(request, response) {
             var parts = file.split("?");
             if (parts.length > 1) file = parts[0];
             file = "." + file;
+
             var type = findType(request, path.extname(file));
 
-            //var urlValidation = new RegExp("\\.\\.|//|/\\.|");
+            // Content Negotiation
+            // For the .html extension:
+            var otype = "text/html";
+            var ntype = "application/xhtml+xml";
+            var header = request.headers.accept;
+            var accepts = header.split(",");
+            if (accepts.indexOf(ntype) >= 0) type = ntype;
+            else if (accepts.indexOf(otype) >= 0) type = otype;
+            console.log("acc: "+request.headers.accept);
+            console.log("type: "+type);
+
+            // URL Validation
             var urlValidation = new RegExp("\\.\\.|//|/\\.");
             var urlInvalid = urlValidation.test(request.url.toLowerCase());
             if (urlInvalid)
@@ -243,7 +255,6 @@ function handleRequest(request,response) {
                 return true;
             }
         } else if(url_methods.parse(request.url).pathname === '/character-creator.html') {
-            console.log("ayyyyy");
             var params = url_methods.parse(request.url, true).query;
             var action = params['action'];
             if(action) {
