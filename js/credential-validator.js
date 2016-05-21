@@ -73,7 +73,7 @@ function validateRegister() {
     } else {
         console.log(username);
         var xhr = new XMLHttpRequest();
-        var params = "type=register&username="+username+"&password="+password;
+        var params = "type=register&username="+username+"&email="+email+"&password="+password;
         xhr.open('POST', "/register-login.html", true);
         xhr.send(params);
         xhr.onreadystatechange = onRegister;

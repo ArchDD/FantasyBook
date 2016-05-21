@@ -308,28 +308,21 @@ function validateText(str, minLength, maxLength) {
 
 function validateLogin(username, password)
 {
-    // Input validation
     if (!validateText(username, 4, 32))
-    {
         return false;
-    }
-    if (!validatePassword(username, 6, 32)) {
+    if (!validatePassword(username, 6, 32))
         return false;
-    }
     return true;
 }
 
-function validateRegister()
-{   
-    var username = document.forms["register"]["register-username"].value;
+function validateRegister(username, email, password) {   
     if (!validateText(username, 4, 32))
-    {
-        //redirect
-    }
-    var password = document.forms["register"]["register-password"].value;
-    if (!validatePassword(username, 6, 32)) {
-        //redirect
-    }
+        return false;
+    else if (!validatePassword(username, 6, 32))
+        return false;
+    else if (!email)
+        return false;
+    return true;
 }
 
 function getUserSession(secret,callback) {
@@ -386,9 +379,7 @@ function registerOrLogin(request, response, cb)
                         }
                     });
                 });
-            }
-            else
-            {
+            } else {
                 // Respond failing server side validation
                 response.writeHead(200,{"Content-Type": "application/json"});
                 var r = {
@@ -400,23 +391,44 @@ function registerOrLogin(request, response, cb)
         }
         else if (POST['type'] == 'register')
         {
-            // Salt and hash password
-            bcrypt.hash(POST['password'], saltRounds, function(h_err, hash) {
-                // Create user
-                db.run("INSERT INTO Users (username, password, email) VALUES ('"+POST['username']+"', '"+hash+"', '"+POST['email']+"')", function() {
-                    // Create default character for user
-                    db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
-                        "VALUES ('"+POST['username']+"','"+POST['username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",function(){
-                        //JSON respond redirect to character on success
+            // Validate input
+            if (validateRegister(POST['username'], POST['password'], POST['email']))
+            {
+                // Check if user already exist
+                db.all("SELECT username FROM Users WHERE username = '"+POST['username']+"'", function(err, rows) {
+                    if(rows.length == 0) {
+                        // Salt and hash password
+                        bcrypt.hash(POST['password'], saltRounds, function(h_err, hash) {
+                            // Create user
+                            db.run("INSERT INTO Users (username, password, email) VALUES ('"+POST['username']+"', '"+hash+"', '"+POST['email']+"')", function() {
+                                // Create default character for user
+                                db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
+                                    "VALUES ('"+POST['username']+"','"+POST['username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",function(){
+                                    createSession(POST['username'], response);
+                                });
+                            });
+                        });
+                    }
+                    else
+                    {
+                        // Respond already exist
                         response.writeHead(200,{"Content-Type": "application/json"});
                         var r = {
-                            "result" : true
+                            "result" : false
                         };
                         var jsonObj = JSON.stringify(r);
                         response.end(jsonObj);
-                    });
+                    }
                 });
-            });
+            } else {
+                // Respond failing server side validation
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var r = {
+                    "result" : false
+                };
+                var jsonObj = JSON.stringify(r);
+                response.end(jsonObj);
+            }
         }
     });
 }
