@@ -15,6 +15,7 @@
     <!-- style sheet link -->
     <link href="/css/main.css" rel="stylesheet" type="text/css" media="all"/>
     <!-- scripts after styling -->
+    <script src="js/session.js"></script>
     <script src="js/credential-validator.js"></script>
 </head>
 
@@ -22,7 +23,8 @@
     <div id = "topbar">
         <nav class="block">
                 <ul id="loginbar">
-                    <li><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="login-register"><a href="register-login.html"><span>Login/Register</span></a></li>
+                    <li id="logout"><a href="register-login.html"><span>Logout</span></a></li>
                 </ul>
         </nav>
     </div>
@@ -44,7 +46,7 @@
         <div id = "container">
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
-                <form class = "form" name = "login" method = "post" onsubmit="return validateForm()">
+                <form class = "form" name = "login" method = "post" onsubmit="return validateLogin()">
                     <input type="hidden" name="form-name" value="login" />
 
                     <p class = "feature-text">Login</p>
@@ -58,7 +60,7 @@
                     <input type="submit" value="Submit"/>
                 </form>
 
-                <form class = "form" name = "register" method = "post">
+                <form class = "form" name = "register" method = "post" onsubmit="return validateRegister()">
                     <input type="hidden" name="form-name" value="register" />
                     <p class = "form-text">Register</p>
 

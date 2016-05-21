@@ -35,11 +35,27 @@ function validateLogin()
     {
         alert("Usernames are between 4 to 32 characters consisting of lowercase, uppercase, and numerical characters.");
     }
+    var password = document.forms["login"]["login-password"].value;
+    if (validatePassword(username, 6, 32)) {
+        // POST FORM
+    }
+    else
+    {
+        alert("Passwords must be between 6 to 32 characters and must contain lowercase, uppercase, and numberical characters.");
+    }
 }
 
-function validateRegistration()
-{
-    var username = document.forms["login"]["login-username"].value;
+function validateRegister()
+{   
+    var username = document.forms["register"]["register-username"].value;
+    if (validateText(username, 4, 32)) {
+        // POST FORM
+    }
+    else
+    {
+        alert("Usernames are between 4 to 32 characters consisting of lowercase, uppercase, and numerical characters.");
+    }
+    var password = document.forms["register"]["register-password"].value;
     if (validatePassword(username, 6, 32)) {
         // POST FORM
     }
