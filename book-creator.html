@@ -43,12 +43,12 @@
             <!-- main contains the primary content -->
             <main id = "main" class = "block">
                 <form class = "form" method="post" action="">
-                    <p class = "feature-text">New Book</p>
+                    <p class = "feature-text">Fill in the form and click the 'create book' button below to start exploring a new story!</p>
 
-                    <p class = "field-text">Title</p>
-                    <input type="text" name="book-title" class = "form-field"/>
+                    <p class = "field-text">Book Title</p>
+                    <input type="text" name="book-title" maxlength="32" class = "form-field"/>
 
-                    <p class = "form-field field-text">Theme</p>
+                    <p class = "form-field field-text">Book Theme</p>
                     <select name="category">
                         <option value="fantasy">Fantasy </option>
                         <option value="science-fiction">Science-fiction </option>
@@ -56,7 +56,7 @@
                         <option value="comedy">Comedy</option>
                     </select>
 
-                    <p class = "field-text">Max Players</p>
+                    <p class = "field-text">Maximum Number of Players</p>
                     <select name="max-players">
                         <option value="1"> 1 </option>
                         <option value="2"> 2 </option>
@@ -64,7 +64,7 @@
                         <option value="4"> 4 </option>
                     </select>
 
-                    <p class = "field-text">Cover Colour</p>
+                    <p class = "field-text">Book Cover Colour</p>
                     <select name="colour">
                         <option value="#2a6f41"> Green </option>
                         <option value="#42548a"> Blue </option>
