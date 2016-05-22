@@ -146,18 +146,19 @@ function serve(request, response) {
     var secret = '';
     // get secret from cookies
     var cookie_secret = GetSecret(request);
+    var session = { "secret" : secret };
     // Check for expired sessions
     //db.run("DELETE FROM Sessions WHERE date <= datetime('now','-6 hour')", function(e) {
-    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-1 minute')", function(e) {
+    db.run("DELETE FROM Sessions WHERE date <= datetime('now','-5 minute')", function(e) {
         if (e) throw e;
         // Check if there is existing session
-        db.all("SELECT secret FROM Sessions WHERE secret = '"+cookie_secret+"'", function(err, row) {
+        db.all("SELECT * FROM Sessions WHERE secret = '"+cookie_secret+"'", function(err, row) {
             // Set secret if found, otherwise leave as empty string
             if (row[0])
             {
-                console.log("session found secret "+row[0]['secret']);
-                secret = row[0]['secret'];
-                response.setHeader('Set-Cookie', ['secret='+row[0]['secret']]);
+                session = row[0];
+                secret = session['secret'];
+                response.setHeader('Set-Cookie', ['secret='+secret]);
             }
 
             var file = request.url;
@@ -197,27 +198,29 @@ function serve(request, response) {
             function ready(error, content) {
                 if (error) return fail(response, NotFound);
                 // Deal with request
-                if(!handleRequest(request,response,secret))
+                if(!handleRequest(request,response,session))
                     succeed(response,type,content);
             }
         });
     });
 }
 
-function handleRequest(request,response,secret) {
+function handleRequest(request,response,session) {
     if (request.method.toLowerCase() == 'post') { 
         if(request.url.toLowerCase() == '/register-login.html'){
             registerOrLogin(request, response);
             return true;
-        }
-        else if(request.url.toLowerCase() == '/character-creator.html'){
-            serverCharacter.submitCharacterForm(request, response, db);
-            // Redirect
-            redirect(response, '/book.html');
-            return true;
-        }
-        else if(request.url.toLowerCase() == '/book-creator.html') {
-            getUserSession(secret, function(user){
+        } else if(url_methods.parse(request.url).pathname === '/character-creator.html') {
+            var params = url_methods.parse(request.url, true).query;
+            var action = params['action'];
+            if(action) {
+                if(action == "submit") {
+                    serverCharacter.submitCharacterForm(request, response, db, session);
+                }
+                return true;
+            }
+        } else if(request.url.toLowerCase() == '/book-creator.html') {
+            getUserSession(session['secret'], function(user){
                 server_book.submitBookForm(user,request,db);
                 redirect(response, '/book.html');
             });
@@ -230,9 +233,6 @@ function handleRequest(request,response,secret) {
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action == "get_session") {
-                    var session = {
-                        "secret" : secret
-                    };
                     var jsonObj = JSON.stringify(session);
                     response.end(jsonObj);
                 }
@@ -243,7 +243,7 @@ function handleRequest(request,response,secret) {
             var action = params['action'];
             if(action) {
                 if(action == "logout") {
-                    secret = '';
+                    session = {'secret' : ''};
                     response.setHeader('Set-Cookie', ["secret=''"]);
                     redirect(response, '/register-login.html');
                 }
@@ -255,19 +255,19 @@ function handleRequest(request,response,secret) {
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action === "get_books") {
-                    getUserSession(secret, function(user){
+                    getUserSession(session['secret'], function(user){
                         server_book.sendBooks(user,response,db);
                     });
                 }
                 else if(action === "get_event") {
-                    getUserSession(secret, function(user){
+                    getUserSession(session['secret'], function(user){
                         var book = parseInt(params['book']);
                         var page = parseInt(params['page']);
                         server_book.getAndSendEvent(user,book,page,response,db);
                     });
                 }
                 else if(action === "event_choice") {
-                    getUserSession(secret, function(user){
+                    getUserSession(session['secret'], function(user){
                         var book = parseInt(params['book']);
                         var choice = parseInt(params['choice']);
                         server_book.setOutcome(user,book,choice,response,db);
@@ -281,7 +281,7 @@ function handleRequest(request,response,secret) {
             if(action) {
                 response.writeHead(200,{"Content-Type": "application/json"});
                 if(action == "get_character") {
-                    serverCharacter.loadCharacter(request, response, db, secret);
+                    serverCharacter.loadCharacter(request, response, db, session['secret']);
                 }
                 return true;
             }
@@ -339,7 +339,7 @@ function CSPRNGBase64 (len) {
 
 function dbErr(e) { if (e) throw e; }
 
-function registerOrLogin(request, response, cb)
+function registerOrLogin(request, response)
 {
     var body='';
     request.on('data', function (data) {
@@ -396,8 +396,8 @@ function registerOrLogin(request, response, cb)
                             // Create user
                             db.run("INSERT INTO Users (username, password, email) VALUES ('"+POST['username']+"', '"+hash+"', '"+POST['email']+"')", function() {
                                 // Create default character for user
-                                db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
-                                    "VALUES ('"+POST['username']+"','"+POST['username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",function(){
+                                db.run("INSERT INTO Characters (username,name,hair_type,eye_type,nose_type,mouth_type,head_type,hair_tint,skin_tint,eye_tint,mouth_tint)"+
+                                    "VALUES ('"+POST['username']+"','"+POST['username']+"',2,1,1,1,1,'ffffff','ffffff','ffffff','ffffff')",function(){
                                     createSession(POST['username'], response);
                                 });
                             });

@@ -1,28 +1,42 @@
 "use strict";
 var http = require('http');
 var util = require('util');
-var formidable = require('formidable');
+var qs = require('querystring');
 
 module.exports = {
     // Parses form to store in database and redirects
-    submitCharacterForm: function (request, response, db){
-        // Creating form object
-        var form = new formidable.IncomingForm();
-        // Parsing form input to store in file or database
-        form.parse(request, function (err, fields, files) {
-            // Deal with form
-            console.log('Add to database here');
-            /*db.run("INSERT INTO Characters (name, hair_type, nose_type, mouth_type, head_type, skin_type, eye_colour, mouth_colour)\
-                    VALUES ('"+fields['']+"', '"+fields['']+"', '"+fields['']+"')",
-            dbErr);*/
-            /*  response.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            response.write('Received Data: \n\n');
-            response.end(util.inspect({
-                fields: fields,
-                files: files
-            }));*/
+    submitCharacterForm: function(request, response, db, session) {
+        var validate = function(a,b,c,d,e,f,g) {
+            return true;
+        };
+        var body='';
+        request.on('data', function (data) {
+            body +=data;
+        });
+        request.on('end', function() {
+            var POST =  qs.parse(body);
+            // Validate input
+            if (validate())
+            {
+                if (!session['username'])
+                    session['username'] = '';
+                db.all("SELECT * FROM Characters WHERE c_id = '"+POST['c_id']+"', username = '"+session['username']+"'", function(err, row) {
+                    // Update
+                    db.run("UPDATE Characters SET name='"+POST['name']+
+                        "',hair_type=2,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
+                        "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff' "+
+                        "WHERE c_id="+POST['c_id'],
+                    function(){});
+                });
+            } else {
+                // Respond failing server side validation
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var r = {
+                    "result" : false
+                };
+                var jsonObj = JSON.stringify(r);
+                response.end(jsonObj);
+            }
         });
     },
 
@@ -46,6 +60,7 @@ module.exports = {
                 var character = {
                     "name"          : "Guest",
                     "hair_type"     : 1,
+                    "eye_type"      : 1,
                     "nose_type"     : 1,
                     "mouth_type"    : 1,
                     "head_type"     : 1,

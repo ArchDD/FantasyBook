@@ -4,6 +4,7 @@
  function character() {
     this.characterName = "";
     this.ownerName = "";
+    this.c_id;
 
     this.hair = {type: "1", hueShift: 0, 
                 yOffset: 0, scale: 1};
@@ -64,11 +65,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             var c_info = JSON.parse(xhr.responseText || "null");
             console.log(c_info);
-            //myCharacter.hair.type = ;
+            readCharacterInfo(c_info);
             init();
         }
     }
 });
+
+function readCharacterInfo(c_info) {
+    myCharacter.c_id = c_info['c_id'];
+    myCharacter.characterName = c_info['name'];
+    myCharacter.ownerName = c_info['username'];
+
+    myCharacter.hair.type = c_info['hair_type'].toString();
+    //myCharacter.eye.type = c_info['eye_type'].toString();
+    myCharacter.nose.type = c_info['nose_type'].toString();
+    myCharacter.mouth.type = c_info['mouth_type'].toString();
+    myCharacter.head.type = c_info['head_type'].toString();
+}
 
 // Aspect ratio information for resizing
 var oldAspectRatio;
@@ -271,4 +284,41 @@ function resizeCanvas(canvas) {
 
 		var obj = {resizeWidth: resizeWidth, dataURL: dataURL};
 		return obj;
+}
+
+function validateText(str, minLength, maxLength) {
+    var reg = new RegExp("^(?=.*([a-z]|[A-Z]|d)).{"+minLength.toString()+","+maxLength.toString()+"}$");
+    return reg.test(str);
+}
+
+function submitCharacter() {
+    var c_id = myCharacter.c_id;
+    var name = document.forms["character-form"]["name"].value;;
+    var hair_type = myCharacter.hair.type;
+    //var eye_type = myCharacter.eye.type;
+    var nose_type = myCharacter.nose.type;
+    var mouth_type = myCharacter.mouth.type;
+    var head_type = myCharacter.head.type;
+
+    if (!validateText(name, 1, 64)) {
+        alert("Character names must be between 1 to 64 characters and consist of lowercase, uppercase, or numerical characters.");
+    } else {
+        var xhr = new XMLHttpRequest();
+        var params = "c_id="+c_id+"&name="+name+"&hair_type="+hair_type+"&nose_type="+nose_type+"&mouth_type="+mouth_type+"&head_type="+head_type;
+        console.log(params);
+        xhr.open('POST', "/character-creator.html?action=submit", true);
+        xhr.send(params);
+        xhr.onreadystatechange = onSubmit;
+        function onSubmit(e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var r = JSON.parse(xhr.responseText || "null");
+                var result = r['result'];
+                console.log("result is "+result);
+                if (!result)
+                {
+                    alert("Update failed.");
+                }
+            }
+        }
+    }
 }
