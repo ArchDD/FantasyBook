@@ -4,27 +4,69 @@ var util = require('util');
 var formidable = require('formidable');
 
 module.exports = {
+    val: function (a,b,c,d,e,f,g)
+    {
+        return true;
+    },
+
     // Parses form to store in database and redirects
     submitCharacterForm: function (request, response, db){
-        // Creating form object
-        var form = new formidable.IncomingForm();
-        // Parsing form input to store in file or database
-        form.parse(request, function (err, fields, files) {
-            // Deal with form
-            console.log('Add to database here');
-            /*db.run("INSERT INTO Characters (name, hair_type, nose_type, mouth_type, head_type, skin_type, eye_colour, mouth_colour)\
-                    VALUES ('"+fields['']+"', '"+fields['']+"', '"+fields['']+"')",
-            dbErr);*/
-            /*  response.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            response.write('Received Data: \n\n');
-            response.end(util.inspect({
-                fields: fields,
-                files: files
-            }));*/
+    {
+        var body='';
+        request.on('data', function (data) {
+            body +=data;
+        });
+        request.on('end',function(){
+            var POST =  qs.parse(body);
+            console.log(POST);
+            // Validate input
+            if (this.val(POST['name']))
+            {
+                // Updae
+                db.run("UPDATE Characters SET name=,hair_type=1,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
+                    "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff'"+
+                    "WHERE owner='"+POST['username']+"'" ,
+                function(){});
+            } else {
+                // Respond failing server side validation
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var r = {
+                    "result" : false
+                };
+                var jsonObj = JSON.stringify(r);
+                response.end(jsonObj);
+            }
         });
     },
+
+    function submitCharacterForm(request, response, db)
+    {
+        var body='';
+        request.on('data', function (data) {
+            body +=data;
+        });
+        request.on('end',function(){
+            var POST =  qs.parse(body);
+            console.log(POST);
+            // Validate input
+            if (this.val(POST['name']))
+            {
+                // Updae
+                db.run("UPDATE Characters SET name=,hair_type=,eye_type=,nose_type=,mouth_type=,head_type=,"+
+                    "hair_tint=,skin_tint=,eye_tint=,mouth_tint= "+
+                    "WHERE owner='"+username+"'" ,
+                function(){});
+            } else {
+                // Respond failing server side validation
+                response.writeHead(200,{"Content-Type": "application/json"});
+                var r = {
+                    "result" : false
+                };
+                var jsonObj = JSON.stringify(r);
+                response.end(jsonObj);
+            }
+        });
+    }
 
     loadCharacter: function (request, response, db, secret) {
         // Check if a session exists
@@ -46,6 +88,7 @@ module.exports = {
                 var character = {
                     "name"          : "Guest",
                     "hair_type"     : 1,
+                    "eye_type"      : 1,
                     "nose_type"     : 1,
                     "mouth_type"    : 1,
                     "head_type"     : 1,

@@ -35,6 +35,7 @@ function startup() {
             username VARCHAR(32) NOT NULL,                          \
             name VARCHAR(64) NOT NULL,                              \
             hair_type INTEGER NOT NULL,                             \
+            eye_type INTEGER NOT NULL,                              \
             nose_type INTEGER NOT NULL,                             \
             mouth_type INTEGER NOT NULL,                            \
             head_type INTEGER NOT NULL,                             \

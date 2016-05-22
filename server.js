@@ -339,7 +339,7 @@ function CSPRNGBase64 (len) {
 
 function dbErr(e) { if (e) throw e; }
 
-function registerOrLogin(request, response, cb)
+function registerOrLogin(request, response)
 {
     var body='';
     request.on('data', function (data) {
@@ -396,8 +396,8 @@ function registerOrLogin(request, response, cb)
                             // Create user
                             db.run("INSERT INTO Users (username, password, email) VALUES ('"+POST['username']+"', '"+hash+"', '"+POST['email']+"')", function() {
                                 // Create default character for user
-                                db.run("INSERT INTO Characters (username, name, hair_type, nose_type, mouth_type, head_type, hair_tint, skin_tint, eye_tint, mouth_tint)"+
-                                    "VALUES ('"+POST['username']+"','"+POST['username']+"', 1, 1, 1, 1, 'ffffff', 'ffffff', 'ffffff', 'ffffff')",function(){
+                                db.run("INSERT INTO Characters (username,name,hair_type,eye_type,nose_type,mouth_type,head_type,hair_tint,skin_tint,eye_tint,mouth_tint)"+
+                                    "VALUES ('"+POST['username']+"','"+POST['username']+"',1,1,1,1,1,'ffffff','ffffff','ffffff','ffffff')",function(){
                                     createSession(POST['username'], response);
                                 });
                             });

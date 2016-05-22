@@ -51,7 +51,7 @@
 				<div id = "game">
 					<!-- UI wrapper to scale relatively to game -->
 					<div id = "ui">
-						<form class="form" action="" method="post">
+						<form class="form" action="" method="post" name = "character-form">
 							<div class = "ui-group" id = "test">
 								<p class = "feature-text">Name</p>
 								<input type="text" name="name" class = "ui-item"/>
@@ -124,7 +124,7 @@
 							</div>
 
 							<div class = "ui-group">
-								<input type="submit" value="Submit"/>
+								<input type="button" value="Submit" onclick="return submitCharacter()"/>
 							</div>
 						</form>
 					</div>
