@@ -117,10 +117,10 @@ db.run(
             "VALUES ("+
                 "'fantasy',"+
                 "'Dragons on the Horizon!',"+
-                "'A scout up ahead has spotted a dragon!',"+
+                "'A scout up ahead spotted a dragon!',"+
                 "'Prepare to shoot.',"+
                 "'Attempt to go around.',"+
-                "'It was not very effective.',"+
+                "'You order your men to prepare their bows.',"+
                 "'You try to go around but stumble upon its nest!'"+
             ")"
     , err);
@@ -143,7 +143,7 @@ db.run(
                 "'Attempt to fix it yourself.',"+
                 "'You broadcasted for help and it was heard loud and clear."+
                 " By aliens. They are now circling the ship.',"+
-                "'Perhaps fixing it yourself was not the best idea. The engine is now on fire."+
+                "'You tried to fix it yourself, however perhaps that was not the best idea. The engine is now on fire."+
                 " Do you even know how spaceship engines work?'"+
             ")"
     , err);
@@ -161,12 +161,12 @@ db.run(
             "VALUES ("+
                 "'murder-mystery',"+
                 "'A Murder in the Dining Room!',"+
-                "'Lying on the table, a letter in one hand and a key in the other."+
-                " What should you do?',"+
+                "'Lying on the table, a letter in one hand and a key in the other. Dead.',"+
                 "'Read the letter.',"+
                 "'Walk away. Not anyone you knew afterall.',"+
-                "'Gibberish.',"+
-                "'The police see you attempting to leave the scene of the crime."+
+                "'You decide to read the letter. However, as you do so, you have a niggling feeling that you forgot something."+
+                " Ah yes, you forgot to check if the murderer was still in the room..',"+
+                "'You decide to leave. Unfortunately as you are leaving the house, the police arrive. They saw you attempting to leave the scene of the crime."+
                 " You are arrested.'"+
             ")"
     , err);
@@ -184,11 +184,11 @@ db.run(
             "VALUES ("+
                 "'nonsense',"+
                 "'The Sky is Falling',"+
-                "'Is it?',"+
-                "'Maybe.',"+
-                "'No.',"+
-                "'Ridiculous.',"+
-                "'Well, it is. So there.'"+
+                "'Top scientists said that the sky is falling at an alarming rate.',"+
+                "'Maybe it is.',"+
+                "'No it is not.',"+
+                "'You are open to the idea. What is a sky anyway?',"+
+                "'You rejected that the sky may be falling. But perhaps it is. We will never know.'"+
             ")"
     , err);
 
