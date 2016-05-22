@@ -1,29 +1,33 @@
 "use strict";
 var http = require('http');
 var util = require('util');
+var qs = require('querystring');
 
 module.exports = {
-    validate: function(a,b,c,d,e,f,g) {
-        return true;
-    },
-
     // Parses form to store in database and redirects
-    submitCharacterForm: function(request, response, db) {
+    submitCharacterForm: function(request, response, db, session) {
+        var validate = function(a,b,c,d,e,f,g) {
+            return true;
+        };
         var body='';
         request.on('data', function (data) {
             body +=data;
         });
         request.on('end', function() {
             var POST =  qs.parse(body);
-            console.log(POST);
             // Validate input
-            if (this.validate(POST['name']))
+            if (validate())
             {
-                // Updae
-                db.run("UPDATE Characters SET name=,hair_type=1,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
-                    "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff'"+
-                    "WHERE owner='"+POST['username']+"'",
-                function(){});
+                if (!session['username'])
+                    session['username'] = '';
+                db.all("SELECT * FROM Characters WHERE c_id = '"+POST['c_id']+"', username = '"+session['username']+"'", function(err, row) {
+                    // Update
+                    db.run("UPDATE Characters SET name='"+POST['name']+
+                        "',hair_type=2,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
+                        "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff' "+
+                        "WHERE c_id="+POST['c_id'],
+                    function(){});
+                });
             } else {
                 // Respond failing server side validation
                 response.writeHead(200,{"Content-Type": "application/json"});
