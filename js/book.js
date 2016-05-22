@@ -2,162 +2,6 @@
 
 //when the document is ready
 $(window).on("load", function() {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CHARACTER IMAGE
-    var characterAspectRatio = 191.2/236;
-    // cached asset management using dictionary
-    var cachedImages = {};
-
-    // character class
-     function character() {
-        this.characterName = "";
-        this.ownerName = "";
-        this.c_id;
-
-        this.hair = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.nose = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.lash = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.brow = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.socket = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.pupil = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.mouth = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.cheek = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.ear = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.chin = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.head = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-        this.neck = {type: "1", hueShift: 0, 
-                    yOffset: 0, scale: 1};
-
-        this.features = [this.neck, this.head, this.chin, this.ear, 
-                        /*this.cheek,*/ this.mouth, this.pupil, this.socket, 
-                        this.brow, this.lash, this.nose, this.hair];
-    }
-
-    // character instance
-    var myCharacter = new character();
-
-    // Get character from server
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', "/character-creator.html?action=get_character", true);
-    xhr.send();
-    xhr.onreadystatechange = setCharacter; 
-    function setCharacter(e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var c_info = JSON.parse(xhr.responseText || "null");
-            readCharacterInfo(c_info);
-            drawCharacter();
-        }
-    }
-
-    function readCharacterInfo(c_info) {
-        myCharacter.c_id = c_info['c_id'];
-        myCharacter.characterName = c_info['name'];
-        myCharacter.ownerName = c_info['username'];
-
-        myCharacter.hair.type = c_info['hair_type'].toString();
-        //myCharacter.eye.type = c_info['eye_type'].toString();
-        myCharacter.nose.type = c_info['nose_type'].toString();
-        myCharacter.mouth.type = c_info['mouth_type'].toString();
-        myCharacter.head.type = c_info['head_type'].toString();
-    }
-
-    function drawCharacter()
-    {   
-        var canvas = document.getElementById("left-character");
-        var character = myCharacter;
-        var x = 0;
-        var y = 0;
-        var width = canvas.width;
-        var height = canvas.height;
-        console.log("dsada: " + width+", "+height);
-
-        var context = canvas.getContext("2d");
-        // clear only the div drawn on
-        context.clearRect(0,0,width,height);
-
-        // images to load
-        var characterImages = [
-            "images/character/neck_"+character.neck.type+".png",
-            "images/character/head_"+character.head.type+".png",
-            "images/character/chin_"+character.chin.type+".png",
-            "images/character/ear_"+character.ear.type+".png",
-            "images/character/cheek_"+character.cheek.type+".png",
-            "images/character/mouth_"+character.mouth.type+".png",
-            "images/character/pupil_"+character.pupil.type+".png",
-            "images/character/socket_"+character.socket.type+".png",
-            "images/character/brow_"+character.brow.type+".png",
-            "images/character/lash_"+character.lash.type+".png",
-            "images/character/nose_"+character.nose.type+".png",
-            "images/character/hair_"+character.hair.type+".png"];
-
-        var featuresPrefixes = ["neck_", "head_", "chin_", "ear_", "mouth_", "pupil_", "socket_", "brow_", "lash_", "nose_", "hair_"];
-
-        loadImages(characterImages, function() {
-            for (var i = 0; i < character.features.length; i++)
-            {
-                draw(canvas, 
-                    "images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
-                    y+character.features[i].yOffset,
-                    width*character.features[i].scale, 
-                    height*character.features[i].scale);
-            }
-        });
-    }
-
-
-    function loadImages(srcList, callback) {
-        // batch loading
-        var loadBatch = {
-            count: 0,
-            total: srcList.length,
-            cb: callback
-        };
-
-        for (var i = 0; i < srcList.length; i++) {
-            // check if exists
-            if (cachedImages[srcList[i]] == undefined) {
-                // load new image
-                var img = new Image();
-                img.onload = function() {
-                    onLoadedCallback(img, loadBatch);
-                }
-                img.src = srcList[i];
-                cachedImages[srcList[i]] = img;
-            } else {
-                // already exists
-                onLoadedCallback(cachedImages[srcList[i]], loadBatch);
-            }
-        }
-    }
-
-    function onLoadedCallback(src, batch)
-    {
-        batch.count++;
-        if (batch.count == batch.total) {
-            batch.cb(src);
-        }
-    }
-
-    function draw(canvas, src, y, width, height) {
-        var context = canvas.getContext("2d");
-        context.drawImage(cachedImages[src], 0, 0, width, height);
-        var c = document.getElementById("right-character");
-        c.getContext("2d").drawImage(canvas, 0, 0);
-    };
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// END IMAGE
-
     var books = {};
     var bookIsOpen = false;
     var pageNumber = 0;
@@ -558,6 +402,161 @@ $(window).on("load", function() {
 
         return $book;
     }
+    
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CHARACTER IMAGE
+    var characterAspectRatio = 191.2/236;
+    // cached asset management using dictionary
+    var cachedImages = {};
+
+    // character class
+     function character() {
+        this.characterName = "";
+        this.ownerName = "";
+        this.c_id;
+
+        this.hair = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.nose = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.lash = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.brow = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.socket = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.pupil = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.mouth = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.cheek = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.ear = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.chin = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.head = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+        this.neck = {type: "1", hueShift: 0, 
+                    yOffset: 0, scale: 1};
+
+        this.features = [this.neck, this.head, this.chin, this.ear, 
+                        /*this.cheek,*/ this.mouth, this.pupil, this.socket, 
+                        this.brow, this.lash, this.nose, this.hair];
+    }
+
+    // character instance
+    var myCharacter = new character();
+
+    // Get character from server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/character-creator.html?action=get_character", true);
+    xhr.send();
+    xhr.onreadystatechange = setCharacter; 
+    function setCharacter(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var c_info = JSON.parse(xhr.responseText || "null");
+            readCharacterInfo(c_info);
+            drawCharacter();
+        }
+    }
+
+    function readCharacterInfo(c_info) {
+        myCharacter.c_id = c_info['c_id'];
+        myCharacter.characterName = c_info['name'];
+        myCharacter.ownerName = c_info['username'];
+
+        myCharacter.hair.type = c_info['hair_type'].toString();
+        //myCharacter.eye.type = c_info['eye_type'].toString();
+        myCharacter.nose.type = c_info['nose_type'].toString();
+        myCharacter.mouth.type = c_info['mouth_type'].toString();
+        myCharacter.head.type = c_info['head_type'].toString();
+    }
+
+    function drawCharacter()
+    {   
+        var canvas = document.getElementById("left-character");
+        var character = myCharacter;
+        var x = 0;
+        var y = 0;
+        var width = canvas.width;
+        var height = canvas.height;
+        console.log("dsada: " + width+", "+height);
+
+        var context = canvas.getContext("2d");
+        // clear only the div drawn on
+        context.clearRect(0,0,width,height);
+
+        // images to load
+        var characterImages = [
+            "images/character/neck_"+character.neck.type+".png",
+            "images/character/head_"+character.head.type+".png",
+            "images/character/chin_"+character.chin.type+".png",
+            "images/character/ear_"+character.ear.type+".png",
+            "images/character/cheek_"+character.cheek.type+".png",
+            "images/character/mouth_"+character.mouth.type+".png",
+            "images/character/pupil_"+character.pupil.type+".png",
+            "images/character/socket_"+character.socket.type+".png",
+            "images/character/brow_"+character.brow.type+".png",
+            "images/character/lash_"+character.lash.type+".png",
+            "images/character/nose_"+character.nose.type+".png",
+            "images/character/hair_"+character.hair.type+".png"];
+
+        var featuresPrefixes = ["neck_", "head_", "chin_", "ear_", "mouth_", "pupil_", "socket_", "brow_", "lash_", "nose_", "hair_"];
+
+        loadImages(characterImages, function() {
+            for (var i = 0; i < character.features.length; i++)
+            {
+                draw(canvas, 
+                    "images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
+                    y+character.features[i].yOffset,
+                    width*character.features[i].scale, 
+                    height*character.features[i].scale);
+            }
+        });
+    }
+
+
+    function loadImages(srcList, callback) {
+        // batch loading
+        var loadBatch = {
+            count: 0,
+            total: srcList.length,
+            cb: callback
+        };
+
+        for (var i = 0; i < srcList.length; i++) {
+            // check if exists
+            if (cachedImages[srcList[i]] == undefined) {
+                // load new image
+                var img = new Image();
+                img.onload = function() {
+                    onLoadedCallback(img, loadBatch);
+                }
+                img.src = srcList[i];
+                cachedImages[srcList[i]] = img;
+            } else {
+                // already exists
+                onLoadedCallback(cachedImages[srcList[i]], loadBatch);
+            }
+        }
+    }
+
+    function onLoadedCallback(src, batch)
+    {
+        batch.count++;
+        if (batch.count == batch.total) {
+            batch.cb(src);
+        }
+    }
+
+    function draw(canvas, src, y, width, height) {
+        var context = canvas.getContext("2d");
+        context.drawImage(cachedImages[src], 0, 0, width, height);
+        var c = document.getElementById("right-character");
+        c.getContext("2d").drawImage(canvas, 0, 0);
+    };
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// END IMAGE
 
 
 });
