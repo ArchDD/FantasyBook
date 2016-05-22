@@ -21,29 +21,29 @@ character = function() {
 	this.ownerName = "";
 
 	this.hair = {type: "medium", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.nose = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.lash = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.brow = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.socket = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.pupil = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.mouth = {type: "feminine", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.cheek = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.ear = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 	this.chin = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+			    yOffset: 0, scale: 1};
 	this.head = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+			    yOffset: 0, scale: 1};
 	this.neck = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+				yOffset: 0, scale: 1};
 
 	this.features = [this.neck, this.head, this.chin, this.ear, 
 					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
@@ -164,10 +164,9 @@ drawCharacter = function()
 		{
 			draw(canvas, 
 				"images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
-				x+character.features[i].xOffset, 
 				y+character.features[i].yOffset,
-				width*character.features[i].xScale, 
-				height*character.features[i].yScale);
+				width*character.features[i].scale, 
+				height*character.features[i].scale);
 		}
 
 	});
@@ -207,9 +206,9 @@ function onLoadedCallback(src, batch)
 	}
 }
 
-draw = function(canvas, src, x, y, width, height) {
+draw = function(canvas, src, y, width, height) {
 	var context = canvas.getContext("2d");
-	context.drawImage(cachedImages[src], x-width/2, y-height/2, width, height);
+	context.drawImage(cachedImages[src], width*1.5, y-height/2, width, height);
 };
 
 resizeAll = function()

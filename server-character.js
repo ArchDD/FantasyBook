@@ -27,7 +27,6 @@ module.exports = {
     },
 
     loadCharacter: function (request, response, db, secret) {
-        console.log("ay");
         // Check if a session exists
         db.all("SELECT username FROM Sessions WHERE secret = '"+secret+"'", function(err, u_row) {
             // Retrieve logged user's character or show default

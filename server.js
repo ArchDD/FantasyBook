@@ -152,18 +152,12 @@ function serve(request, response) {
         if (e) throw e;
         // Check if there is existing session
         db.all("SELECT secret FROM Sessions WHERE secret = '"+cookie_secret+"'", function(err, row) {
-            // Match found
+            // Set secret if found, otherwise leave as empty string
             if (row[0])
             {
                 console.log("session found secret "+row[0]['secret']);
                 secret = row[0]['secret'];
                 response.setHeader('Set-Cookie', ['secret='+row[0]['secret']]);
-            }
-            else
-            {
-                // No match, leave empty string
-                console.log("no session");
-                //response.setHeader('Set-Cookie', ['secret='+'']); // no need to set cookie if not logged on
             }
 
             var file = request.url;
