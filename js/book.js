@@ -5,14 +5,6 @@ $(window).on("load", function() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CHARACTER IMAGE
     var characterAspectRatio = 191.2/236;
-    var c = document.getElementById("character");
-    var ctx = c.getContext("2d");
-
-    ctx.beginPath();
-    ctx.rect(0, 0, c.height*characterAspectRatio, c.height);
-    ctx.fillStyle = "red";
-    ctx.fill();
-
     // cached asset management using dictionary
     var cachedImages = {};
 
@@ -82,12 +74,12 @@ $(window).on("load", function() {
 
     function drawCharacter()
     {   
-        var canvas = document.getElementById("character");
+        var canvas = document.getElementById("left-character");
         var character = myCharacter;
         var x = 0;
         var y = 0;
-        var width = c.height*characterAspectRatio;
-        var height = c.height;
+        var width = canvas.width;
+        var height = canvas.height;
         console.log("dsada: " + width+", "+height);
 
         var context = canvas.getContext("2d");
@@ -120,7 +112,6 @@ $(window).on("load", function() {
                     width*character.features[i].scale, 
                     height*character.features[i].scale);
             }
-
         });
     }
 
@@ -161,6 +152,8 @@ $(window).on("load", function() {
     function draw(canvas, src, y, width, height) {
         var context = canvas.getContext("2d");
         context.drawImage(cachedImages[src], 0, 0, width, height);
+        var c = document.getElementById("right-character");
+        c.getContext("2d").drawImage(canvas, 0, 0);
     };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// END IMAGE
