@@ -14,20 +14,22 @@ exports.submitBookForm = function(user,request,db) {
                 "desc,"+
                 "pages,"+
                 "colour,"+
+                "theme,"+
                 "texture"+
             ") VALUES ('"+
                 user+"','"+
                 fields['book-title']+"',"+
-                "'A "+fields['category']+" book.',"+
+                "'A "+fields['theme']+" book.',"+
                 2+",'"+
-                fields['colour']+"',"+
+                fields['colour']+"','"+
+                fields['theme']+"',"+
                 "'leather')"
             , dbErr);
         // get new book id and create event
         db.get("SELECT last_insert_rowid()",function(err,data){
             var bookId = data['last_insert_rowid()'];
             // add event entry to book
-            addNewEvent(bookId,2,db);
+            addNewEvent(bookId,2,fields['theme'],db);
             // register users who can participate in book
             insertContributorRow(bookId,user,db);
             var players = fields['player'];
@@ -76,10 +78,10 @@ function retrieveUserBooks(username,db,callback){
 // retrieve book row from database if user owns it
 function retrieveUserBook(username,bookId,db,callback){
     // select books which the user is registered with
-    db.get("SELECT * FROM Books WHERE EXISTS "+
-        "(SELECT * FROM BookContributors WHERE "+
+    db.get("SELECT * FROM Books WHERE b_id IN "+
+        "(SELECT b_id FROM BookContributors WHERE "+
             "username='"+username+
-            "' and b_id="+bookId+")"
+            "' and b_id="+bookId+") LIMIT 1"
     , function(err, row) {
         callback(err,row);
     });
@@ -93,8 +95,8 @@ function retrieveBookById(bookId,db,callback){
 }
 
 // retrieve random event
-function retrieveRandomEvent(db,callback){
-    db.get("SELECT * FROM BookEvents ORDER BY RANDOM() LIMIT 1", function(err, row) {
+function retrieveRandomEvent(theme,db,callback){
+    db.get("SELECT * FROM BookEvents WHERE theme='"+theme+"' ORDER BY RANDOM() LIMIT 1", function(err, row) {
         callback(err,row);
     });
 }
@@ -162,7 +164,7 @@ exports.setOutcome = function(user,bookId,choice,response,db){
             var page = row['pages'];
             // update book size and entry to reflect choice
             updateEventChoice(bookId,page,choice,db);
-            addNewEvent(bookId,page+1,db);
+            addNewEvent(bookId,page+1,row['theme'],db);
             var pageObj = {"pages" : page+1};
             
             response.end(JSON.stringify(pageObj));
@@ -210,14 +212,8 @@ function sendEvent(bookEntry,eventEntry,response){
     response.end(jsonObj);
 }
 
-function addNewEvent(bookId,page,db){
-    retrieveRandomEvent(db,function(err,row){
-        var eventObj = {
-            "eventName" : row['title'],
-            "eventDesc" : row['description'],
-            "choice1" : row['choice1'],
-            "choice2" : row['choice2']
-        }
+function addNewEvent(bookId,page,theme,db){
+    retrieveRandomEvent(theme,db,function(err,row){
         // record new event in bookentries table
         insertNewEventData(bookId,page,row['e_id'],db);
     });
