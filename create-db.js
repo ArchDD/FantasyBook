@@ -57,6 +57,7 @@ function startup() {
             desc VARCHAR(128) NOT NULL,                             \
             pages INTEGER NOT NULL,                                 \
             colour CHAR(7) NOT NULL,                                \
+            theme VARCHAR(32) NOT NULL,                             \
             texture VARCHAR(32) NOT NULL,                           \
             FOREIGN KEY(username) REFERENCES Users(username)        \
         )"
@@ -93,7 +94,7 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS BookEvents                      \
         (                                                           \
             e_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
-            category VARCHAR(128) NOT NULL,                         \
+            theme VARCHAR(32) NOT NULL,                             \
             title VARCHAR(32) NOT NULL,                             \
             description VARCHAR(255) NOT NULL,                      \
             choice1 VARCHAR(255) NOT NULL,                          \
@@ -105,7 +106,7 @@ function startup() {
 
 db.run(
             "INSERT INTO BookEvents ("+
-                "category,"+
+                "theme,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -114,7 +115,7 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
-                "'Fantasy',"+
+                "'fantasy',"+
                 "'Dragons on the Horizon!',"+
                 "'A scout up ahead has spotted a dragon!',"+
                 "'Prepare to shoot.',"+
@@ -126,7 +127,7 @@ db.run(
 
     db.run(
             "INSERT INTO BookEvents ("+
-                "category,"+
+                "theme,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -135,7 +136,30 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
-                "'Murder Mystery',"+
+                "'science-fiction',"+
+                "'Warp drive busted!',"+
+                "'The ship stalled while exploring a new star system. ',"+
+                "'Broadcast for help.',"+
+                "'Attempt to fix it yourself.',"+
+                "'You broadcasted for help and it was heard loud and clear."+
+                " By aliens. They are now circling the ship.',"+
+                "'Perhaps fixing it yourself was not the best idea. The engine is now on fire."+
+                " Do you even know how spaceship engines work?'"+
+            ")"
+    , err);
+
+    db.run(
+            "INSERT INTO BookEvents ("+
+                "theme,"+
+                "title,"+
+                "description,"+
+                "choice1,"+
+                "choice2,"+
+                "outcome1,"+
+                "outcome2"+
+            ") "+
+            "VALUES ("+
+                "'murder-mystery',"+
                 "'A Murder in the Dining Room!',"+
                 "'Lying on the table, a letter in one hand and a key in the other."+
                 " What should you do?',"+
@@ -149,7 +173,7 @@ db.run(
 
     db.run(
             "INSERT INTO BookEvents ("+
-                "category,"+
+                "theme,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -158,7 +182,7 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
-                "'Nonsense',"+
+                "'nonsense',"+
                 "'The Sky is Falling',"+
                 "'Is it?',"+
                 "'Maybe.',"+
