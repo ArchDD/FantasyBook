@@ -305,7 +305,7 @@ input {
 	margin: 0 auto;
 }
 
-input[type="submit"] {
+input[type="button"] {
 	width: 40%;
 	margin: 5% auto;
 }

@@ -1,53 +1,38 @@
-// initialise when document is ready
-document.addEventListener("DOMContentLoaded", function(event) {
-	// retrieve character information from server
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', "/character-creator.html?action=get_character", true);
-    xhr.send();
-    xhr.onreadystatechange = setCharacter; 
-    function setCharacter(e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var c_info = JSON.parse(xhr.responseText || "null");
-            console.log(c_info);
-            //myCharacter.hair.type = ;
-            init();
-        }
-    }
-});
+"use strict";
 
 // character class
-character = function() {
-	this.characterName = "";
-	this.ownerName = "";
+ function character() {
+    this.characterName = "";
+    this.ownerName = "";
 
-	this.hair = {type: "medium", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.nose = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.lash = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.brow = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.socket = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.pupil = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.mouth = {type: "feminine", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.cheek = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.ear = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.chin = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.head = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
-	this.neck = {type: "default", hueShift: 0, 
-				xOffset: 0, yOffset: 0, xScale: 1, yScale: 1};
+    this.hair = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.nose = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.lash = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.brow = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.socket = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.pupil = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.mouth = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.cheek = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.ear = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.chin = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.head = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.neck = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
 
-	this.features = [this.neck, this.head, this.chin, this.ear, 
-					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
-					this.brow, this.lash, this.nose, this.hair];
+    this.features = [this.neck, this.head, this.chin, this.ear, 
+                    /*this.cheek,*/ this.mouth, this.pupil, this.socket, 
+                    this.brow, this.lash, this.nose, this.hair];
 }
 
 // character instance
@@ -62,15 +47,32 @@ var backgroundImages = [
 ];
 
 // appearance list
-var hairList = ["medium", "short"];
-var mouthList = ["masculine", "feminine"]
+var hairList = ["1", "2"];
+var mouthList = ["1", "2"]
 
 // cached asset management using dictionary
 var cachedImages = {};
 
+// initialise when document is ready
+document.addEventListener("DOMContentLoaded", function(event) {
+    // retrieve character information from server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/character-creator.html?action=get_character", true);
+    xhr.send();
+    xhr.onreadystatechange = setCharacter; 
+    function setCharacter(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var c_info = JSON.parse(xhr.responseText || "null");
+            console.log(c_info);
+            //myCharacter.hair.type = ;
+            init();
+        }
+    }
+});
+
 // Aspect ratio information for resizing
 var oldAspectRatio;
-init = function() {
+function init() {
 	// decide initial aspect ratio
 	var gameContainer = document.getElementById("main");
 	oldAspectRatio = gameContainer.clientWidth/gameContainer.clientHeight;
@@ -86,26 +88,9 @@ init = function() {
 	});*/
 
 	setupUI();
-    //getCharacter();
 };
-
-getCharacter = function()
-{
-	var xhr = new XMLHttpRequest();
-	xhr.open('GET', "/character-creator.html?action=get_character", true);
-	xhr.send();
-	xhr.onreadystatechange = setCharacter; 
-    function setCharacter(e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var c_info = JSON.parse(xhr.responseText || "null");
-            console.log(c_info);
-            //myCharacter.hair.type = ;
-        }
-    }
-}
-
 // required for IE8 since it does not support indexOf
-getIndex = function(val, list) {
+function getIndex(val, list) {
     for (var i = 0; i < list.length; i++) {
         if (list[i] == val) {
             return i;
@@ -113,7 +98,7 @@ getIndex = function(val, list) {
     }
 }
 
-setupUI = function() {
+function setupUI() {
 	// UI listeners
 	document.getElementById("previous-hair").addEventListener('click', function(event) {
 		var i = getIndex(myCharacter.hair.type, hairList)-1;
@@ -132,7 +117,7 @@ setupUI = function() {
 	});
 }
 
-placeUI = function(canvas) {
+function placeUI(canvas) {
 	// clearing
 	var ui = document.querySelectorAll('#ui')[0];
 	ui.style.width = '0px';
@@ -146,7 +131,7 @@ placeUI = function(canvas) {
 	ui.style.top = rect.top+canvas.height/20+'px';
 }
 
-drawCharacter = function()
+function drawCharacter()
 {	
 	var canvas = document.getElementById("character");
 	var character = myCharacter;
@@ -181,17 +166,16 @@ drawCharacter = function()
 		{
 			draw(canvas, 
 				"images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
-				x+character.features[i].xOffset, 
 				y+character.features[i].yOffset,
-				width*character.features[i].xScale, 
-				height*character.features[i].yScale);
+				width*character.features[i].scale, 
+				height*character.features[i].scale);
 		}
 
 	});
 }
 
 
-loadImages = function(srcList, callback) {
+function loadImages(srcList, callback) {
 	// batch loading
 	var loadBatch = {
 		count: 0,
@@ -224,12 +208,12 @@ function onLoadedCallback(src, batch)
 	}
 }
 
-draw = function(canvas, src, x, y, width, height) {
+function draw(canvas, src, y, width, height) {
 	var context = canvas.getContext("2d");
-	context.drawImage(cachedImages[src], x-width/2, y-height/2, width, height);
+	context.drawImage(cachedImages[src], width*1.5, y-height/2, width, height);
 };
 
-resizeAll = function()
+function resizeAll()
 {
 	var characterCreator = document.getElementById("character-creator");
 	var characterCanvas = document.getElementById("character");
@@ -258,7 +242,7 @@ resizeAll = function()
 }
 
 // event function that makes canvas responsive
-resizeCanvas = function(canvas) {
+function resizeCanvas(canvas) {
 		canvas.style.marginLeft = "0px";
 		canvas.style.marginTop = "0px";
 		var gameContainer = document.getElementById("main");
@@ -285,6 +269,6 @@ resizeCanvas = function(canvas) {
 		canvas.style.marginLeft = (gameContainer.clientWidth-resizeWidth)/2 + 'px';
 		canvas.style.marginTop = (gameContainer.clientHeight-resizeHeight)/2 + 'px';
 
-		var obj = {resizeWidth: this.resizeWidth, dataURL: this.dataURL};
+		var obj = {resizeWidth: resizeWidth, dataURL: dataURL};
 		return obj;
-};
+}
