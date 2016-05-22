@@ -92,6 +92,7 @@ function startup() {
         "CREATE TABLE IF NOT EXISTS BookEvents                      \
         (                                                           \
             e_id INTEGER PRIMARY KEY AUTOINCREMENT,                 \
+            category VARCHAR(128) NOT NULL,                         \
             title VARCHAR(32) NOT NULL,                             \
             description VARCHAR(255) NOT NULL,                      \
             choice1 VARCHAR(255) NOT NULL,                          \
@@ -103,6 +104,7 @@ function startup() {
 
 db.run(
             "INSERT INTO BookEvents ("+
+                "category,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -111,6 +113,7 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
+                "'Fantasy',"+
                 "'Dragons on the Horizon!',"+
                 "'A scout up ahead has spotted a dragon!',"+
                 "'Prepare to shoot.',"+
@@ -122,6 +125,7 @@ db.run(
 
     db.run(
             "INSERT INTO BookEvents ("+
+                "category,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -130,6 +134,7 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
+                "'Murder Mystery',"+
                 "'A Murder in the Dining Room!',"+
                 "'Lying on the table, a letter in one hand and a key in the other."+
                 " What should you do?',"+
@@ -143,6 +148,7 @@ db.run(
 
     db.run(
             "INSERT INTO BookEvents ("+
+                "category,"+
                 "title,"+
                 "description,"+
                 "choice1,"+
@@ -151,6 +157,7 @@ db.run(
                 "outcome2"+
             ") "+
             "VALUES ("+
+                "'Nonsense',"+
                 "'The Sky is Falling',"+
                 "'Is it?',"+
                 "'Maybe.',"+

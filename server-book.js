@@ -32,7 +32,6 @@ exports.submitBookForm = function(user,request,db) {
             insertContributorRow(bookId,user,db);
             var players = fields['player'];
             if(players) {
-                console.log(typeof(players));
                 if(typeof(players)==='object') {
                     for(var i = 0; i < players.length; i++)
                         insertContributorRow(bookId,players[i],db);
@@ -47,10 +46,21 @@ exports.submitBookForm = function(user,request,db) {
 }
 
 function insertContributorRow(bookId,user,db) {
-    db.run("INSERT OR IGNORE INTO BookContributors VALUES ('"+
+    retrieveUser(user,db,function(err,row) {
+        if(row){
+            db.run("INSERT OR IGNORE INTO BookContributors VALUES ('"+
                 bookId+"','"+
                 user+"')"
-    , dbErr);
+            , dbErr);
+        }
+    });
+}
+
+// retrieve book by book id
+function retrieveUser(user,db,callback){
+    db.get("SELECT * FROM Users WHERE username = '"+user+"'", function(err, row) {
+        callback(err,row);
+    });
 }
 
 // retrieve books associated with username from database
