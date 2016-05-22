@@ -385,8 +385,9 @@ function registerOrLogin(request, response)
         }
         else if (POST['type'] == 'register')
         {
+            console.log(POST);
             // Validate input
-            if (validateRegister(POST['username'], POST['password'], POST['email']))
+            if (validateRegister(POST['username'], POST['email'], POST['password']))
             {
                 // Check if user already exist
                 db.all("SELECT username FROM Users WHERE username = '"+POST['username']+"'", function(err, rows) {
