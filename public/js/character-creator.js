@@ -149,10 +149,17 @@ function drawCharacter()
 {	
 	var canvas = document.getElementById("character");
 	var character = myCharacter;
-	var x = canvas.width/1.3;
+	var x = canvas.width/1.25;
 	var y = canvas.height/2;
-	var width = characterAspectRatio*(canvas.height/1.4);
-	var height = (canvas.height/1.4);
+
+    var width = characterAspectRatio*(canvas.height/1.4);
+	var height = canvas.height/1.4;
+
+    if (canvas.width < canvas.height/characterAspectRatio)
+    {
+        height = characterAspectRatio*(canvas.height/1.4);
+        width = (height/1.4)/characterAspectRatio;
+    }
 
 	var context = canvas.getContext("2d");
 	// clear only the div drawn on
@@ -180,6 +187,7 @@ function drawCharacter()
 		{
 			draw(canvas, 
 				"images/character/"+featuresPrefixes[i]+character.features[i].type+".png",
+                x,
 				y+character.features[i].yOffset,
 				width*character.features[i].scale, 
 				height*character.features[i].scale);
@@ -222,9 +230,9 @@ function onLoadedCallback(src, batch)
 	}
 }
 
-function draw(canvas, src, y, width, height) {
+function draw(canvas, src, x, y, width, height) {
 	var context = canvas.getContext("2d");
-	context.drawImage(cachedImages[src], width*1.5, y-height/2, width, height);
+	context.drawImage(cachedImages[src], x-width/2, y-height/2, width, height);
 };
 
 function resizeAll()
