@@ -95,6 +95,7 @@ function init() {
     	resizeAll();
 	}, false);
 
+    // Preload images here
 	/*loadImages(backgroundImages, function() {
 		for (var i = 0; i < backgroundImages.length; i++) 
 			draw(characterCreator, backgroundImages[i], characterCreator.width/2, characterCreator.height/2, characterCreator.width, characterCreator.height);

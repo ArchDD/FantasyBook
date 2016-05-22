@@ -192,6 +192,11 @@ body{
     text-align: right;
 }
 
+#character {
+    /*position: absolute;
+    z-index: 1;*/
+}
+
 #right_page {
     background:-webkit-gradient(linear, right top, left top, color-stop(0.95, #FFF), color-stop(1, #DADADA));
     background-image:-webkit-linear-gradient(right, #FFF 95%, #C4C4C4 100%);
