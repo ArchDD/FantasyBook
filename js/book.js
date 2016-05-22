@@ -13,7 +13,6 @@ $(window).on("load", function() {
     var textures = {
         leather : new Image()
     };
-    textures.leather.src = "images/leather_grey.png";
 
     $.get("?action=get_books&uniqueId="+Math.random(), function(data, status){
         books = data;
@@ -69,15 +68,19 @@ $(window).on("load", function() {
         var loadedTextures = 0;
         //For each texture
         $.each(textures, function(i,tex) {
+            // append to hidden container
             $('#hidden-textures').append(tex);
             tex.onload = function() {
                 loadedTextures++;
                 //when all textures are loaded
                 if(loadedTextures == Object.keys(textures).length) {
+                    // generate books
                     populateBooks();
                 }
-
             }
+            // set texture sources
+            textures.leather.src = "images/leather_grey.png";
+            
         });
     }
 
