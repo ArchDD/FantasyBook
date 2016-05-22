@@ -23,7 +23,7 @@ module.exports = {
                 db.all("SELECT * FROM Characters WHERE c_id = '"+POST['c_id']+"', username = '"+session['username']+"'", function(err, row) {
                     // Update
                     db.run("UPDATE Characters SET name='"+POST['name']+
-                        "',hair_type=2,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
+                        "',hair_type=1,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
                         "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff' "+
                         "WHERE c_id="+POST['c_id'],
                     function(){});

@@ -304,7 +304,7 @@ function validateLogin(username, password)
 {
     if (!validateText(username, 4, 32))
         return false;
-    if (!validatePassword(username, 6, 32))
+    if (!validatePassword(password, 6, 32))
         return false;
     return true;
 }
@@ -312,7 +312,7 @@ function validateLogin(username, password)
 function validateRegister(username, email, password) {   
     if (!validateText(username, 4, 32))
         return false;
-    else if (!validatePassword(username, 6, 32))
+    else if (!validatePassword(password, 6, 32))
         return false;
     else if (!email)
         return false;
