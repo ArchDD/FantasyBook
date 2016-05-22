@@ -161,7 +161,7 @@ function serve(request, response) {
                 response.setHeader('Set-Cookie', ['secret='+secret]);
             }
 
-            var file = request.url;
+            var file = "/public"+request.url;
             if (ends(file,'/')) file = file + 'index.html';
             // If there are parameters, take them off
             var parts = file.split("?");
@@ -497,12 +497,12 @@ function noSpaces(name) {
 
 // Do a few tests.
 function test() {
-    if (! fs.existsSync('./index.html')) failTest('no index.html page found');
-    if (! inSite('./index.html')) failTest('inSite failure 1');
+    if (! fs.existsSync('./public/index.html')) failTest('no index.html page found');
+    if (! inSite('./public/index.html')) failTest('inSite failure 1');
     if (inSite('./../site')) failTest('inSite failure 2');
-    if (! matchCase('./index.html')) failTest('matchCase failure');
-    if (matchCase('./Index.html')) failTest('matchCase failure');
-    if (! noSpaces('./index.html')) failTest('noSpaces failure');
+    if (! matchCase('./public/index.html')) failTest('matchCase failure');
+    if (matchCase('./public/Index.html')) failTest('matchCase failure');
+    if (! noSpaces('./public/index.html')) failTest('noSpaces failure');
     if (noSpaces('./my index.html')) failTest('noSpaces failure');
 }
 
