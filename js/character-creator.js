@@ -1,7 +1,7 @@
-//"use strict";
+"use strict";
 
 // character class
-character = function() {
+ function character() {
     this.characterName = "";
     this.ownerName = "";
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 // Aspect ratio information for resizing
 var oldAspectRatio;
-init = function() {
+function init() {
 	// decide initial aspect ratio
 	var gameContainer = document.getElementById("main");
 	oldAspectRatio = gameContainer.clientWidth/gameContainer.clientHeight;
@@ -90,7 +90,7 @@ init = function() {
 	setupUI();
 };
 // required for IE8 since it does not support indexOf
-getIndex = function(val, list) {
+function getIndex(val, list) {
     for (var i = 0; i < list.length; i++) {
         if (list[i] == val) {
             return i;
@@ -98,7 +98,7 @@ getIndex = function(val, list) {
     }
 }
 
-setupUI = function() {
+function setupUI() {
 	// UI listeners
 	document.getElementById("previous-hair").addEventListener('click', function(event) {
 		var i = getIndex(myCharacter.hair.type, hairList)-1;
@@ -117,7 +117,7 @@ setupUI = function() {
 	});
 }
 
-placeUI = function(canvas) {
+function placeUI(canvas) {
 	// clearing
 	var ui = document.querySelectorAll('#ui')[0];
 	ui.style.width = '0px';
@@ -131,7 +131,7 @@ placeUI = function(canvas) {
 	ui.style.top = rect.top+canvas.height/20+'px';
 }
 
-drawCharacter = function()
+function drawCharacter()
 {	
 	var canvas = document.getElementById("character");
 	var character = myCharacter;
@@ -175,7 +175,7 @@ drawCharacter = function()
 }
 
 
-loadImages = function(srcList, callback) {
+function loadImages(srcList, callback) {
 	// batch loading
 	var loadBatch = {
 		count: 0,
@@ -208,12 +208,12 @@ function onLoadedCallback(src, batch)
 	}
 }
 
-draw = function(canvas, src, y, width, height) {
+function draw(canvas, src, y, width, height) {
 	var context = canvas.getContext("2d");
 	context.drawImage(cachedImages[src], width*1.5, y-height/2, width, height);
 };
 
-resizeAll = function()
+function resizeAll()
 {
 	var characterCreator = document.getElementById("character-creator");
 	var characterCanvas = document.getElementById("character");
@@ -242,7 +242,7 @@ resizeAll = function()
 }
 
 // event function that makes canvas responsive
-resizeCanvas = function(canvas) {
+function resizeCanvas(canvas) {
 		canvas.style.marginLeft = "0px";
 		canvas.style.marginTop = "0px";
 		var gameContainer = document.getElementById("main");
@@ -269,6 +269,6 @@ resizeCanvas = function(canvas) {
 		canvas.style.marginLeft = (gameContainer.clientWidth-resizeWidth)/2 + 'px';
 		canvas.style.marginTop = (gameContainer.clientHeight-resizeHeight)/2 + 'px';
 
-		var obj = {resizeWidth: this.resizeWidth, dataURL: this.dataURL};
+		var obj = {resizeWidth: resizeWidth, dataURL: dataURL};
 		return obj;
-};
+}
