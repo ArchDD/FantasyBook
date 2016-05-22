@@ -64,7 +64,7 @@ function validateRegister() {
     var confirm = document.forms["register"]["register-confirm"].value;
     if (!validateText(username, 4, 32)) {
         alert("Usernames are between 4 to 32 characters consisting of lowercase, uppercase, and numerical characters.");
-    } else if (!validatePassword(username, 6, 32)) {
+    } else if (!validatePassword(password, 6, 32)) {
         alert("Passwords must be between 6 to 32 characters and must contain lowercase, uppercase, and numberical characters.");
     } else if (!email) {
         alert("Invalid Email.");
