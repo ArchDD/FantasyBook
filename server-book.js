@@ -55,8 +55,23 @@ function insertContributorRow(bookId,user,db) {
 
 // retrieve books associated with username from database
 function retrieveUserBooks(username,db,callback){
-    db.all("SELECT * FROM Books WHERE username = '"+username+"'", function(err, rows) {
+    // select books which the user is registered with
+    db.all("SELECT * FROM Books WHERE b_id IN "+
+        "(SELECT b_id FROM BookContributors WHERE "+
+            "username = '"+username+"')", function(err, rows) {
         callback(err,rows);
+    });
+}
+
+// retrieve book row from database if user owns it
+function retrieveUserBook(username,bookId,db,callback){
+    // select books which the user is registered with
+    db.get("SELECT * FROM Books WHERE EXISTS "+
+        "(SELECT * FROM BookContributors WHERE "+
+            "username='"+username+
+            "' and b_id="+bookId+")"
+    , function(err, row) {
+        callback(err,row);
     });
 }
 
@@ -130,23 +145,25 @@ exports.sendBooks = function (user,response,db) {
 };
 
 exports.setOutcome = function(user,bookId,choice,response,db){
-    retrieveBookById(bookId, db,function(err, row) {
-            if(row['username']===user) {
-                // event is last page of book
-                var page = row['pages'];
-                // update book size and entry to reflect choice
-                updateEventChoice(bookId,page,choice,db);
-                addNewEvent(bookId,page+1,db);
-                var pageObj = {"pages" : page+1};
-                
-                response.end(JSON.stringify(pageObj));
-            }
+    retrieveUserBook(user, bookId, db, function(err, row) {
+        // if the user was found in possession of the book
+        if(row) {   
+            // event is last page of book
+            var page = row['pages'];
+            // update book size and entry to reflect choice
+            updateEventChoice(bookId,page,choice,db);
+            addNewEvent(bookId,page+1,db);
+            var pageObj = {"pages" : page+1};
+            
+            response.end(JSON.stringify(pageObj));
+        }
     });
 }
 
 exports.getAndSendEvent = function (user,bookId,page,response,db) {
-    retrieveBookById(bookId, db, function(err, row) {
-            if(row['username']===user) {
+    retrieveUserBook(user, bookId, db, function(err, row) {
+            // if the user was found in possession of the book
+            if(row) {
                 // send existing event
                 retrieveBookEntry(bookId,page,db,function(err,bookEntry){
                     retrieveBookEvent(bookEntry['e_id'], db, function(err,eventEntry) {
