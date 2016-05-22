@@ -1,53 +1,38 @@
-// initialise when document is ready
-document.addEventListener("DOMContentLoaded", function(event) {
-	// retrieve character information from server
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', "/character-creator.html?action=get_character", true);
-    xhr.send();
-    xhr.onreadystatechange = setCharacter; 
-    function setCharacter(e) {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var c_info = JSON.parse(xhr.responseText || "null");
-            console.log(c_info);
-            //myCharacter.hair.type = ;
-            init();
-        }
-    }
-});
+//"use strict";
 
 // character class
 character = function() {
-	this.characterName = "";
-	this.ownerName = "";
+    this.characterName = "";
+    this.ownerName = "";
 
-	this.hair = {type: "medium", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.nose = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.lash = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.brow = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.socket = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.pupil = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.mouth = {type: "feminine", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.cheek = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.ear = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
-	this.chin = {type: "default", hueShift: 0, 
-			    yOffset: 0, scale: 1};
-	this.head = {type: "default", hueShift: 0, 
-			    yOffset: 0, scale: 1};
-	this.neck = {type: "default", hueShift: 0, 
-				yOffset: 0, scale: 1};
+    this.hair = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.nose = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.lash = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.brow = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.socket = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.pupil = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.mouth = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.cheek = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.ear = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.chin = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.head = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
+    this.neck = {type: "1", hueShift: 0, 
+                yOffset: 0, scale: 1};
 
-	this.features = [this.neck, this.head, this.chin, this.ear, 
-					/*this.cheek,*/ this.mouth, this.pupil, this.socket, 
-					this.brow, this.lash, this.nose, this.hair];
+    this.features = [this.neck, this.head, this.chin, this.ear, 
+                    /*this.cheek,*/ this.mouth, this.pupil, this.socket, 
+                    this.brow, this.lash, this.nose, this.hair];
 }
 
 // character instance
@@ -62,11 +47,28 @@ var backgroundImages = [
 ];
 
 // appearance list
-var hairList = ["medium", "short"];
-var mouthList = ["masculine", "feminine"]
+var hairList = ["1", "2"];
+var mouthList = ["1", "2"]
 
 // cached asset management using dictionary
 var cachedImages = {};
+
+// initialise when document is ready
+document.addEventListener("DOMContentLoaded", function(event) {
+    // retrieve character information from server
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/character-creator.html?action=get_character", true);
+    xhr.send();
+    xhr.onreadystatechange = setCharacter; 
+    function setCharacter(e) {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var c_info = JSON.parse(xhr.responseText || "null");
+            console.log(c_info);
+            //myCharacter.hair.type = ;
+            init();
+        }
+    }
+});
 
 // Aspect ratio information for resizing
 var oldAspectRatio;
