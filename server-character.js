@@ -1,31 +1,28 @@
 "use strict";
 var http = require('http');
 var util = require('util');
-var formidable = require('formidable');
 
 module.exports = {
-    val: function (a,b,c,d,e,f,g)
-    {
+    validate: function(a,b,c,d,e,f,g) {
         return true;
     },
 
     // Parses form to store in database and redirects
-    submitCharacterForm: function (request, response, db){
-    {
+    submitCharacterForm: function(request, response, db) {
         var body='';
         request.on('data', function (data) {
             body +=data;
         });
-        request.on('end',function(){
+        request.on('end', function() {
             var POST =  qs.parse(body);
             console.log(POST);
             // Validate input
-            if (this.val(POST['name']))
+            if (this.validate(POST['name']))
             {
                 // Updae
                 db.run("UPDATE Characters SET name=,hair_type=1,eye_type=1,nose_type=1,mouth_type=1,head_type=1,"+
                     "hair_tint='ffffff',skin_tint='ffffff',eye_tint='ffffff',mouth_tint='ffffff'"+
-                    "WHERE owner='"+POST['username']+"'" ,
+                    "WHERE owner='"+POST['username']+"'",
                 function(){});
             } else {
                 // Respond failing server side validation
@@ -38,35 +35,6 @@ module.exports = {
             }
         });
     },
-
-    function submitCharacterForm(request, response, db)
-    {
-        var body='';
-        request.on('data', function (data) {
-            body +=data;
-        });
-        request.on('end',function(){
-            var POST =  qs.parse(body);
-            console.log(POST);
-            // Validate input
-            if (this.val(POST['name']))
-            {
-                // Updae
-                db.run("UPDATE Characters SET name=,hair_type=,eye_type=,nose_type=,mouth_type=,head_type=,"+
-                    "hair_tint=,skin_tint=,eye_tint=,mouth_tint= "+
-                    "WHERE owner='"+username+"'" ,
-                function(){});
-            } else {
-                // Respond failing server side validation
-                response.writeHead(200,{"Content-Type": "application/json"});
-                var r = {
-                    "result" : false
-                };
-                var jsonObj = JSON.stringify(r);
-                response.end(jsonObj);
-            }
-        });
-    }
 
     loadCharacter: function (request, response, db, secret) {
         // Check if a session exists
